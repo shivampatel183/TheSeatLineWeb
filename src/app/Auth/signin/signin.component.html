@@ -1,0 +1,53 @@
+<app-toast></app-toast>
+<div class="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-6 border border-gray-700">
+        <!-- Header -->
+        <div class="text-center">
+            <h1
+                class="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                The Seat Line</h1>
+            <p class="text-gray-400 mt-1">Join the community today</p>
+        </div>
+
+        <!-- Register Form -->
+        <form (ngSubmit)="onRegister()" class="space-y-4">
+            <!-- Display Name Field -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
+                <input type="text" [(ngModel)]="registerData.displayName" name="displayName" required
+                    placeholder="Your name"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+            </div>
+
+            <!-- Email Field -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                <input type="email" [(ngModel)]="registerData.email" name="email" required placeholder="you@example.com"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                <input type="password" [(ngModel)]="registerData.passwordHash" name="password" required
+                    placeholder="••••••••"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+            </div>
+
+            <!-- Register Button -->
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
+                Create Account
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <p class="text-center text-gray-400">
+            Already have an account?
+            <a [routerLink]="['/login']"
+                class="text-indigo-400 font-semibold hover:text-indigo-300 transition cursor-pointer">
+                Sign in here
+            </a>
+        </p>
+    </div>
+</div>
