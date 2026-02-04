@@ -3,7 +3,13 @@
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white font-semibold">TS</div>
-        <span class="text-lg font-semibold text-slate-900">The Seat Line</span>
+        <a routerLink="/" class="text-lg font-semibold text-slate-900">The Seat Line</a>
+      </div>
+      <div class="hidden items-center gap-6 md:flex">
+        <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Home</a>
+        <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Events</a>
+        <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Offers</a>
+        <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Support</a>
       </div>
       <div class="flex items-center gap-3">
         <a
@@ -23,77 +29,6 @@
   </nav>
 
   <main>
-    <section class="mx-auto max-w-6xl px-6 py-16">
-      <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div>
-          <p class="inline-flex items-center rounded-full bg-sky-100 px-4 py-1 text-sm font-semibold text-sky-700">
-            Discover events near you
-          </p>
-          <h1 class="mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-            Find shows, workshops, and live experiences in your city.
-          </h1>
-          <p class="mt-4 text-lg text-slate-600">
-            A simple, clean landing page inspired by BookMyShow — just pick a location and explore what&apos;s happening.
-          </p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <span class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600">Mumbai</span>
-            <span class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600">Delhi NCR</span>
-            <span class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600">Bengaluru</span>
-            <span class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600">Pune</span>
-            <span class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600">Chennai</span>
-          </div>
-          <button class="mt-8 rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-800">
-            Explore events
-          </button>
-        </div>
-        <div class="rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-slate-100">
-          <h2 class="text-2xl font-semibold text-slate-900">Featured this week</h2>
-          <ul class="mt-6 space-y-4 text-sm text-slate-600">
-            <li class="rounded-2xl border border-slate-100 p-4">
-              <p class="font-semibold text-slate-900">Sunset Indie Fest</p>
-              <p>Sat, 12 Oct · Mumbai</p>
-            </li>
-            <li class="rounded-2xl border border-slate-100 p-4">
-              <p class="font-semibold text-slate-900">Laugh Factory Live</p>
-              <p>Sun, 13 Oct · Bengaluru</p>
-            </li>
-            <li class="rounded-2xl border border-slate-100 p-4">
-              <p class="font-semibold text-slate-900">Broadway Nights</p>
-              <p>Fri, 18 Oct · Mumbai</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="mx-auto max-w-6xl px-6 pb-16">
-      <div class="grid gap-6 md:grid-cols-3">
-        <div class="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-100">
-          <h3 class="text-lg font-semibold text-slate-900">Events by location</h3>
-          <p class="mt-2 text-sm text-slate-600">See what&apos;s trending in your city with one tap.</p>
-        </div>
-        <div class="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-100">
-          <h3 class="text-lg font-semibold text-slate-900">Quick booking</h3>
-          <p class="mt-2 text-sm text-slate-600">Secure tickets instantly with a lightweight flow.</p>
-        </div>
-        <div class="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-100">
-          <h3 class="text-lg font-semibold text-slate-900">Light & responsive UI</h3>
-          <p class="mt-2 text-sm text-slate-600">Clean layout that looks great on every device.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="mx-auto max-w-6xl px-6 pb-20">
-      <div class="rounded-3xl bg-gradient-to-r from-sky-100 via-white to-rose-100 p-8 text-center shadow-lg">
-        <h2 class="text-3xl font-semibold text-slate-900">Ready to plan your next outing?</h2>
-        <p class="mt-3 text-sm text-slate-600">Create an account or sign in to save events and book tickets.</p>
-        <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <a routerLink="/register" class="rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white">Get started</a>
-          <a routerLink="/login" class="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700">I already have an account</a>
-        </div>
-      </div>
-    </section>
-
     <router-outlet />
   </main>
 </div>
