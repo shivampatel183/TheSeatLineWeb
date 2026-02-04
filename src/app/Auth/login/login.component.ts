@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         }
       },
-      error: (err: any) => {
+      error: () => {
         this.toast.error('Server error. Please try again later.');
       },
     });
