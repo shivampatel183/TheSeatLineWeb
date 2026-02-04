@@ -1,51 +1,58 @@
-<div class="min-h-screen bg-gray-900 text-gray-200 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-6 border border-gray-700">
-        <div class="text-center">
-            <h1
-                class="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                The Seat Line</h1>
-            <p class="text-gray-400 mt-1">Log in to your account</p>
-        </div>
-
-        <form (ngSubmit)="onLogin()" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-                <input type="email" [(ngModel)]="loginData.email" name="email" required placeholder="you@example.com"
-                    #email="ngModel" required email
-                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                <p *ngIf="email.touched && email.invalid" class="text-red-400 text-sm mt-1">
-                    Valid email is required
-                </p>
-            </div>
-
-            <!-- Password Field -->
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                <input type="password" [(ngModel)]="loginData.passwordHash" name="password" required
-                    placeholder="••••••••" #password="ngModel" required
-                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                <p *ngIf="password.touched && password.invalid" class="text-red-400 text-sm mt-1">
-                    Password must be at least 6 characters
-                </p>
-            </div>
-
-            <!-- Login Button -->
-            <button type="submit"
-                class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
-                Sign In
-            </button>
-
-        </form>
-
-
-
-
-        <!-- Register Link -->
-        <p class="text-center text-gray-400">
-            Don't have an account?
-            <a [routerLink]="['/register']" class="text-indigo-400 font-semibold hover:text-indigo-300 transition">
-                Register here
-            </a>
-        </p>
+<div class="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center px-6 py-16">
+  <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl ring-1 ring-slate-100">
+    <div class="text-center">
+      <p class="text-sm font-semibold text-sky-600">Welcome back</p>
+      <h1 class="mt-2 text-3xl font-semibold text-slate-900">Sign in to The Seat Line</h1>
+      <p class="mt-2 text-sm text-slate-500">Access your bookings, saved events, and tickets.</p>
     </div>
+
+    <form (ngSubmit)="onLogin()" class="mt-8 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-600">Email Address</label>
+        <input
+          type="email"
+          [(ngModel)]="loginData.email"
+          name="email"
+          required
+          placeholder="you@example.com"
+          #email="ngModel"
+          email
+          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+        />
+        <p *ngIf="email.touched && email.invalid" class="mt-1 text-sm text-rose-500">
+          Valid email is required.
+        </p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-600">Password</label>
+        <input
+          type="password"
+          [(ngModel)]="loginData.passwordHash"
+          name="password"
+          required
+          placeholder="••••••••"
+          #password="ngModel"
+          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200"
+        />
+        <p *ngIf="password.touched && password.invalid" class="mt-1 text-sm text-rose-500">
+          Password must be at least 6 characters.
+        </p>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800"
+      >
+        Sign In
+      </button>
+    </form>
+
+    <div class="mt-6 rounded-2xl bg-slate-50 p-4 text-center text-sm text-slate-600">
+      Don&apos;t have an account?
+      <a [routerLink]="['/register']" class="font-semibold text-sky-600 hover:text-sky-700">
+        Register here
+      </a>
+    </div>
+  </div>
 </div>
