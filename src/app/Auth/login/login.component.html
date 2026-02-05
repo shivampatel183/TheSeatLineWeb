@@ -1,47 +1,25 @@
-<div class="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12 lg:px-8">
-  <div class="mx-auto grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-    <div class="hidden rounded-3xl bg-gradient-to-br from-sky-600 to-slate-900 p-10 text-white shadow-2xl lg:block">
-      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-100">The Seat Line</p>
-      <h2 class="mt-4 text-4xl font-semibold leading-tight">Book the best seats, without the stress.</h2>
-      <p class="mt-4 text-sm text-sky-100/90">Sign in to manage bookings, discover nearby events, and keep your digital
-        tickets ready on any device.</p>
+<section class="h-screen flex items-center justify-center bg-gray-50">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="space-y-4">
+      <button type="submit" ...>Login</button>
+    </form>
+
+    <div class="mt-6 flex items-center justify-between">
+      <span class="border-b w-1/5 lg:w-1/4"></span>
+      <span class="text-xs text-center text-gray-500 uppercase">OR</span>
+      <span class="border-b w-1/5 lg:w-1/4"></span>
     </div>
 
-    <div class="w-full rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-slate-100 sm:p-8">
-      <div class="text-center">
-        <p class="text-sm font-semibold text-sky-600">Welcome back</p>
-        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Sign in to The Seat Line</h1>
-        <p class="mt-2 text-sm text-slate-500">Access your bookings, saved events, and tickets.</p>
-      </div>
-
-      <form (ngSubmit)="onLogin()" class="mt-8 space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-600">Email Address</label>
-          <input type="email" [(ngModel)]="loginData.email" name="email" required placeholder="you@example.com"
-            #email="ngModel" email
-            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" />
-          <p *ngIf="email.touched && email.invalid" class="mt-1 text-sm text-rose-500">Valid email is required.</p>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-600">Password</label>
-          <input type="password" [(ngModel)]="loginData.passwordHash" name="password" required placeholder="••••••••"
-            #password="ngModel"
-            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" />
-          <p *ngIf="password.touched && password.invalid" class="mt-1 text-sm text-rose-500">Password must be at least 6
-            characters.</p>
-        </div>
-
-        <button type="submit"
-          class="w-full rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800">
-          Sign In
-        </button>
-      </form>
-      <app-google-login />
-      <div class="mt-6 rounded-2xl bg-slate-50 p-4 text-center text-sm text-slate-600">
-        Don&apos;t have an account?
-        <a [routerLink]="['/register']" class="font-semibold text-sky-600 hover:text-sky-700">Register here</a>
-      </div>
+    <div class="mt-4 flex justify-center">
+      <app-google-login></app-google-login>
     </div>
+
+    <p class="mt-4 text-center text-sm text-gray-600">
+      Don't have an account?
+      <a routerLink="/signin" class="text-blue-600 hover:underline">Sign up</a>
+    </p>
   </div>
-</div>
+</section>

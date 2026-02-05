@@ -1,18 +1,16 @@
-export class UserMainEntity {
-  displayName: string = '';
-  email: string = '';
-  passwordHash: string = '';
-  createdAt: Date = new Date();
-}
-
-export class UserEntity extends UserMainEntity {
-  githubId: string = '';
-  githubToken: string = '';
-}
-
 export class LoginEntity {
   token: string = '';
-  displayName: string = '';
+  refreshToken: string = '';
   email: string = '';
-  avatarUrl: string = '';
+  fullName: string = '';
+}
+
+export class RegisterEntity {
+  fullName: string = '';
+  email: string = '';
+  password: string = '';
+}
+
+export class GoogleLoginEntity {
+  idToken: string = '';
 }

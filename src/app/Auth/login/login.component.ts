@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ToastService } from '../../common/Services/toast.service';
 import { ApiResponse } from '../../common/components/model/authmodel';
-import { LoginEntity, UserMainEntity } from '../auth.model';
+import { LoginEntity } from '../auth.model';
 import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
 @Component({
@@ -16,7 +16,7 @@ import { GoogleLoginComponent } from '../../Component/google-login/google-login.
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  loginData = new UserMainEntity();
+  loginData = new LoginEntity();
 
   constructor(
     private authService: AuthService,
@@ -42,9 +42,8 @@ export class LoginComponent implements OnInit {
             response.message || 'Login Successful! Redirecting...',
           );
           localStorage.setItem('token', response.data.token);
-          localStorage.setItem('UserName', response.data.displayName);
+          localStorage.setItem('UserName', response.data.fullName);
           localStorage.setItem('UserEmail', response.data.email);
-          localStorage.setItem('AvatarUrl', response.data.avatarUrl);
           this.router.navigate(['/']);
         }
       },

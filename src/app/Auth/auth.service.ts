@@ -1,45 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { ApiService } from '../common/Services/api.services';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { LoginEntity, RegisterEntity, GoogleLoginEntity } from './auth.model';
 import { ApiResponse } from '../common/components/model/authmodel';
-import { LoginEntity } from './auth.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private api: ApiService,
-    private router: Router,
-  ) {}
+  private apiUrl = 'https://localhost:7243/api/auth';
 
-  register(user: any): Observable<ApiResponse<string>> {
-    return this.api.post('/Auth/Registration', user);
+  constructor(private http: HttpClient) {}
+
+  login(data: any): Observable<ApiResponse<LoginEntity>> {
+    return this.http
+      .post<ApiResponse<LoginEntity>>(`${this.apiUrl}/login`, data)
+      .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
-  login(user: any): Observable<ApiResponse<LoginEntity>> {
-    return this.api.post<ApiResponse<LoginEntity>>('/Auth/Login', user);
+  register(data: RegisterEntity): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/register`, data);
   }
 
-  validateToken(): Observable<any> {
-    return this.api.post('/Auth/validateToken', {});
+  // Google Login
+  loginWithGoogle(idToken: string): Observable<ApiResponse<LoginEntity>> {
+    return this.http
+      .post<
+        ApiResponse<LoginEntity>
+      >(`${this.apiUrl}/google-login`, { idToken })
+      .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
-  validateGithubCode(code: string): Observable<any> {
-    return this.api.get(`/Auth/callback?code=${code}`);
+  // Refresh Token
+  refreshToken(): Observable<ApiResponse<LoginEntity>> {
+    const payload = {
+      accessToken: localStorage.getItem('accessToken'),
+      refreshToken: localStorage.getItem('refreshToken'),
+    };
+    return this.http
+      .post<ApiResponse<LoginEntity>>(`${this.apiUrl}/refresh-token`, payload)
+      .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
-  initiateGithubLogin() {
-    window.location.href = `${this.api.baseUrl}/GithubAuth/github`;
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  // Helper to Save Tokens
+  private saveTokens(data: LoginEntity) {
+    if (data) {
+      localStorage.setItem('accessToken', data.token);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          email: data.email,
+          fullName: data.fullName,
+        }),
+      );
+    }
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    localStorage.clear();
+    window.location.href = '/login';
   }
 }

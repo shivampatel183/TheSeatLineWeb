@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // Import HTTP_INTERCEPTORS
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -9,14 +9,16 @@ import {
   SocialLoginModule,
   SocialAuthServiceConfig,
   GoogleLoginProvider,
+  GoogleSigninButtonModule,
 } from '@abacritt/angularx-social-login';
 
 import { routes } from './app.routes';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Auth/login/login.component';
-import { RegisterComponent } from './Auth/signin/signin.component';
+import { RegisterComponent } from './Auth/signin/signin.component'; // Ensure correct path/name
 import { ToastComponent } from './common/components/toast/toast.component';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { GoogleLoginComponent } from './Component/google-login/google-login.component'; // Import your new component
+import { AuthInterceptor } from './interceptors/auth.interceptor'; // Import your interceptor
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     LoginComponent,
     RegisterComponent,
     ToastComponent,
+    GoogleLoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,9 +34,9 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     HttpClientModule,
     FormsModule,
     SocialLoginModule,
+    GoogleSigninButtonModule,
   ],
   providers: [
-    // 4. Configure Google Login
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -42,7 +45,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '966081852486-j62f41l7i8t1mfe2ef06ohunk8mid1vv.apps.googleusercontent.com', // Replace with your actual ID
+              '966081852486-j62f41l7i8t1mfe2ef06ohunk8mid1vv.apps.googleusercontent.com', // Replace with your actual Client ID
             ),
           },
         ],
@@ -51,7 +54,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
         },
       } as SocialAuthServiceConfig,
     },
-    // 5. Register the Token Interceptor (For attaching tokens & refreshing)
+    // 4. Register the Auth Interceptor
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
