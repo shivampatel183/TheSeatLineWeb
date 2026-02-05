@@ -9,7 +9,10 @@ import { LoginEntity } from './auth.model';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private router: Router,
+  ) {}
 
   register(user: any): Observable<ApiResponse<string>> {
     return this.api.post('/Auth/Registration', user);

@@ -9,44 +9,24 @@
     <form (ngSubmit)="onRegister()" class="mt-8 space-y-4">
       <div>
         <label class="block text-sm font-medium text-slate-600">Display Name</label>
-        <input
-          type="text"
-          [(ngModel)]="registerData.displayName"
-          name="displayName"
-          required
-          placeholder="Your name"
-          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"
-        />
+        <input type="text" [(ngModel)]="registerData.displayName" name="displayName" required placeholder="Your name"
+          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-600">Email Address</label>
-        <input
-          type="email"
-          [(ngModel)]="registerData.email"
-          name="email"
-          required
-          placeholder="you@example.com"
-          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"
-        />
+        <input type="email" [(ngModel)]="registerData.email" name="email" required placeholder="you@example.com"
+          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
       </div>
 
       <div>
         <label class="block text-sm font-medium text-slate-600">Password</label>
-        <input
-          type="password"
-          [(ngModel)]="registerData.passwordHash"
-          name="password"
-          required
-          placeholder="••••••••"
-          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"
-        />
+        <input type="password" [(ngModel)]="registerData.passwordHash" name="password" required placeholder="••••••••"
+          class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
       </div>
 
-      <button
-        type="submit"
-        class="w-full rounded-xl bg-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition hover:-translate-y-0.5 hover:bg-rose-600"
-      >
+      <button type="submit"
+        class="w-full rounded-xl bg-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition hover:-translate-y-0.5 hover:bg-rose-600">
         Create Account
       </button>
     </form>

@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
   ) {}
 
   ngOnInit() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -38,22 +38,18 @@ export class LoginComponent implements OnInit {
           return;
         } else {
           this.toast.success(
-            response.message || 'Login Successful! Redirecting...'
+            response.message || 'Login Successful! Redirecting...',
           );
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('UserName', response.data.displayName);
           localStorage.setItem('UserEmail', response.data.email);
           localStorage.setItem('AvatarUrl', response.data.avatarUrl);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/']);
         }
       },
       error: () => {
         this.toast.error('Server error. Please try again later.');
       },
     });
-  }
-
-  connectGithub() {
-    this.authService.initiateGithubLogin();
   }
 }
