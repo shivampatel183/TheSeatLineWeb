@@ -6,11 +6,12 @@ import { AuthService } from '../auth.service';
 import { ToastService } from '../../common/Services/toast.service';
 import { ApiResponse } from '../../common/components/model/authmodel';
 import { LoginEntity, UserMainEntity } from '../auth.model';
+import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, GoogleLoginComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
