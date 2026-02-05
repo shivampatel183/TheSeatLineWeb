@@ -1,21 +1,50 @@
 <nav class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white font-semibold">
-                TS</div>
-            <a routerLink="/" class="text-lg font-semibold text-slate-900">The Seat Line</a>
-        </div>
-        <div class="hidden items-center gap-6 md:flex">
-            <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Home</a>
-            <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Events</a>
-            <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Offers</a>
-            <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Support</a>
-        </div>
-        <div class="flex items-center gap-3">
-            <a routerLink="/login"
-                class="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
-                Log in
-            </a>
-        </div>
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white sm:h-10 sm:w-10">
+        TS
+      </div>
+      <a routerLink="/" class="text-base font-semibold text-slate-900 sm:text-lg" (click)="closeMobileMenu()">The Seat Line</a>
     </div>
+
+    <div class="hidden items-center gap-6 md:flex">
+      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Home</a>
+      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Events</a>
+      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Offers</a>
+      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Support</a>
+    </div>
+
+    <div class="hidden items-center gap-3 md:flex">
+      <a routerLink="/login" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
+        Log in
+      </a>
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 md:hidden"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div *ngIf="isMobileMenuOpen" class="border-t border-slate-200 bg-white px-4 py-3 md:hidden sm:px-6">
+    <div class="flex flex-col gap-2">
+      <a routerLink="/" (click)="closeMobileMenu()" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Home</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Events</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Offers</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Support</a>
+      <a routerLink="/login" (click)="closeMobileMenu()" class="mt-2 rounded-full border border-slate-200 px-4 py-2 text-center text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
+        Log in
+      </a>
+    </div>
+  </div>
 </nav>
