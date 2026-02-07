@@ -17,14 +17,13 @@
     </div>
 
     <div class="hidden items-center gap-3 md:flex">
-      <!-- Show Login only if NOT logged in -->
       <a *ngIf="!authService.isLoggedIn()" routerLink="/login"
         class="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
         Log in
       </a>
 
-      <!-- Show Profile + Logout if logged in -->
       <div *ngIf="authService.isLoggedIn()" class="flex items-center gap-3">
+        <i class="bi bi-person"></i>
         <a routerLink="/profile" class="text-sm font-semibold text-slate-700 hover:text-slate-900">
           Profile
         </a>
