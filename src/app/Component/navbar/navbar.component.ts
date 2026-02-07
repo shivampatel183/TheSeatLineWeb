@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../Auth/auth.service';
@@ -24,6 +24,18 @@ export class NavbarComponent {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth >= 768 && this.isMobileMenuOpen) {
+      this.closeMobileMenu();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closeMobileMenu();
   }
 
   logout() {
