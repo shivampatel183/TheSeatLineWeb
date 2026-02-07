@@ -1,8 +1,13 @@
-export class LoginEntity {
+export class ResponseEntity {
   token: string = '';
   refreshToken: string = '';
   email: string = '';
   fullName: string = '';
+}
+
+export class LoginEntity {
+  email: string = '';
+  password: string = '';
 }
 
 export class RegisterEntity {

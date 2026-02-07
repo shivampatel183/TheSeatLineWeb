@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../common/Services/toast.service';
 import { ApiResponse } from '../../common/components/model/authmodel';
-import { UserMainEntity } from '../auth.model';
+import { RegisterEntity } from '../auth.model';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +15,7 @@ import { UserMainEntity } from '../auth.model';
   styleUrls: ['./signin.component.css'],
 })
 export class RegisterComponent {
-  registerData = new UserMainEntity();
+  registerData = new RegisterEntity();
   constructor(
     private authService: AuthService,
     private router: Router,

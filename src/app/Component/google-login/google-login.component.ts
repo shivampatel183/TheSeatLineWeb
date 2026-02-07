@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { AuthService } from '../../Auth/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+declare var google: any;
 
 @Component({
   selector: 'app-google-login',
+  standalone: true,
   templateUrl: './google-login.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GoogleLoginComponent implements OnInit {
-  constructor(
-    private socialAuthService: SocialAuthService,
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-
-  ngOnInit() {
-    this.socialAuthService.authState.subscribe((user) => {
-      if (user && user.idToken) {
-        this.authService.loginWithGoogle(user.idToken).subscribe({
-          next: () => {
-            this.router.navigate(['/']);
-          },
-          error: (err) => console.error('Google Login Failed', err),
-        });
-      }
+  ngOnInit(): void {
+    google.accounts.id.initialize({
+      client_id:
+        '966081852486-j62f41l7i8t1mfe2ef06ohunk8mid1vv.apps.googleusercontent.com',
+      callback: this.handleCredentialResponse,
     });
+
+    google.accounts.id.renderButton(document.getElementById('googleBtn'), {
+      theme: 'outline',
+      size: 'large',
+    });
+  }
+
+  handleCredentialResponse(response: any) {
+    console.log('Google Token:', response.credential);
   }
 }

@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LoginEntity, RegisterEntity, GoogleLoginEntity } from './auth.model';
+import {
+  LoginEntity,
+  RegisterEntity,
+  GoogleLoginEntity,
+  ResponseEntity,
+} from './auth.model';
 import { ApiResponse } from '../common/components/model/authmodel';
 
 @Injectable({
@@ -12,9 +17,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(data: any): Observable<ApiResponse<LoginEntity>> {
+  login(data: LoginEntity): Observable<ApiResponse<ResponseEntity>> {
     return this.http
-      .post<ApiResponse<LoginEntity>>(`${this.apiUrl}/login`, data)
+      .post<ApiResponse<ResponseEntity>>(`${this.apiUrl}/login`, data)
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
@@ -23,27 +28,29 @@ export class AuthService {
   }
 
   // Google Login
-  loginWithGoogle(idToken: string): Observable<ApiResponse<LoginEntity>> {
+  loginWithGoogle(idToken: string): Observable<ApiResponse<ResponseEntity>> {
     return this.http
       .post<
-        ApiResponse<LoginEntity>
+        ApiResponse<ResponseEntity>
       >(`${this.apiUrl}/google-login`, { idToken })
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
   // Refresh Token
-  refreshToken(): Observable<ApiResponse<LoginEntity>> {
+  refreshToken(): Observable<ApiResponse<ResponseEntity>> {
     const payload = {
       accessToken: localStorage.getItem('accessToken'),
       refreshToken: localStorage.getItem('refreshToken'),
     };
     return this.http
-      .post<ApiResponse<LoginEntity>>(`${this.apiUrl}/refresh-token`, payload)
+      .post<
+        ApiResponse<ResponseEntity>
+      >(`${this.apiUrl}/refresh-token`, payload)
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
   // Helper to Save Tokens
-  private saveTokens(data: LoginEntity) {
+  private saveTokens(data: ResponseEntity) {
     if (data) {
       localStorage.setItem('accessToken', data.token);
       localStorage.setItem('refreshToken', data.refreshToken);

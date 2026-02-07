@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ToastService } from '../../common/Services/toast.service';
 import { ApiResponse } from '../../common/components/model/authmodel';
-import { LoginEntity } from '../auth.model';
+import { LoginEntity, ResponseEntity } from '../auth.model';
 import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
 @Component({
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     this.authService.login(this.loginData).subscribe({
-      next: (response: ApiResponse<LoginEntity>) => {
+      next: (response: ApiResponse<ResponseEntity>) => {
         if (!response.success) {
           this.toast.error(response.error || 'Login failed');
           return;
