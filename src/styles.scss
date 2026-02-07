@@ -1,10 +1,91 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --theme-primary: #4f46e5;
+  --theme-primary-dark: #3730a3;
+  --theme-accent: #f97316;
+  --theme-bg: #f5f7ff;
+  --theme-surface: #ffffff;
+  --theme-text: #1f2937;
+  --theme-muted: #6b7280;
+  --theme-border: #dbe2ff;
+  --theme-success: #16a34a;
+  --theme-error: #dc2626;
+  --theme-warning: #d97706;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
-  width: 100%;
-  height: 100%;
   margin: 0;
-  overflow: hidden;
+  min-height: 100%;
+  font-family: Inter, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: var(--theme-text);
+  background: var(--theme-bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-shell {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+.page-card {
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: 1rem;
+  box-shadow: 0 12px 30px rgba(30, 41, 59, 0.08);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  font-weight: 700;
+}
+
+.section-subtitle {
+  margin: 0.5rem 0 0;
+  color: var(--theme-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  padding: 0.72rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--theme-primary);
+}
+
+.btn-primary:hover {
+  background: var(--theme-primary-dark);
+}
+
+.btn-outline {
+  border-color: var(--theme-border);
+  background: #fff;
+  color: var(--theme-primary-dark);
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    width: 94%;
+  }
 }

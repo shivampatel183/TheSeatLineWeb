@@ -1,47 +1,26 @@
-<section class="h-screen w-screen flex items-center justify-center bg-gray-50 overflow-hidden px-4 sm:px-6">
-  <div class="w-full max-w-sm sm:max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
-      Welcome Back
-    </h2>
+<section class="auth-page">
+  <div class="auth-card page-card">
+    <h1 class="auth-title">Welcome Back</h1>
 
-    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-slate-600">
-          Email Address
-        </label>
-        <input type="email" [(ngModel)]="loginData.email" name="email" required placeholder="you@example.com" class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900
-                 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-sky-200" />
-      </div>
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="auth-form">
+      <label class="auth-label">Email Address</label>
+      <input type="email" [(ngModel)]="loginData.email" name="email" required placeholder="you@example.com" class="auth-input" />
 
-      <div>
-        <label class="block text-sm font-medium text-slate-600">
-          Password
-        </label>
-        <input type="password" [(ngModel)]="loginData.password" name="password" required placeholder="••••••••" class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900
-                 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-sky-200" />
-      </div>
-      <button type="submit" class="w-full bg-rose-500 text-white py-3 px-4 rounded-xl font-medium
-         hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
-        Sign In
-      </button>
+      <label class="auth-label">Password</label>
+      <input type="password" [(ngModel)]="loginData.password" name="password" required placeholder="••••••••" class="auth-input" />
 
+      <button type="submit" class="btn btn-primary auth-btn">Sign In</button>
     </form>
 
-    <div class="my-6 flex items-center justify-between">
-      <span class="w-1/5 border-b"></span>
-      <span class="text-xs text-gray-500 uppercase">OR</span>
-      <span class="w-1/5 border-b"></span>
-    </div>
+    <div class="auth-divider"><span>OR</span></div>
 
-    <div class="flex justify-center">
+    <div class="social-login-wrap">
       <app-google-login></app-google-login>
     </div>
 
-    <p class="mt-5 text-center text-sm text-gray-600">
+    <p class="auth-footnote">
       Don’t have an account?
-      <a routerLink="/register" class="text-blue-600 hover:underline">
-        Sign up
-      </a>
+      <a routerLink="/register" class="auth-link">Sign up</a>
     </p>
   </div>
 </section>

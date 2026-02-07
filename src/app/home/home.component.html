@@ -1,1 +1,42 @@
-<p>Home Page</p>
+<section class="home-hero">
+  <div class="page-shell hero-layout">
+    <div>
+      <p class="hero-kicker">Discover Experiences</p>
+      <h1 class="section-title">Book your next event with a clear, modern flow.</h1>
+      <p class="section-subtitle">The Seat Line helps you explore events by city, style, and vibe in seconds.</p>
+      <div class="hero-actions">
+        <a routerLink="/register" class="btn btn-primary">Get Started</a>
+        <a routerLink="/login" class="btn btn-outline">Sign In</a>
+      </div>
+    </div>
+    <div class="page-card stats-card">
+      <h3>Popular Cities</h3>
+      <div class="tag-list">
+        <span class="city-tag" *ngFor="let location of locations">{{ location }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-shell content-section">
+  <h2 class="section-title">Browse Categories</h2>
+  <div class="card-grid">
+    <article class="page-card simple-card" *ngFor="let category of categories">
+      <h3>{{ category.title }}</h3>
+      <p>{{ category.description }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="page-shell content-section">
+  <h2 class="section-title">Trending Events</h2>
+  <div class="card-grid">
+    <article class="page-card event-card" *ngFor="let event of events">
+      <span class="event-tag">{{ event.tag }}</span>
+      <h3>{{ event.name }}</h3>
+      <p>{{ event.venue }}</p>
+      <p>{{ event.date }}</p>
+      <strong>{{ event.price }}</strong>
+    </article>
+  </div>
+</section>

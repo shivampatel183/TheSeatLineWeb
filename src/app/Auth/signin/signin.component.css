@@ -1,0 +1,55 @@
+.register-page {
+  padding: 2rem 0;
+}
+
+.register-layout {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 1rem;
+}
+
+.register-card,
+.register-side {
+  padding: 1.4rem;
+}
+
+.register-kicker {
+  margin: 0;
+  color: var(--theme-primary);
+  font-weight: 700;
+}
+
+.register-title {
+  margin: 0.4rem 0;
+}
+
+.register-copy,
+.register-side p,
+.register-footnote {
+  color: var(--theme-muted);
+}
+
+.register-form {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.register-btn {
+  margin-top: 0.4rem;
+}
+
+.register-side {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+  color: #fff;
+}
+
+.register-side p {
+  color: #eef2ff;
+}
+
+@media (max-width: 900px) {
+  .register-layout {
+    grid-template-columns: 1fr;
+  }
+}

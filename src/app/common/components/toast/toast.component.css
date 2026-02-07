@@ -8,6 +8,63 @@
     transform: translateX(0);
   }
 }
+
+.toast-stack {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 60;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.toast-item {
+  min-width: 280px;
+  max-width: 360px;
+  background: #fff;
+  border-left: 4px solid;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.16);
+  padding: 0.8rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.toast-main {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.toast-main p {
+  margin: 0;
+}
+
+.toast-success { border-color: var(--theme-success); }
+.toast-error { border-color: var(--theme-error); }
+.toast-warning { border-color: var(--theme-warning); }
+
+.toast-close {
+  border: 0;
+  background: transparent;
+  color: var(--theme-muted);
+  cursor: pointer;
+}
+
 .animate-slide-in {
   animation: slideIn 0.3s ease-out forwards;
+}
+
+@media (max-width: 640px) {
+  .toast-stack {
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .toast-item {
+    min-width: 100%;
+    max-width: none;
+  }
 }

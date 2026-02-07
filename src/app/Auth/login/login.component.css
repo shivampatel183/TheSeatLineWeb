@@ -1,2 +1,72 @@
-/* Login component styles are now managed by Tailwind CSS */
-/* No additional component-specific styles needed */
+.auth-page {
+  min-height: calc(100vh - 68px);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  padding: 1.5rem;
+}
+
+.auth-title {
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.auth-label {
+  font-weight: 600;
+  color: var(--theme-muted);
+  font-size: 0.9rem;
+}
+
+.auth-input {
+  width: 100%;
+  border: 1px solid var(--theme-border);
+  border-radius: 0.75rem;
+  padding: 0.78rem 0.9rem;
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px #e0e7ff;
+}
+
+.auth-btn {
+  margin-top: 0.5rem;
+}
+
+.auth-divider {
+  text-align: center;
+  margin: 1.1rem 0;
+  color: var(--theme-muted);
+  font-size: 0.82rem;
+}
+
+.auth-divider span {
+  background: white;
+  padding: 0 0.5rem;
+}
+
+.social-login-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-footnote {
+  text-align: center;
+  margin: 1rem 0 0;
+  color: var(--theme-muted);
+}
+
+.auth-link {
+  color: var(--theme-primary);
+  font-weight: 700;
+}

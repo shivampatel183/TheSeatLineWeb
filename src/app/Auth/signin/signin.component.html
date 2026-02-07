@@ -1,48 +1,32 @@
-<div class="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12 lg:px-8">
-  <div class="mx-auto grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-    <div class="w-full rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-slate-100 sm:p-8">
-      <div class="text-center">
-        <p class="text-sm font-semibold text-rose-500">Create account</p>
-        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Join The Seat Line</h1>
-        <p class="mt-2 text-sm text-slate-500">Get early access to trending events in your city.</p>
-      </div>
+<section class="register-page">
+  <div class="page-shell register-layout">
+    <div class="page-card register-card">
+      <p class="register-kicker">Create account</p>
+      <h1 class="register-title">Join The Seat Line</h1>
+      <p class="register-copy">Get early access to trending events in your city.</p>
 
-      <form (ngSubmit)="onRegister()" class="mt-8 space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-600">Display Name</label>
-          <input type="text" [(ngModel)]="registerData.fullName" name="displayName" required placeholder="Your name"
-            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
-        </div>
+      <form (ngSubmit)="onRegister()" class="register-form">
+        <label class="auth-label">Display Name</label>
+        <input type="text" [(ngModel)]="registerData.fullName" name="displayName" required placeholder="Your name" class="auth-input" />
 
-        <div>
-          <label class="block text-sm font-medium text-slate-600">Email Address</label>
-          <input type="email" [(ngModel)]="registerData.email" name="email" required placeholder="you@example.com"
-            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
-        </div>
+        <label class="auth-label">Email Address</label>
+        <input type="email" [(ngModel)]="registerData.email" name="email" required placeholder="you@example.com" class="auth-input" />
 
-        <div>
-          <label class="block text-sm font-medium text-slate-600">Password</label>
-          <input type="password" [(ngModel)]="registerData.password" name="password" required placeholder="••••••••"
-            class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100" />
-        </div>
+        <label class="auth-label">Password</label>
+        <input type="password" [(ngModel)]="registerData.password" name="password" required placeholder="••••••••" class="auth-input" />
 
-        <button type="submit"
-          class="w-full rounded-xl bg-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition hover:-translate-y-0.5 hover:bg-rose-600">
-          Create Account
-        </button>
+        <button type="submit" class="btn btn-primary register-btn">Create Account</button>
       </form>
 
-      <div class="mt-6 rounded-2xl bg-slate-50 p-4 text-center text-sm text-slate-600">
+      <p class="register-footnote">
         Already have an account?
-        <a [routerLink]="['/login']" class="font-semibold text-sky-600 hover:text-sky-700">Sign in here</a>
-      </div>
+        <a [routerLink]="['/login']" class="auth-link">Sign in here</a>
+      </p>
     </div>
 
-    <div class="hidden rounded-3xl bg-gradient-to-br from-rose-500 to-orange-400 p-10 text-white shadow-2xl lg:block">
-      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-rose-100">Start today</p>
-      <h2 class="mt-4 text-4xl font-semibold leading-tight">Create your account and never miss a show.</h2>
-      <p class="mt-4 text-sm text-rose-100/90">Your profile keeps tickets, preferences, and event alerts synced across
-        desktop and mobile.</p>
-    </div>
+    <aside class="register-side page-card">
+      <h2>Never miss a show.</h2>
+      <p>Your profile keeps tickets, preferences, and event alerts synced across desktop and mobile.</p>
+    </aside>
   </div>
-</div>
+</section>
