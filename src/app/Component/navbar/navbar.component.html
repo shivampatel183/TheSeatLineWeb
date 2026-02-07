@@ -1,70 +1,65 @@
-<nav class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
-    <div class="flex items-center gap-2 sm:gap-3">
-      <div
-        class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white sm:h-10 sm:w-10">
-        TS
-      </div>
-      <a routerLink="/" class="text-base font-semibold text-slate-900 sm:text-lg" (click)="closeMobileMenu()">The Seat
-        Line</a>
+<nav class="navbar">
+  <div class="navbar__container">
+    <div class="navbar__brand-group">
+      <div class="navbar__logo" aria-hidden="true">TS</div>
+      <a routerLink="/" class="navbar__brand-link" (click)="closeMobileMenu()">The Seat Line</a>
     </div>
 
-    <div class="hidden items-center gap-6 md:flex">
-      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Home</a>
-      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Events</a>
-      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Offers</a>
-      <a routerLink="/" class="text-sm font-medium text-slate-600 hover:text-slate-900">Support</a>
+    <div class="navbar__links" aria-label="Primary navigation">
+      <a routerLink="/" class="navbar__link">Home</a>
+      <a routerLink="/" class="navbar__link">Events</a>
+      <a routerLink="/" class="navbar__link">Offers</a>
+      <a routerLink="/" class="navbar__link">Support</a>
     </div>
 
-    <div class="hidden items-center gap-3 md:flex">
-      <!-- Show Login only if NOT logged in -->
-      <a *ngIf="!authService.isLoggedIn()" routerLink="/login"
-        class="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
+    <div class="navbar__actions">
+      <a *ngIf="!authService.isLoggedIn()" routerLink="/login" class="btn btn--secondary">
         Log in
       </a>
 
-      <!-- Show Profile + Logout if logged in -->
-      <div *ngIf="authService.isLoggedIn()" class="flex items-center gap-3">
-        <a routerLink="/profile" class="text-sm font-semibold text-slate-700 hover:text-slate-900">
-          Profile
-        </a>
-
-        <button (click)="logout()"
-          class="rounded-full bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-600">
-          Logout
-        </button>
+      <div *ngIf="authService.isLoggedIn()" class="navbar__profile-actions">
+        <a routerLink="/profile" class="navbar__profile-link">Profile</a>
+        <button type="button" (click)="logout()" class="btn btn--danger">Logout</button>
       </div>
     </div>
 
-
-    <button type="button"
-      class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 md:hidden"
-      (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle navigation menu">
-      <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
+    <button
+      type="button"
+      class="navbar__toggle"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen"
+      aria-controls="mobile-nav-panel"
+      aria-label="Toggle navigation menu"
+    >
+      <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="navbar__toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
-      <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
+      <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="navbar__toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
   </div>
 
-  <div *ngIf="isMobileMenuOpen" class="border-t border-slate-200 bg-white px-4 py-3 md:hidden sm:px-6">
-    <div class="flex flex-col gap-2">
-      <a routerLink="/" (click)="closeMobileMenu()"
-        class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Home</a>
-      <a routerLink="/" (click)="closeMobileMenu()"
-        class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Events</a>
-      <a routerLink="/" (click)="closeMobileMenu()"
-        class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Offers</a>
-      <a routerLink="/" (click)="closeMobileMenu()"
-        class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Support</a>
-      <a routerLink="/login" (click)="closeMobileMenu()"
-        class="mt-2 rounded-full border border-slate-200 px-4 py-2 text-center text-sm font-semibold text-slate-700 shadow-sm hover:border-slate-300">
+  <div id="mobile-nav-panel" class="mobile-menu" *ngIf="isMobileMenuOpen">
+    <div class="mobile-menu__list">
+      <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Home</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Events</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Offers</a>
+      <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Support</a>
+
+      <a
+        *ngIf="!authService.isLoggedIn()"
+        routerLink="/login"
+        (click)="closeMobileMenu()"
+        class="btn btn--secondary mobile-menu__action"
+      >
         Log in
       </a>
+
+      <div *ngIf="authService.isLoggedIn()" class="mobile-menu__auth-actions">
+        <a routerLink="/profile" (click)="closeMobileMenu()" class="mobile-menu__link">Profile</a>
+        <button type="button" (click)="logout()" class="btn btn--danger mobile-menu__action">Logout</button>
+      </div>
     </div>
   </div>
 </nav>
