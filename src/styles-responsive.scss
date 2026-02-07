@@ -1,0 +1,383 @@
+/* ========================================
+   RESPONSIVE DESIGN UTILITIES & GLOBAL STYLES
+   ======================================== */
+
+/* ===============================
+   MOBILE-FIRST BREAKPOINTS
+   =============================== */
+/* xs: 0px (default) */
+/* sm: 640px */
+/* md: 768px */
+/* lg: 1024px */
+/* xl: 1280px */
+/* 2xl: 1536px */
+
+/* ===============================
+   CUSTOM SCROLLBAR (non-mobile)
+   =============================== */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+/* ===============================
+   FOCUS STATES FOR ACCESSIBILITY
+   =============================== */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #f43f5e;
+  outline-offset: 2px;
+}
+
+/* ===============================
+   IMPROVED INPUT STYLES
+   =============================== */
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+  accent-color: #f43f5e;
+}
+
+input::placeholder {
+  color: #cbd5e1;
+}
+
+/* ===============================
+   BUTTON GLOBAL STYLES
+   =============================== */
+button {
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ===============================
+   RESPONSIVE TEXT UTILITIES
+   =============================== */
+.text-responsive-h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+
+  @media (min-width: 640px) {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 3.75rem;
+    line-height: 4.5rem;
+  }
+}
+
+.text-responsive-h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+
+  @media (min-width: 640px) {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+.text-responsive-body {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  @media (min-width: 640px) {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE SPACING UTILITIES
+   =============================== */
+.py-responsive {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  @media (min-width: 640px) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.px-responsive {
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media (min-width: 640px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ===============================
+   CONTAINER QUERIES (for component-based responsive)
+   =============================== */
+.container-responsive {
+  container-type: inline-size;
+}
+
+/* ===============================
+   SAFE AREA INSETS (for notched phones)
+   =============================== */
+.safe-padding-top {
+  padding-top: safe-area-inset-top;
+}
+
+.safe-padding-bottom {
+  padding-bottom: safe-area-inset-bottom;
+}
+
+.safe-padding-left {
+  padding-left: safe-area-inset-left;
+}
+
+.safe-padding-right {
+  padding-right: safe-area-inset-right;
+}
+
+/* ===============================
+   TOUCH-FRIENDLY SIZING
+   =============================== */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===============================
+   RESPONSIVE GRID
+   =============================== */
+.grid-responsive-2 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 2rem;
+  }
+}
+
+.grid-responsive-3 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE IMAGES
+   =============================== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===============================
+   MOBILE MENU OPTIMIZATIONS
+   =============================== */
+.mobile-menu-hidden {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.mobile-menu-visible {
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+/* ===============================
+   SMOOTH SCROLLING
+   =============================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===============================
+   IMPROVED FORM INPUTS
+   =============================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Remove default select arrow for better custom styling */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+}
+
+/* ===============================
+   RESPONSIVE FLEX
+   =============================== */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+/* ===============================
+   PREVENT LARGE TEXT ZOOM ON MOBILE INPUT FOCUS
+   =============================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  font-size: 16px; /* Prevents auto-zoom on iOS */
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+/* ===============================
+   ORIENTATION UTILITIES
+   =============================== */
+@media (orientation: landscape) {
+  .hide-landscape {
+    display: none;
+  }
+}
+
+@media (orientation: portrait) {
+  .hide-portrait {
+    display: none;
+  }
+}
+
+/* ===============================
+   HIGH DPI SCREEN OPTIMIZATIONS
+   =============================== */
+@media (min-device-pixel-ratio: 2) {
+  /* Optimizations for retina displays */
+  hr {
+    height: 0.5px;
+  }
+}
+
+/* ===============================
+   REDUCED MOTION SUPPORT
+   =============================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===============================
+   DARK MODE SUPPORT (Optional)
+   =============================== */
+@media (prefers-color-scheme: dark) {
+  /* Define dark mode colors if needed */
+  /* This is a template - uncomment and customize as needed */
+  /* 
+  body {
+    background-color: #1e293b;
+    color: #f1f5f9;
+  }
+  */
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+@media print {
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  /* Prevent page breaks inside elements */
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+}

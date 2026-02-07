@@ -1,1 +1,63 @@
-/* Home component styling handled with Tailwind classes. */
+/* Home component styles */
+
+/* Hero section responsive adjustments */
+@media (max-width: 639px) {
+  section {
+    /* Ensure proper spacing on small screens */
+    overflow-x: hidden;
+  }
+}
+
+/* Feature card animations */
+.feature-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover {
+  @media (hover: hover) {
+    transform: translateY(-4px);
+  }
+}
+
+.feature-card:active {
+  transform: scale(0.98);
+}
+
+/* CTA Button responsive sizing */
+@media (max-width: 639px) {
+  button {
+    width: 100%;
+  }
+}
+
+/* Responsive grid layouts */
+@media (max-width: 639px) {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    display: flex;
+    gap: 1.5rem;
+  }
+}
+
+/* Image container responsive */
+.image-container {
+  width: 100%;
+  aspect-ratio: 1;
+
+  @media (min-width: 1024px) {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+}
+
+/* Section spacing responsive */
+section {
+  overflow-x: hidden;
+}

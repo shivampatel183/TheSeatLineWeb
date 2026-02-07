@@ -1,3 +1,69 @@
 a {
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+nav {
+  /* Ensure navbar doesn't cause horizontal scroll */
+  overflow-x: hidden;
+
+  /* Better shadow for depth */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 639px) {
+    /* Extra padding for mobile */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+      env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}
+
+/* Mobile menu animations */
+@media (max-width: 767px) {
+  .mobile-menu {
+    animation: slideDown 0.3s ease-out;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hamburger menu button */
+button {
+  transition: all 0.3s ease;
+
+  /* Ensure touch target is at least 44x44px */
+  min-height: 44px;
+  min-width: 44px;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Link styling improvements */
+a {
+  &:focus-visible {
+    outline: 2px solid #f43f5e;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Smooth transitions for menu */
+.nav-menu-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

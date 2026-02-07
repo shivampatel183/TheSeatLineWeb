@@ -1,0 +1,59 @@
+/* Google Login Button Responsive Styles */
+
+#googleBtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  /* Ensure button is properly sized on all devices */
+  @media (max-width: 639px) {
+    /* Constrain width but stay responsive */
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    @media (max-width: 767px) {
+      /* Tablet sizing */
+      max-width: 100%;
+    }
+  }
+}
+
+/* Google button iframe adjustments */
+:deep(iframe) {
+  max-width: 100% !important;
+  width: auto !important;
+
+  @media (max-width: 639px) {
+    width: 100% !important;
+  }
+}
+
+/* Container flex centering */
+div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Ensure no overflow on mobile */
+@media (max-width: 639px) {
+  * {
+    max-width: 100%;
+  }
+}
+
+/* Smooth interactions */
+button {
+  transition: all 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

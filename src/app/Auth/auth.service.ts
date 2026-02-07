@@ -8,31 +8,28 @@ import {
   ResponseEntity,
 } from './auth.model';
 import { ApiResponse } from '../common/components/model/authmodel';
+import { ApiService } from '../common/Services/api.services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7243/api/auth';
-
-  constructor(private http: HttpClient) {}
+  constructor(private apiApiService: ApiService) {}
 
   login(data: LoginEntity): Observable<ApiResponse<ResponseEntity>> {
-    return this.http
-      .post<ApiResponse<ResponseEntity>>(`${this.apiUrl}/login`, data)
+    return this.apiApiService
+      .post<ApiResponse<ResponseEntity>>(`/Auth/login`, data)
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
   register(data: RegisterEntity): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/register`, data);
+    return this.apiApiService.post<ApiResponse<string>>(`/Auth/register`, data);
   }
 
   // Google Login
   loginWithGoogle(idToken: string): Observable<ApiResponse<ResponseEntity>> {
-    return this.http
-      .post<
-        ApiResponse<ResponseEntity>
-      >(`${this.apiUrl}/google-login`, { idToken })
+    return this.apiApiService
+      .post<ApiResponse<ResponseEntity>>(`/Auth/google-login`, { idToken })
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
@@ -42,14 +39,11 @@ export class AuthService {
       accessToken: localStorage.getItem('accessToken'),
       refreshToken: localStorage.getItem('refreshToken'),
     };
-    return this.http
-      .post<
-        ApiResponse<ResponseEntity>
-      >(`${this.apiUrl}/refresh-token`, payload)
+    return this.apiApiService
+      .post<ApiResponse<ResponseEntity>>(`/refresh-token`, payload)
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
-  // Helper to Save Tokens
   private saveTokens(data: ResponseEntity) {
     if (data) {
       localStorage.setItem('accessToken', data.token);

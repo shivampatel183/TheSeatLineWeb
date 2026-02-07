@@ -1,5 +1,5 @@
-<div class="fixed top-5 right-5 z-50 flex flex-col gap-3">
-    <div *ngFor="let toast of toasts" class="min-w-[300px] max-w-md p-4 rounded-lg shadow-lg border-l-4
+<div class="fixed bottom-4 right-4 z-50 flex flex-col gap-3 max-w-sm sm:max-w-md mx-4">
+    <div *ngFor="let toast of toasts" class="w-full min-w-0 p-4 rounded-lg shadow-lg border-l-4
            bg-white bg-opacity-100 backdrop-blur-0
            transform transition-all duration-300 ease-in-out animate-slide-in" [ngClass]="{
       'border-green-500 text-gray-800': toast.type === 'success',
@@ -7,14 +7,15 @@
       'border-yellow-500 text-gray-800': toast.type === 'warning'
     }">
 
-        <div class="flex justify-between items-start">
-            <div class="flex items-center gap-3">
-                <span *ngIf="toast.type === 'success'" class="text-green-500 text-xl">✓</span>
-                <span *ngIf="toast.type === 'error'" class="text-red-500 text-xl">⚠</span>
-                <span *ngIf="toast.type === 'warning'" class="text-yellow-500 text-xl">!</span>
-                <p class="font-medium text-sm">{{ toast.message }}</p>
+        <div class="flex justify-between items-start gap-3">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+                <span *ngIf="toast.type === 'success'" class="text-green-500 text-lg sm:text-xl flex-shrink-0">✓</span>
+                <span *ngIf="toast.type === 'error'" class="text-red-500 text-lg sm:text-xl flex-shrink-0">⚠</span>
+                <span *ngIf="toast.type === 'warning'" class="text-yellow-500 text-lg sm:text-xl flex-shrink-0">!</span>
+                <p class="font-medium text-xs sm:text-sm break-words">{{ toast.message }}</p>
             </div>
-            <button (click)="remove(toast.id)" class="text-gray-400 hover:text-gray-600 transition">✕</button>
+            <button (click)="remove(toast.id)"
+                class="text-gray-400 hover:text-gray-600 transition flex-shrink-0 ml-2">✕</button>
         </div>
 
     </div>
