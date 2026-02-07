@@ -1,6 +1,8 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { AuthService } from '../../Auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +13,10 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
   isMobileMenuOpen = false;
+  private userSubject = new BehaviorSubject<any>(null);
+  user$ = this.userSubject.asObservable();
+
+  constructor(public authService: AuthService) {}
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -18,5 +24,10 @@ export class NavbarComponent {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.closeMobileMenu();
   }
 }

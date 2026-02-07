@@ -62,4 +62,8 @@ export class AuthService {
     localStorage.clear();
     window.location.href = '/login';
   }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('accessToken');
+  }
 }
