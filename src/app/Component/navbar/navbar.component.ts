@@ -1,7 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../Auth/auth.service';
 
 @Component({
@@ -13,10 +12,22 @@ import { AuthService } from '../../Auth/auth.service';
 })
 export class NavbarComponent {
   isMobileMenuOpen = false;
-  private userSubject = new BehaviorSubject<any>(null);
-  user$ = this.userSubject.asObservable();
 
   constructor(public authService: AuthService) {}
+
+  get userName(): string {
+    const rawUser = localStorage.getItem('user');
+    if (!rawUser) {
+      return 'Profile';
+    }
+
+    try {
+      const parsedUser = JSON.parse(rawUser) as { fullName?: string; email?: string };
+      return parsedUser.fullName || parsedUser.email || 'Profile';
+    } catch {
+      return 'Profile';
+    }
+  }
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;

@@ -65,6 +65,13 @@
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
+.navbar__profile-link,
+.mobile-menu__profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .navbar__link:hover,
 .navbar__profile-link:hover,
 .mobile-menu__link:hover {
@@ -104,6 +111,25 @@
 
 .btn--danger:hover {
   background: #e11d48;
+}
+
+.btn--theme {
+  color: #f43f5e;
+  background: #fff;
+  border-color: #f43f5e;
+}
+
+.btn--theme:hover {
+  color: #e11d48;
+  border-color: #e11d48;
+  background: #fff5f7;
+}
+
+.navbar__profile-icon,
+.navbar__logout-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
 }
 
 .navbar__toggle {

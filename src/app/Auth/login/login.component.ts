@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       this.router.navigate(['/']);
     }
@@ -41,9 +41,6 @@ export class LoginComponent implements OnInit {
           this.toast.success(
             response.message || 'Login Successful! Redirecting...',
           );
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('UserName', response.data.fullName);
-          localStorage.setItem('UserEmail', response.data.email);
           this.router.navigate(['/']);
         }
       },

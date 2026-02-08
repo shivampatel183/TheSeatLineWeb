@@ -1,5 +1,22 @@
 <section class="home home--hero">
   <div class="home__container">
+    <div class="hero__search">
+      <p class="hero__search-eyebrow">Find events near you</p>
+      <form class="hero__search-bar" role="search">
+        <label class="sr-only" for="citySearch">City</label>
+        <input id="citySearch" type="text" placeholder="Enter your city" />
+        <button type="submit">Search Events</button>
+        <button type="button" class="hero__location-button" aria-label="Current city">
+          <span class="hero__location-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" focusable="false">
+              <path
+                d="M12 2.5c-3.6 0-6.5 2.9-6.5 6.5 0 4.8 5.6 11.6 6.2 12.4.2.3.6.3.8 0 .6-.8 6.2-7.6 6.2-12.4 0-3.6-2.9-6.5-6.5-6.5zm0 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+            </svg>
+          </span>
+          <span class="hero__location-text">{{ currentCity }}</span>
+        </button>
+      </form>
+    </div>
     <div class="hero__layout">
       <div class="hero__content">
         <div>
@@ -86,13 +103,5 @@
         <p class="feature-card__text">Our dedicated support team is here to help whenever you need us.</p>
       </article>
     </div>
-  </div>
-</section>
-
-<section class="home home--cta">
-  <div class="cta__container">
-    <h2 class="cta__title">Ready to Book Your Perfect Event?</h2>
-    <p class="cta__subtitle">Join thousands of users who are already enjoying amazing events</p>
-    <button routerLink="/register" class="cta__button">Get Started Now</button>
   </div>
 </section>

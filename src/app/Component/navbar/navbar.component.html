@@ -18,8 +18,24 @@
       </a>
 
       <div *ngIf="authService.isLoggedIn()" class="navbar__profile-actions">
-        <a routerLink="/profile" class="navbar__profile-link">Profile</a>
-        <button type="button" (click)="logout()" class="btn btn--danger">Logout</button>
+        <a routerLink="/profile" class="navbar__profile-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="navbar__profile-icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a7.5 7.5 0 0 1 15 0" />
+          </svg>
+          {{ userName }}
+        </a>
+        <button type="button" (click)="logout()" class="btn btn--theme">
+          <svg xmlns="http://www.w3.org/2000/svg" class="navbar__logout-icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-7.5a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 6 21h7.5a2.25 2.25 0 0 0 2.25-2.25V15" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M12 12h8.25m0 0-2.25-2.25M20.25 12l-2.25 2.25" />
+          </svg>
+          Logout
+        </button>
       </div>
     </div>
 
@@ -49,8 +65,24 @@
       </a>
 
       <div *ngIf="authService.isLoggedIn()" class="mobile-menu__auth-actions">
-        <a routerLink="/profile" (click)="closeMobileMenu()" class="mobile-menu__link">Profile</a>
-        <button type="button" (click)="logout()" class="btn btn--danger mobile-menu__action">Logout</button>
+        <a routerLink="/profile" (click)="closeMobileMenu()" class="mobile-menu__link mobile-menu__profile-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="navbar__profile-icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a7.5 7.5 0 0 1 15 0" />
+          </svg>
+          {{ userName }}
+        </a>
+        <button type="button" (click)="logout()" class="btn btn--theme mobile-menu__action">
+          <svg xmlns="http://www.w3.org/2000/svg" class="navbar__logout-icon" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-7.5a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 6 21h7.5a2.25 2.25 0 0 0 2.25-2.25V15" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M12 12h8.25m0 0-2.25-2.25M20.25 12l-2.25 2.25" />
+          </svg>
+          Logout
+        </button>
       </div>
     </div>
   </div>

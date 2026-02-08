@@ -40,7 +40,7 @@ export class AuthService {
       refreshToken: localStorage.getItem('refreshToken'),
     };
     return this.apiApiService
-      .post<ApiResponse<ResponseEntity>>(`/refresh-token`, payload)
+      .post<ApiResponse<ResponseEntity>>(`/Auth/refresh-token`, payload)
       .pipe(tap((response) => this.saveTokens(response.data)));
   }
 
@@ -48,13 +48,8 @@ export class AuthService {
     if (data) {
       localStorage.setItem('accessToken', data.token);
       localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          email: data.email,
-          fullName: data.fullName,
-        }),
-      );
+      localStorage.setItem('UserName', data.fullName);
+      localStorage.setItem('UserEmail', data.email);
     }
   }
 
