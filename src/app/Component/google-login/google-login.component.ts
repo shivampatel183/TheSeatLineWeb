@@ -1,7 +1,9 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../../common/Services/toast.service';
 import { AuthService } from '../../Auth/auth.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+
 declare var google: any;
 
 @Component({
@@ -19,14 +21,13 @@ export class GoogleLoginComponent implements OnInit {
 
   ngOnInit(): void {
     google.accounts.id.initialize({
-      client_id:
-        '966081852486-j62f41l7i8t1mfe2ef06ohunk8mid1vv.apps.googleusercontent.com',
+      // 2. Use the environment variable here
+      client_id: environment.googleClientId,
       callback: this.handleCredentialResponse,
     });
 
     const googleBtnElement = document.getElementById('googleBtn');
     if (googleBtnElement) {
-      // Determine size based on screen width
       const isMobile = window.innerWidth < 640;
       google.accounts.id.renderButton(googleBtnElement, {
         theme: 'outline',
