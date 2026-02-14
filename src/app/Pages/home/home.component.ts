@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { City } from '../../common/model/master.model';
+import { ApiService } from '../../common/Services/api.services';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,8 @@ import { City } from '../../common/model/master.model';
 })
 export class HomeComponent implements OnInit {
   currentCity = 'Select city';
-  cities: City[] = [];
+
+  constructor(private apiApiService: ApiService) {}
 
   ngOnInit(): void {
     this.currentCity = this.getStoredCity();
@@ -24,5 +26,11 @@ export class HomeComponent implements OnInit {
     } catch {
       return 'Select city';
     }
+  }
+
+  test() {
+    this.apiApiService.get<any>(`/Venue/GetVenue`).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

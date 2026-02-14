@@ -16,14 +16,15 @@ export class NavbarComponent {
   constructor(public authService: AuthService) {}
 
   get userName(): string {
-    const rawUser = localStorage.getItem('user');
+    const rawUser = localStorage.getItem('accessToken');
     if (!rawUser) {
       return 'Profile';
     }
 
     try {
-      const parsedUser = JSON.parse(rawUser) as { fullName?: string; email?: string };
-      return parsedUser.fullName || parsedUser.email || 'Profile';
+      var UserName = localStorage.getItem('UserName');
+      var UserEmail = localStorage.getItem('UserEmail');
+      return UserName || UserEmail || 'Profile';
     } catch {
       return 'Profile';
     }
