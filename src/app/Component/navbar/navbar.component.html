@@ -9,6 +9,7 @@
       <a routerLink="/" class="navbar__link">Home</a>
       <a routerLink="/" class="navbar__link">Events</a>
       <a routerLink="/" class="navbar__link">Offers</a>
+      <a *ngIf="authService.isLoggedIn()" routerLink="/my-bookings" class="navbar__link">My Bookings</a>
       <a routerLink="/" class="navbar__link">Support</a>
     </div>
 
@@ -57,6 +58,8 @@
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Home</a>
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Events</a>
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Offers</a>
+      <a *ngIf="authService.isLoggedIn()" routerLink="/my-bookings" (click)="closeMobileMenu()"
+        class="mobile-menu__link">My Bookings</a>
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Support</a>
 
       <a *ngIf="!authService.isLoggedIn()" routerLink="/login" (click)="closeMobileMenu()"

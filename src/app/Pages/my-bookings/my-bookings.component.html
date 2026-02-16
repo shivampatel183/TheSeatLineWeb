@@ -1,0 +1,57 @@
+<div class="bookings-container">
+    <!-- Header -->
+    <div class="bookings-header">
+        <h1>My Bookings</h1>
+        <p>View and manage all your seat reservations</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+            <span>All Bookings</span>
+            <span class="count">{{ getBookingCount('all') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'upcoming'" (click)="setFilter('upcoming')">
+            <span>Upcoming</span>
+            <span class="count">{{ getBookingCount('upcoming') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'past'" (click)="setFilter('past')">
+            <span>Past</span>
+            <span class="count">{{ getBookingCount('past') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'cancelled'" (click)="setFilter('cancelled')">
+            <span>Cancelled</span>
+            <span class="count">{{ getBookingCount('cancelled') }}</span>
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading your bookings...</p>
+    </div>
+
+    <!-- Bookings Grid -->
+    <div *ngIf="!isLoading && filteredBookings.length > 0" class="bookings-grid">
+        <app-booking-card *ngFor="let booking of filteredBookings" [booking]="booking"
+            (cancelled)="onBookingCancelled($event)"></app-booking-card>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredBookings.length === 0" class="empty-state">
+        <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                <polyline points="17 2 12 7 7 2"></polyline>
+            </svg>
+        </div>
+        <h2>No bookings found</h2>
+        <p *ngIf="activeFilter === 'all'">You haven't made any bookings yet. Start exploring shows and reserve your
+            seats!</p>
+        <p *ngIf="activeFilter === 'upcoming'">You don't have any upcoming bookings.</p>
+        <p *ngIf="activeFilter === 'past'">You don't have any past bookings.</p>
+        <p *ngIf="activeFilter === 'cancelled'">You don't have any cancelled bookings.</p>
+        <a href="/" class="browse-btn">Browse Shows</a>
+    </div>
+</div>
