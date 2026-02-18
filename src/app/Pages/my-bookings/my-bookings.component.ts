@@ -31,15 +31,19 @@ export class MyBookingsComponent implements OnInit {
     this.isLoading = true;
     this.bookingService.getMyBookings().subscribe({
       next: (response) => {
+        console.log('Booking API Response:', response);
         if (response.success && response.data) {
+          console.log('Bookings data:', response.data);
           this.bookings = response.data;
           this.applyFilter();
         } else {
+          console.error('Failed to load bookings:', response);
           this.toast.error('Failed to load bookings');
         }
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading bookings:', error);
         this.toast.error('Error loading bookings');
         this.isLoading = false;
       },

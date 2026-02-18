@@ -48,7 +48,7 @@
         </div>
         <div class="detail-row">
             <span class="label">Total Seats:</span>
-            <span class="value">{{ booking.seats.length }}</span>
+            <span class="value">{{ booking.seats?.length || 0 }}</span>
         </div>
         <div class="detail-row">
             <span class="label">Payment:</span>
@@ -62,7 +62,7 @@
     <div class="card-footer">
         <div class="total-amount">
             <span class="label">Total Amount</span>
-            <span class="amount">${{ booking.totalAmount.toFixed(2) }}</span>
+            <span class="amount">Rs. {{ booking.totalAmount.toFixed(2) }}</span>
         </div>
         <div class="actions">
             <button *ngIf="canCancel()" class="cancel-btn" (click)="cancelBooking()" [disabled]="isCancelling">

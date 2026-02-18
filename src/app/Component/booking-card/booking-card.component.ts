@@ -25,6 +25,7 @@ export class BookingCardComponent {
   ) {}
 
   cancelBooking(): void {
+
     if (!confirm('Are you sure you want to cancel this booking?')) {
       return;
     }
@@ -90,6 +91,7 @@ export class BookingCardComponent {
   }
 
   canCancel(): boolean {
+    if (!this.booking) return false;
     return (
       this.booking.status === BookingStatus.Confirmed &&
       new Date(this.booking.show?.showDate || this.booking.bookingDate) >
@@ -98,6 +100,9 @@ export class BookingCardComponent {
   }
 
   getSeatNumbers(): string {
+    if (!this.booking?.seats || this.booking.seats.length === 0) {
+      return 'N/A';
+    }
     return this.booking.seats.map((s) => s.seatNumber).join(', ');
   }
 }
