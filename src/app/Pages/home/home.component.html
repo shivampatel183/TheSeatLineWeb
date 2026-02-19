@@ -15,10 +15,6 @@
             </svg>
           </span>
           <span class="hero__location-text">{{ currentCity }}</span>
-          <dropdown class="hero__location-dropdown">
-            <ul>
-              <li *ngFor="let city of nearbyCities" (click)="selectCity(city)">{{ city }}</li>
-            </ul>
         </button>
       </form>
     </div>
