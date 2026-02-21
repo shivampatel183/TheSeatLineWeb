@@ -4,8 +4,6 @@
 @media (max-width: 639px) {
   div {
     min-height: auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
   }
 }
 

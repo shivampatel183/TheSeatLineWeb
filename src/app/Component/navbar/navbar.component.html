@@ -53,7 +53,18 @@
     </button>
   </div>
 
-  <div id="mobile-nav-panel" class="mobile-menu" *ngIf="isMobileMenuOpen">
+</nav>
+
+<div class="navbar__spacer"></div>
+
+<div class="mobile-sidebar" *ngIf="isMobileMenuOpen">
+  <button type="button" class="mobile-sidebar__backdrop" (click)="closeMobileMenu()" aria-label="Close navigation menu"></button>
+  <aside id="mobile-nav-panel" class="mobile-sidebar__panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <button type="button" class="mobile-sidebar__close" (click)="closeMobileMenu()" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="navbar__toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
     <div class="mobile-menu__list">
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Home</a>
       <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu__link">Events</a>
@@ -88,5 +99,5 @@
         </button>
       </div>
     </div>
-  </div>
-</nav>
+  </aside>
+</div>

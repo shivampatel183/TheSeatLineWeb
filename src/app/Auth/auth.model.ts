@@ -1,19 +1,31 @@
 export class ResponseEntity {
-  token: string = '';
+  accessToken: string = '';
   refreshToken: string = '';
+  expiresAt: string = '';
+  user: UserEntity = new UserEntity();
+}
+
+export class UserEntity {
   email: string = '';
-  fullName: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  phoneNumber: string = '';
 }
 
 export class LoginEntity {
   email: string = '';
   password: string = '';
+  rememberMe: boolean = false;
+  mfaCode?: string;
 }
 
 export class RegisterEntity {
-  fullName: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  phoneNumber: string = '';
 }
 
 export class GoogleLoginEntity {

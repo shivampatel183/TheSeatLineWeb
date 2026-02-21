@@ -14,10 +14,20 @@ export class AppComponent {
   title = 'TheSeatLineWeb';
 
   ngOnInit() {
+    const existingVisitorCity = localStorage.getItem('visitorCity');
+    if (existingVisitorCity) {
+      return;
+    }
+
     fetch('https://ipapi.co/json/')
       .then((res) => res.json())
       .then((data) => {
-        localStorage.setItem('city', data.city);
+        if (typeof data?.city === 'string' && data.city.trim().length > 0) {
+          localStorage.setItem('visitorCity', data.city.trim());
+        }
+      })
+      .catch(() => {
+        // Ignore geolocation fetch errors and continue with manual city selection.
       });
   }
 }

@@ -46,10 +46,11 @@ export class AuthService {
 
   private saveTokens(data: ResponseEntity) {
     if (data) {
-      localStorage.setItem('accessToken', data.token);
+      localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('UserName', data.fullName);
-      localStorage.setItem('UserEmail', data.email);
+      localStorage.setItem('expiresAt', data.expiresAt);
+      localStorage.setItem('UserName', data.user.firstName);
+      localStorage.setItem('UserEmail', data.user.email);
     }
   }
 

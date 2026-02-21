@@ -1,0 +1,29 @@
+<div class="city-popup" *ngIf="isOpen">
+  <div class="city-popup__backdrop" (click)="requestClose()"></div>
+  <div class="city-popup__panel" role="dialog" aria-modal="true" aria-label="Select your city">
+    <h3 class="city-popup__title">Select Your City</h3>
+    <p class="city-popup__subtitle">Choose a city to see events near you.</p>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      class="city-popup__search"
+      placeholder="Search city"
+      aria-label="Search city"
+    />
+
+    <div class="city-popup__list" *ngIf="filteredCities.length > 0; else noCities">
+      <button
+        type="button"
+        class="city-popup__item"
+        *ngFor="let city of filteredCities"
+        (click)="selectCity(city)"
+      >
+        {{ city }}
+      </button>
+    </div>
+
+    <ng-template #noCities>
+      <p class="city-popup__empty">No city found.</p>
+    </ng-template>
+  </div>
+</div>

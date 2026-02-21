@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../Auth/auth.service';
 
@@ -10,7 +10,7 @@ import { AuthService } from '../../Auth/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnDestroy {
   isMobileMenuOpen = false;
 
   constructor(public authService: AuthService) {}
@@ -32,10 +32,12 @@ export class NavbarComponent {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    this.setBodyScrollLock(this.isMobileMenuOpen);
   }
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+    this.setBodyScrollLock(false);
   }
 
   @HostListener('window:resize')
@@ -53,5 +55,13 @@ export class NavbarComponent {
   logout() {
     this.authService.logout();
     this.closeMobileMenu();
+  }
+
+  ngOnDestroy() {
+    this.setBodyScrollLock(false);
+  }
+
+  private setBodyScrollLock(locked: boolean) {
+    document.body.style.overflow = locked ? 'hidden' : '';
   }
 }

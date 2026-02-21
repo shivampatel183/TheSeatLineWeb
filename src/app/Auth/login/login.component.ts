@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
+    debugger;
     this.authService.login(this.loginData).subscribe({
       next: (response: ApiResponse<ResponseEntity>) => {
         if (!response.success) {
