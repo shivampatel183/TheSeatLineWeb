@@ -9,20 +9,6 @@
         </div>
 
         <form (ngSubmit)="onRegister()" class="auth-form">
-          <div *ngFor="let field of registerFields" class="auth-field">
-            <label [for]="field.name" class="auth-label">{{ field.label }}</label>
-            <input
-              [id]="field.name"
-              [type]="field.type"
-              [name]="field.name"
-              [placeholder]="field.placeholder"
-              [autocomplete]="field.autocomplete"
-              [ngModel]="getFieldValue(field)"
-              (ngModelChange)="setFieldValue(field, $event)"
-              required
-              class="auth-input"
-            />
-          </div>
 
           <label class="auth-checkbox">
             <input type="checkbox" class="auth-checkbox-input" required />
