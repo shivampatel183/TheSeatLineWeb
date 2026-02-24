@@ -1,96 +1,65 @@
-﻿<div
-  class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12 lg:px-8 lg:py-20">
-  <div class="mx-auto grid w-full max-w-5xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-    <!-- Form Section -->
-    <div class="w-full rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-100 sm:p-8 md:p-10">
-      <div class="text-center mb-8">
-        <p class="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-wide">Create account</p>
-        <h1 class="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">Join The Seat Line</h1>
-        <p class="mt-2 text-sm sm:text-base text-slate-600">Get early access to trending events in your city.</p>
-      </div>
-
-      <form (ngSubmit)="onRegister()" class="space-y-5 sm:space-y-6">
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Display Name</label>
-          <input type="text" [(ngModel)]="registerData.firstName" name="firstName" required placeholder="Your Name"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
+<section class="auth-page">
+  <div class="auth-container">
+    <div class="auth-grid">
+      <div class="auth-card">
+        <div class="auth-header">
+          <p class="auth-kicker">Create account</p>
+          <h1 class="auth-title">Join The Seat Line</h1>
+          <p class="auth-subtitle">Get early access to trending events in your city.</p>
         </div>
 
-        <!-- <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
-          <input type="text" [(ngModel)]="registerData.lastName" name="lastName" required placeholder="Sharma"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
-        </div> -->
+        <form (ngSubmit)="onRegister()" class="auth-form">
+          <div *ngFor="let field of registerFields" class="auth-field">
+            <label [for]="field.name" class="auth-label">{{ field.label }}</label>
+            <input
+              [id]="field.name"
+              [type]="field.type"
+              [name]="field.name"
+              [placeholder]="field.placeholder"
+              [autocomplete]="field.autocomplete"
+              [ngModel]="getFieldValue(field)"
+              (ngModelChange)="setFieldValue(field, $event)"
+              required
+              class="auth-input"
+            />
+          </div>
 
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
-          <input type="email" [(ngModel)]="registerData.email" name="email" required placeholder="user@example.com"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
-        </div>
+          <label class="auth-checkbox">
+            <input type="checkbox" class="auth-checkbox-input" required />
+            <span class="auth-checkbox-label">
+              I agree to the
+              <a href="#" class="auth-link">Terms &amp; Conditions</a>
+              and
+              <a href="#" class="auth-link">Privacy Policy</a>
+            </span>
+          </label>
 
-        <!-- <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
-          <input type="tel" [(ngModel)]="registerData.phoneNumber" name="phoneNumber" required placeholder="+919876543210"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
-        </div> -->
+          <button type="submit" [disabled]="isSubmitting" class="auth-submit">
+            {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
+          </button>
+        </form>
 
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
-          <input type="password" [(ngModel)]="registerData.password" name="password" required
-            placeholder="SecurePass@123"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
-          <input type="password" [(ngModel)]="registerData.confirmPassword" name="confirmPassword" required
-            placeholder="SecurePass@123"
-            class="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm sm:text-base shadow-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 transition" />
-        </div>
-
-        <label class="flex items-start gap-2 sm:gap-3">
-          <input type="checkbox" class="h-5 w-5 rounded border-slate-300 text-rose-500 mt-0.5 flex-shrink-0" required />
-          <span class="text-xs sm:text-sm text-slate-600">
-            I agree to the <a href="#" class="text-rose-600 hover:text-rose-700 font-medium">Terms & Conditions</a> and
-            <a href="#" class="text-rose-600 hover:text-rose-700 font-medium">Privacy Policy</a>
-          </span>
-        </label>
-
-        <button type="submit" [disabled]="isSubmitting"
-          class="w-full rounded-lg bg-rose-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-rose-500/20 transition hover:bg-rose-600 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70">
-          {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
-        </button>
-      </form>
-
-      <div class="mt-6 rounded-xl bg-slate-50 p-4 text-center text-xs sm:text-sm text-slate-600">
-        Already have an account?
-        <a [routerLink]="['/login']" class="font-semibold text-rose-600 hover:text-rose-700 transition">Sign in here</a>
-      </div>
-    </div>
-
-    <!-- Marketing Section (Hidden on small screens) -->
-    <div
-      class="hidden rounded-2xl bg-gradient-to-br from-rose-500 to-orange-400 p-8 sm:p-10 text-white shadow-2xl lg:block">
-      <p class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-rose-100">Start today</p>
-      <h2 class="mt-6 text-3xl sm:text-4xl font-bold leading-tight">Create your account and never miss a show.</h2>
-      <p class="mt-6 text-sm text-rose-100/90 leading-relaxed">
-        Your profile keeps tickets, preferences, and event alerts synced across desktop and mobile. Enjoy personalized
-        recommendations and exclusive member benefits.
-      </p>
-      <div class="mt-8 space-y-4">
-        <div class="flex items-start gap-3">
-          <span class="text-xl">&#10003;</span>
-          <p class="text-sm text-rose-100">Instant bookings with no waiting</p>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-xl">&#10003;</span>
-          <p class="text-sm text-rose-100">Access exclusive member-only events</p>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-xl">&#10003;</span>
-          <p class="text-sm text-rose-100">Get early bird discounts on upcoming shows</p>
+        <div class="auth-footer-box">
+          Already have an account?
+          <a [routerLink]="['/login']" class="auth-link">Sign in here</a>
         </div>
       </div>
+
+      <aside class="auth-panel">
+        <p class="auth-panel-kicker">Start today</p>
+        <h2 class="auth-panel-title">Create your account and never miss a show.</h2>
+        <p class="auth-panel-copy">
+          Your profile keeps tickets, preferences, and event alerts synced across desktop and mobile. Enjoy
+          personalized recommendations and exclusive member benefits.
+        </p>
+
+        <div class="auth-panel-list">
+          <div *ngFor="let benefit of marketingBenefits" class="auth-panel-item">
+            <span class="auth-panel-check">&#10003;</span>
+            <p class="auth-panel-item-text">{{ benefit }}</p>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
-</div>
+</section>

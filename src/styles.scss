@@ -5,6 +5,136 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .auth-page {
+    @apply min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12 lg:px-8;
+  }
+
+  .auth-container {
+    @apply mx-auto w-full max-w-5xl;
+  }
+
+  .auth-grid {
+    @apply grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr];
+  }
+
+  .auth-card {
+    @apply w-full rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-100 sm:p-8 md:p-10;
+  }
+
+  .auth-header {
+    @apply mb-8 text-center;
+  }
+
+  .auth-kicker {
+    @apply text-xs font-semibold uppercase tracking-wide text-rose-500 sm:text-sm;
+  }
+
+  .auth-title {
+    @apply mt-3 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl;
+  }
+
+  .auth-subtitle {
+    @apply mt-2 text-sm text-slate-600 sm:text-base;
+  }
+
+  .auth-form {
+    @apply space-y-5 sm:space-y-6;
+  }
+
+  .auth-field {
+    @apply space-y-2;
+  }
+
+  .auth-label {
+    @apply block text-sm font-medium text-slate-700;
+  }
+
+  .auth-input {
+    @apply block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm transition focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100 sm:text-base;
+  }
+
+  .auth-row {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .auth-checkbox {
+    @apply flex items-start gap-2 sm:gap-3;
+  }
+
+  .auth-checkbox-input {
+    @apply mt-0.5 h-5 w-5 flex-shrink-0 rounded border-slate-300 text-rose-500;
+  }
+
+  .auth-checkbox-label {
+    @apply text-xs text-slate-600 sm:text-sm;
+  }
+
+  .auth-link {
+    @apply font-medium text-rose-600 transition hover:text-rose-700;
+  }
+
+  .auth-submit {
+    @apply w-full rounded-lg bg-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition hover:-translate-y-0.5 hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 sm:text-base;
+  }
+
+  .auth-divider {
+    @apply relative my-6 sm:my-8;
+  }
+
+  .auth-divider-line {
+    @apply absolute inset-0 flex items-center;
+  }
+
+  .auth-divider-label-wrap {
+    @apply relative flex justify-center text-xs sm:text-sm;
+  }
+
+  .auth-divider-label {
+    @apply bg-white px-2 uppercase tracking-wider text-slate-600;
+  }
+
+  .auth-footer-box {
+    @apply mt-6 rounded-xl bg-slate-50 p-4 text-center text-xs text-slate-600 sm:text-sm;
+  }
+
+  .auth-footer-text {
+    @apply mt-6 text-center text-xs text-slate-600 sm:mt-8 sm:text-sm;
+  }
+
+  .auth-panel {
+    @apply hidden rounded-2xl bg-gradient-to-br from-rose-500 to-orange-400 p-8 text-white shadow-2xl sm:p-10 lg:block;
+  }
+
+  .auth-panel-kicker {
+    @apply text-xs font-semibold uppercase tracking-wider text-rose-100 sm:text-sm;
+  }
+
+  .auth-panel-title {
+    @apply mt-6 text-3xl font-bold leading-tight sm:text-4xl;
+  }
+
+  .auth-panel-copy {
+    @apply mt-6 text-sm leading-relaxed text-rose-100/90;
+  }
+
+  .auth-panel-list {
+    @apply mt-8 space-y-4;
+  }
+
+  .auth-panel-item {
+    @apply flex items-start gap-3;
+  }
+
+  .auth-panel-check {
+    @apply text-xl;
+  }
+
+  .auth-panel-item-text {
+    @apply text-sm text-rose-100;
+  }
+}
+
 html,
 body {
   width: 100%;

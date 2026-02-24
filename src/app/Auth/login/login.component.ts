@@ -8,6 +8,17 @@ import { ApiResponse } from '../../common/components/model/authmodel';
 import { LoginEntity, ResponseEntity } from '../auth.model';
 import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
+type LoginFieldKey = 'email' | 'password';
+
+interface LoginFieldConfig {
+  key: LoginFieldKey;
+  name: LoginFieldKey;
+  label: string;
+  type: 'email' | 'password';
+  placeholder: string;
+  autocomplete: string;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -17,6 +28,24 @@ import { GoogleLoginComponent } from '../../Component/google-login/google-login.
 })
 export class LoginComponent implements OnInit {
   loginData = new LoginEntity();
+  readonly loginFields: LoginFieldConfig[] = [
+    {
+      key: 'email',
+      name: 'email',
+      label: 'Email Address',
+      type: 'email',
+      placeholder: 'you@example.com',
+      autocomplete: 'email',
+    },
+    {
+      key: 'password',
+      name: 'password',
+      label: 'Password',
+      type: 'password',
+      placeholder: '********',
+      autocomplete: 'current-password',
+    },
+  ];
 
   constructor(
     private authService: AuthService,
@@ -29,6 +58,14 @@ export class LoginComponent implements OnInit {
     if (token) {
       this.router.navigate(['/']);
     }
+  }
+
+  getFieldValue(field: LoginFieldConfig): string {
+    return this.loginData[field.key];
+  }
+
+  setFieldValue(field: LoginFieldConfig, value: string): void {
+    this.loginData[field.key] = value;
   }
 
   onLogin() {
