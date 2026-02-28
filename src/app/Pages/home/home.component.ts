@@ -14,6 +14,7 @@ import { CitySelectorComponent } from '../../common/components/city-selector/cit
 export class HomeComponent implements OnInit {
   private readonly SELECTED_CITY_KEY = 'city';
   private readonly VISITOR_CITY_KEY = 'visitorCity';
+  private readonly AVAILABLE_CITIES_KEY = 'availableCities';
 
   currentCity = 'Select city';
   availableCities: string[] = [];
@@ -55,6 +56,19 @@ export class HomeComponent implements OnInit {
   }
 
   private async fetchAvailableCities(): Promise<string[]> {
+    // Try to load from cache first
+    try {
+      const cachedCities = localStorage.getItem(this.AVAILABLE_CITIES_KEY);
+      if (cachedCities) {
+        const parsedCities = JSON.parse(cachedCities);
+        if (Array.isArray(parsedCities) && parsedCities.length > 0) {
+          return parsedCities;
+        }
+      }
+    } catch (e) {
+      console.error('Error parsing cached cities:', e);
+    }
+
     try {
       const response = await firstValueFrom(
         this.apiApiService.get<any>(`/City`),
@@ -87,6 +101,16 @@ export class HomeComponent implements OnInit {
       );
 
       uniqueCities.sort((a: string, b: string) => a.localeCompare(b));
+
+      // Store in cache
+      if (uniqueCities.length > 0) {
+        try {
+          localStorage.setItem(this.AVAILABLE_CITIES_KEY, JSON.stringify(uniqueCities));
+        } catch (e) {
+          console.error('Error caching cities:', e);
+        }
+      }
+
       return uniqueCities;
     } catch {
       return [];

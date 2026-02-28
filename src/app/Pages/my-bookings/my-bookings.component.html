@@ -11,14 +11,6 @@
             <span>All Bookings</span>
             <span class="count">{{ getBookingCount('all') }}</span>
         </button>
-        <button class="filter-tab" [class.active]="activeFilter === 'upcoming'" (click)="setFilter('upcoming')">
-            <span>Upcoming</span>
-            <span class="count">{{ getBookingCount('upcoming') }}</span>
-        </button>
-        <button class="filter-tab" [class.active]="activeFilter === 'past'" (click)="setFilter('past')">
-            <span>Past</span>
-            <span class="count">{{ getBookingCount('past') }}</span>
-        </button>
         <button class="filter-tab" [class.active]="activeFilter === 'cancelled'" (click)="setFilter('cancelled')">
             <span>Cancelled</span>
             <span class="count">{{ getBookingCount('cancelled') }}</span>

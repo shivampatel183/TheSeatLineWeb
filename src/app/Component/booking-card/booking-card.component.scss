@@ -1,9 +1,9 @@
 .booking-card {
-  background: white;
-  border-radius: 1rem;
+  background: var(--bg-main);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
@@ -17,8 +17,8 @@
 /* Card Header */
 .card-header {
   padding: 1.25rem;
-  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-  color: white;
+  background: var(--bg-card-gradient);
+  color: var(--text-on-primary);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -44,7 +44,7 @@
 
 .status-badge {
   padding: 0.25rem 0.625rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -75,7 +75,7 @@
 /* Show Info */
 .show-info {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
@@ -85,18 +85,18 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  color: #475569;
+  color: var(--text-light);
   font-size: 0.875rem;
 }
 
 .info-row svg {
   flex-shrink: 0;
-  color: #f43f5e;
+  color: var(--primary);
 }
 
 .show-title {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 /* Booking Details */
@@ -116,12 +116,12 @@
 }
 
 .detail-row .label {
-  color: #64748b;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
 .detail-row .value {
-  color: #0f172a;
+  color: var(--text-main);
   font-weight: 600;
 }
 
@@ -133,7 +133,7 @@
 
 .payment-badge {
   padding: 0.1875rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -162,8 +162,8 @@
 /* Card Footer */
 .card-footer {
   padding: 1rem 1.25rem;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -178,7 +178,7 @@
 
 .total-amount .label {
   font-size: 0.6875rem;
-  color: #64748b;
+  color: var(--text-muted);
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -187,7 +187,7 @@
 .total-amount .amount {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #f43f5e;
+  color: var(--primary);
 }
 
 .actions {
@@ -197,10 +197,10 @@
 
 .cancel-btn {
   padding: 0.5rem 1rem;
-  background: white;
-  color: #f43f5e;
-  border: 1px solid #f43f5e;
-  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-full);
   font-weight: 600;
   font-size: 0.8125rem;
   cursor: pointer;
@@ -212,8 +212,8 @@
 
 .cancel-btn:hover:not(:disabled) {
   background: #fff5f7;
-  color: #e11d48;
-  border-color: #e11d48;
+  color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .cancel-btn:disabled {

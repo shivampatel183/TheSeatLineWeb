@@ -1,10 +1,10 @@
 <section class="home home--hero">
   <div class="home__container">
     <div class="hero__search">
-      <p class="hero__search-eyebrow">Find events near you</p>
+      <p class="hero__search-eyebrow">Find your favorite events</p>
       <form class="hero__search-bar" role="search">
         <label class="sr-only" for="citySearch">City</label>
-        <input id="citySearch" type="text" placeholder="Enter your city" />
+        <input id="citySearch" type="text" placeholder="Search by events, artists or venues" />
         <button type="submit" class="hero__search-submit" aria-label="Search events">
           <i class="fas fa-search" aria-hidden="true"></i>
         </button>
@@ -19,7 +19,7 @@
     <div class="hero__layout">
       <div class="hero__content">
         <div>
-          <h1 class="hero__title">Never Miss Your Favorite Show</h1>
+          <h1 class="hero__title">Never Miss Your Favorite Events</h1>
           <p class="hero__subtitle">
             Discover, book, and enjoy the best events in your city. Your personalized entertainment platform powered by
             real-time availability.
@@ -105,10 +105,6 @@
   </div>
 </section>
 
-<app-city-selector
-  [isOpen]="showCityPopup"
-  [cities]="availableCities"
-  [canClose]="currentCity !== 'Select city' || availableCities.length === 0"
-  (closeRequested)="closeCityPopup()"
-  (citySelected)="selectCity($event)"
-></app-city-selector>
+<app-city-selector [isOpen]="showCityPopup" [cities]="availableCities"
+  [canClose]="currentCity !== 'Select city' || availableCities.length === 0" (closeRequested)="closeCityPopup()"
+  (citySelected)="selectCity($event)"></app-city-selector>

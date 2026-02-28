@@ -5,6 +5,43 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Colors */
+  --primary: #f43f5e;       /* Rose 500 */
+  --primary-hover: #e11d48; /* Rose 600 */
+  --primary-light: #ffe4e6; /* Rose 100 */
+  --secondary: #0f172a;     /* Slate 900 */
+  --secondary-hover: #1e293b; /* Slate 800 */
+  
+  --bg-main: #ffffff;
+  --bg-alt: #f8fafc;        /* Slate 50 */
+  --bg-gradient: linear-gradient(130deg, #f8fafc 0%, #ffffff 45%, #eff6ff 100%);
+  --bg-primary-gradient: linear-gradient(90deg, #f43f5e 0%, #ec4899 100%);
+  --bg-card-gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+
+  --border-color: #e2e8f0;   /* Slate 200 */
+  --border-focus: #f43f5e;
+  
+  --text-main: #0f172a;      /* Slate 900 */
+  --text-muted: #64748b;     /* Slate 500 */
+  --text-light: #475569;     /* Slate 600 */
+  --text-on-primary: #ffffff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 38px rgba(244, 63, 94, 0.25);
+  
+  /* Radius */
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-full: 9999px;
+
+  /* Fonts */
+  --font-family: "Outfit", sans-serif;
+}
+
 @layer components {
   .auth-page {
     @apply min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12 lg:px-8;
@@ -136,22 +173,16 @@
 }
 
 html,
+body,
+* {
+  font-family: var(--font-family);
+}
+
 body {
   width: 100%;
   height: 100%;
   margin: 0;
   overflow-x: hidden;
-  font-family: "Outfit", sans-serif;
-}
-* {
-  font-family: "Outfit", sans-serif;
-}
-
-/* Improve body readability */
-body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-    Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -167,7 +198,7 @@ main {
 
 .home {
   width: 100%;
-  padding: 3.5rem 1rem;
+  padding: 2rem 1rem;
 }
 
 .home__container,
@@ -178,7 +209,7 @@ main {
 
 .home--hero {
   min-height: calc(100vh - 4.5rem);
-  background: linear-gradient(130deg, #f8fafc 0%, #ffffff 45%, #eff6ff 100%);
+  background: var(--bg-gradient);
 }
 
 .hero__layout {
@@ -195,16 +226,15 @@ main {
 .hero__search {
   display: grid;
   gap: 0.7rem;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
 }
 
 .hero__search-eyebrow {
   margin: 0;
-  color: #e11d48;
-  font-size: 0.9rem;
+  color: var(--primary-hover);
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-align: center;
 }
 
 .hero__search-bar {
@@ -214,33 +244,33 @@ main {
   align-items: center;
   padding: 0.6rem;
   border-radius: 0.95rem;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 .hero__search-bar input {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   padding: 0.75rem 0.9rem;
   font-size: 1rem;
-  color: #0f172a;
+  color: var(--text-main);
   outline: none;
-  background: #f8fafc;
+  background: var(--bg-alt);
 }
 
 .hero__search-bar input:focus {
-  border-color: #f43f5e;
+  border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.18);
-  background: #fff;
+  background: var(--bg-main);
 }
 
 .hero__search-bar button {
   border: none;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   padding: 0.8rem 1.1rem;
-  background: #0f172a;
-  color: #fff;
+  background: var(--secondary);
+  color: var(--text-on-primary);
   font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
@@ -269,15 +299,15 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: #fff;
-  color: #0f172a;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   font-weight: 600;
 }
 
 .hero__search-bar .hero__location-button:hover {
-  background: #f8fafc;
+  background: var(--bg-alt);
   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
@@ -290,12 +320,12 @@ main {
 .hero__location-icon svg {
   width: 1rem;
   height: 1rem;
-  fill: #e11d48;
+  fill: var(--primary-hover);
 }
 
 .hero__location-icon i {
   font-size: 1rem;
-  color: #e11d48;
+  color: var(--primary-hover);
 }
 
 .hero__location-text {
@@ -304,7 +334,7 @@ main {
 
 .hero__search-hint {
   margin: 0;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -322,7 +352,7 @@ main {
 
 .hero__title {
   margin: 0;
-  color: #0f172a;
+  color: var(--text-main);
   font-size: clamp(2rem, 5vw, 3.3rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -330,7 +360,7 @@ main {
 
 .hero__subtitle {
   margin: 1.2rem 0 0;
-  color: #475569;
+  color: var(--text-light);
   font-size: clamp(1rem, 3vw, 1.2rem);
   line-height: 1.6;
 }
@@ -343,7 +373,7 @@ main {
 .hero__button,
 .cta__button {
   border: 1px solid transparent;
-  border-radius: 0.7rem;
+  border-radius: var(--radius-md);
   min-height: 2.85rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
@@ -356,8 +386,8 @@ main {
 }
 
 .hero__button--primary {
-  background: #f43f5e;
-  color: #fff;
+  background: var(--primary);
+  color: var(--text-on-primary);
   box-shadow: 0 10px 24px rgba(244, 63, 94, 0.32);
 }
 
@@ -368,12 +398,12 @@ main {
 
 .hero__button--secondary {
   border-color: #cbd5e1;
-  background: #fff;
-  color: #0f172a;
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .hero__button--secondary:hover {
-  background: #f8fafc;
+  background: var(--bg-alt);
 }
 
 .hero__stats {
@@ -385,22 +415,22 @@ main {
 
 .hero__stat-value {
   margin: 0;
-  color: #0f172a;
+  color: var(--text-main);
   font-size: clamp(1.45rem, 4vw, 2rem);
   font-weight: 800;
 }
 
 .hero__stat-label {
   margin: 0.2rem 0 0;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.84rem;
 }
 
 .hero__media-card {
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   min-height: 17rem;
   background: linear-gradient(150deg, #fb7185, #ec4899);
-  box-shadow: 0 20px 38px rgba(236, 72, 153, 0.25);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
 
@@ -412,13 +442,13 @@ main {
 
 .hero__media-text {
   margin: 0;
-  color: #fff;
+  color: var(--text-on-primary);
   font-size: clamp(1.35rem, 4vw, 1.9rem);
   font-weight: 800;
 }
 
 .home--features {
-  background: #fff;
+  background: var(--bg-main);
 }
 
 .section-headline {
@@ -428,13 +458,13 @@ main {
 
 .section-headline__title {
   margin: 0;
-  color: #0f172a;
+  color: var(--text-main);
   font-size: clamp(1.7rem, 5vw, 2.4rem);
 }
 
 .section-headline__subtitle {
   margin-top: 0.8rem;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .feature-grid {
@@ -443,7 +473,7 @@ main {
 }
 
 .feature-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   border-radius: 0.9rem;
   padding: 1.25rem;
   transition:
@@ -453,13 +483,13 @@ main {
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .feature-card__icon {
   width: 3rem;
   height: 3rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -487,18 +517,18 @@ main {
 
 .feature-card__title {
   margin: 0.9rem 0 0;
-  color: #0f172a;
+  color: var(--text-main);
   font-size: 1.2rem;
 }
 
 .feature-card__text {
   margin: 0.5rem 0 0;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.55;
 }
 
 .home--cta {
-  background: linear-gradient(90deg, #f43f5e 0%, #ec4899 100%);
+  background: var(--bg-primary-gradient);
 }
 
 .cta__container {
@@ -508,7 +538,7 @@ main {
 
 .cta__title {
   margin: 0;
-  color: #fff;
+  color: var(--text-on-primary);
   font-size: clamp(1.6rem, 5vw, 2.4rem);
 }
 
@@ -519,14 +549,11 @@ main {
 
 .cta__button {
   margin-top: 1.75rem;
-  background: #fff;
-  color: #e11d48;
+  background: var(--bg-main);
+  color: var(--primary-hover);
 }
 
 @media (min-width: 640px) {
-  .home {
-    padding: 4rem 1.5rem;
-  }
 
   .hero__actions {
     grid-auto-flow: column;
@@ -550,10 +577,6 @@ main {
 }
 
 @media (min-width: 1024px) {
-  .home {
-    padding-inline: 2rem;
-  }
-
   .hero__layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem;
