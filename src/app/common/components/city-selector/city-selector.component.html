@@ -3,21 +3,12 @@
   <div class="city-popup__panel" role="dialog" aria-modal="true" aria-label="Select your city">
     <h3 class="city-popup__title">Select Your City</h3>
     <p class="city-popup__subtitle">Choose a city to see events near you.</p>
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      class="city-popup__search"
-      placeholder="Search city"
-      aria-label="Search city"
-    />
+    <input type="text" [(ngModel)]="searchTerm" class="city-popup__search" placeholder="Search city"
+      aria-label="Search city" />
 
     <div class="city-popup__list" *ngIf="filteredCities.length > 0; else noCities">
-      <button
-        type="button"
-        class="city-popup__item"
-        *ngFor="let city of filteredCities"
-        (click)="selectCity(city)"
-      >
+      <button type="button" class="city-popup__item" [class.city-popup__item--active]="city === selectedCity"
+        *ngFor="let city of filteredCities" (click)="selectCity(city)">
         {{ city }}
       </button>
     </div>

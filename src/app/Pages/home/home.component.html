@@ -105,6 +105,6 @@
   </div>
 </section>
 
-<app-city-selector [isOpen]="showCityPopup" [cities]="availableCities"
+<app-city-selector [isOpen]="showCityPopup" [cities]="availableCities" [selectedCity]="currentCity"
   [canClose]="currentCity !== 'Select city' || availableCities.length === 0" (closeRequested)="closeCityPopup()"
   (citySelected)="selectCity($event)"></app-city-selector>

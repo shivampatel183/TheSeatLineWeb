@@ -25,12 +25,10 @@ export class ProfileComponent implements OnInit {
   isLoading = false;
 
   editData: UpdateUserProfileRequest = {
-    fullName: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    dateOfBirth: '',
   };
 
   passwordData: ChangePasswordRequest = {
@@ -48,6 +46,11 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserProfile();
+  }
+
+  get fullName(): string {
+    if (!this.user) return 'User';
+    return `${this.user.firstName} ${this.user.lastName}`.trim() || 'User';
   }
 
   loadUserProfile(): void {
@@ -72,12 +75,10 @@ export class ProfileComponent implements OnInit {
   populateEditData(): void {
     if (this.user) {
       this.editData = {
-        fullName: this.user.fullName,
-        phone: this.user.phone || '',
-        address: this.user.address || '',
-        city: this.user.city || '',
-        state: this.user.state || '',
-        zipCode: this.user.zipCode || '',
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        phoneNumber: this.user.phoneNumber || '',
+        dateOfBirth: this.user.dateOfBirth || '',
       };
     }
   }
@@ -97,7 +98,10 @@ export class ProfileComponent implements OnInit {
           this.user = response.data;
           this.isEditMode = false;
           this.toast.success('Profile updated successfully');
-          localStorage.setItem('UserName', this.user.fullName);
+          localStorage.setItem(
+            'UserName',
+            `${this.user.firstName} ${this.user.lastName}`.trim(),
+          );
         } else {
           this.toast.error('Failed to update profile');
         }
@@ -110,61 +114,28 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  togglePasswordChange(): void {
-    this.isChangingPassword = !this.isChangingPassword;
-    if (!this.isChangingPassword) {
-      this.resetPasswordForm();
-    }
-  }
-
-  changePassword(): void {
-    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      this.toast.error('Passwords do not match');
-      return;
-    }
-
-    if (this.passwordData.newPassword.length < 6) {
-      this.toast.error('Password must be at least 6 characters');
-      return;
-    }
-
-    this.isLoading = true;
-    this.userService.changePassword(this.passwordData).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.toast.success('Password changed successfully');
-          this.isChangingPassword = false;
-          this.resetPasswordForm();
-        } else {
-          this.toast.error(response.error || 'Failed to change password');
-        }
-        this.isLoading = false;
-      },
-      error: () => {
-        this.toast.error('Error changing password');
-        this.isLoading = false;
-      },
-    });
-  }
-
-  resetPasswordForm(): void {
-    this.passwordData = {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    };
-  }
-
+  
   logout(): void {
     this.authService.logout();
   }
 
   getInitials(): string {
     if (!this.user) return 'U';
-    const names = this.user.fullName.split(' ');
-    if (names.length >= 2) {
-      return names[0][0] + names[1][0];
+    const first = this.user.firstName?.[0] || '';
+    const last = this.user.lastName?.[0] || '';
+    return (first + last).toUpperCase() || 'U';
+  }
+
+  formatDate(dateString?: string): string {
+    if (!dateString) return 'Not provided';
+    try {
+      return new Date(dateString).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    } catch {
+      return dateString;
     }
-    return this.user.fullName.substring(0, 2);
   }
 }

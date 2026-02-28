@@ -13,6 +13,7 @@ export class CitySelectorComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() cities: string[] = [];
   @Input() canClose = true;
+  @Input() selectedCity = '';
 
   @Output() closeRequested = new EventEmitter<void>();
   @Output() citySelected = new EventEmitter<string>();

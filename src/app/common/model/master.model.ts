@@ -4,28 +4,24 @@ export interface City {
 }
 
 export interface User {
-  id: number;
-  fullName: string;
+  id: string;
   email: string;
-  phone?: string;
-  dateOfBirth?: Date;
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  profileImageUrl?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  dateOfBirth?: string;
+  avatarUrl?: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  lastLoginAt?: string;
+  createdAt: string;
 }
 
 export interface UpdateUserProfileRequest {
-  fullName: string;
-  phone?: string;
-  dateOfBirth?: Date;
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  dateOfBirth?: string;
 }
 
 export interface ChangePasswordRequest {

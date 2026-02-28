@@ -16,33 +16,15 @@ export class UserService {
 
   // Get current user profile
   getUserProfile(): Observable<ApiResponse<User>> {
-    return this.apiService.get<ApiResponse<User>>('/User/profile');
+    return this.apiService.get<ApiResponse<User>>('/Auth/profile');
   }
 
   // Update user profile
   updateUserProfile(
     data: UpdateUserProfileRequest,
   ): Observable<ApiResponse<User>> {
-    return this.apiService.put<ApiResponse<User>>('/User/profile', data);
+    return this.apiService.put<ApiResponse<User>>('/Auth/profile', data);
   }
 
-  // Change password
-  changePassword(
-    data: ChangePasswordRequest,
-  ): Observable<ApiResponse<string>> {
-    return this.apiService.post<ApiResponse<string>>(
-      '/User/change-password',
-      data,
-    );
-  }
 
-  // Upload profile image
-  uploadProfileImage(file: File): Observable<ApiResponse<string>> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.apiService.post<ApiResponse<string>>(
-      '/User/upload-profile-image',
-      formData,
-    );
-  }
 }
