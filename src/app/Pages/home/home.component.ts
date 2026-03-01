@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../common/Services/api.services';
 import { firstValueFrom } from 'rxjs';
 import { CitySelectorComponent } from '../../common/components/city-selector/city-selector.component';
+import { EventListComponent } from '../../Component/event-list/event-list.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CitySelectorComponent],
+  imports: [CommonModule, CitySelectorComponent, EventListComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })

@@ -1,0 +1,33 @@
+<section class="events-section">
+    <div class="events-section__header">
+        <div class="events-section__title-group">
+            <h2 class="events-section__title">Recommended Events</h2>
+            <p class="events-section__subtitle">Handpicked for you based on your interests</p>
+        </div>
+
+        <div class="events-section__filter">
+            <button *ngFor="let cat of categories" [class.active]="activeCategory === cat" (click)="setCategory(cat)"
+                class="filter-btn">
+                {{ cat }}
+            </button>
+        </div>
+    </div>
+
+    <div class="events-grid" *ngIf="events$ | async as events; else loading">
+        <app-event-card *ngFor="let event of events" [event]="event" class="events-grid__item">
+        </app-event-card>
+
+        <div *ngIf="events.length === 0" class="no-events">
+            <i class="fas fa-calendar-times"></i>
+            <p>No events found for this category.</p>
+        </div>
+    </div>
+
+    <ng-template #loading>
+        <div class="loading-state">
+            <div class="skeleton-grid">
+                <div *ngFor="let i of [1,2,3,4]" class="skeleton-card"></div>
+            </div>
+        </div>
+    </ng-template>
+</section>

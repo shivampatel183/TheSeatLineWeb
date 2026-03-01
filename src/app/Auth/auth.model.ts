@@ -9,7 +9,7 @@ export class UserEntity {
   email: string = '';
   firstName: string = '';
   lastName: string = '';
-  phoneNumber: string = '';
+  phoneNumber?: string | null = null;
 }
 
 export class LoginEntity {
@@ -25,7 +25,7 @@ export class RegisterEntity {
   confirmPassword: string = '';
   firstName: string = '';
   lastName: string = '';
-  phoneNumber: string = '';
+  phoneNumber?: string | null = null;
 }
 
 export class GoogleLoginEntity {

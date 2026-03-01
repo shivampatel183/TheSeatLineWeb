@@ -1,0 +1,34 @@
+<div class="event-card">
+    <div class="event-card__image-wrapper">
+        <img [src]="event.bannerImageUrl" [alt]="event.title" class="event-card__image" />
+        <div class="event-card__badge" *ngIf="event.language">
+            {{ event.language }}
+        </div>
+    </div>
+
+    <div class="event-card__content">
+        <div class="event-card__header">
+            <h3 class="event-card__title">{{ event.title }}</h3>
+            <span class="event-card__type">{{ event.eventType === 1 ? 'Movie' : 'Event' }}</span>
+        </div>
+
+        <div class="event-card__details">
+            <div class="event-card__detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{ formattedDate }}</span>
+            </div>
+            <div class="event-card__detail-item">
+                <i class="fas fa-clock"></i>
+                <span>{{ formattedTime }}</span>
+            </div>
+            <div class="event-card__detail-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ event.venueName }}, {{ event.city }}</span>
+            </div>
+        </div>
+
+        <div class="event-card__footer">
+            <button class="event-card__btn" [routerLink]="['/event', event.id]">Book Now</button>
+        </div>
+    </div>
+</div>

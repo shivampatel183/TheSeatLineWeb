@@ -25,8 +25,7 @@
 
     <!-- Bookings Grid -->
     <div *ngIf="!isLoading && filteredBookings.length > 0" class="bookings-grid">
-        <app-booking-card *ngFor="let booking of filteredBookings" [booking]="booking"
-            (cancelled)="onBookingCancelled($event)"></app-booking-card>
+        <app-booking-card *ngFor="let booking of filteredBookings" [booking]="booking"></app-booking-card>
     </div>
 
     <!-- Empty State -->
@@ -39,11 +38,7 @@
             </svg>
         </div>
         <h2>No bookings found</h2>
-        <p *ngIf="activeFilter === 'all'">You haven't made any bookings yet. Start exploring shows and reserve your
-            seats!</p>
-        <p *ngIf="activeFilter === 'upcoming'">You don't have any upcoming bookings.</p>
-        <p *ngIf="activeFilter === 'past'">You don't have any past bookings.</p>
-        <p *ngIf="activeFilter === 'cancelled'">You don't have any cancelled bookings.</p>
-        <a href="/" class="browse-btn">Browse Shows</a>
+        <p>You haven't made any bookings yet. Start exploring events and reserve your seats!</p>
+        <a href="/" class="browse-btn">Browse Events</a>
     </div>
 </div>

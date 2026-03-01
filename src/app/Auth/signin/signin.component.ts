@@ -2,13 +2,18 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ToastService } from '../../common/Services/toast.service';
-import { ApiResponse } from '../../common/components/model/authmodel';
+import { ApiResponse } from '../../common/model/api.model';
 import { RegisterEntity } from '../auth.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
-type RegisterFieldKey = 'firstName' | 'email' | 'password' | 'confirmPassword';
+type RegisterFieldKey =
+  | 'firstName'
+  | 'lastName'
+  | 'email'
+  | 'password'
+  | 'confirmPassword';
 
 interface RegisterFieldConfig {
   key: RegisterFieldKey;
@@ -28,14 +33,25 @@ interface RegisterFieldConfig {
 })
 export class RegisterComponent {
   registerData = new RegisterEntity();
+  termsAccepted = false;
   isSubmitting = false;
+  showPassword = false;
+  showConfirmPassword = false;
   readonly registerFields: RegisterFieldConfig[] = [
     {
       key: 'firstName',
       name: 'firstName',
-      label: 'Display Name',
+      label: 'First Name',
       type: 'text',
       placeholder: 'Your Name',
+      autocomplete: 'name',
+    },
+    {
+      key: 'lastName',
+      name: 'lastName',
+      label: 'Last Name',
+      type: 'text',
+      placeholder: 'Your Last Name',
       autocomplete: 'name',
     },
     {
@@ -83,18 +99,52 @@ export class RegisterComponent {
     this.registerData[field.key] = value;
   }
 
-  onRegister() {
+  getInputType(field: RegisterFieldConfig): string {
+    if (field.key === 'password') {
+      return this.showPassword ? 'text' : 'password';
+    }
+
+    if (field.key === 'confirmPassword') {
+      return this.showConfirmPassword ? 'text' : 'password';
+    }
+
+    return field.type;
+  }
+
+  togglePasswordVisibility(field: RegisterFieldKey): void {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    }
+
+    if (field === 'confirmPassword') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
+  }
+
+  onRegister(registerForm: NgForm) {
+    if (registerForm.invalid) {
+      registerForm.control.markAllAsTouched();
+      return;
+    }
+
     if (this.registerData.password !== this.registerData.confirmPassword) {
       this.toastService.error('Passwords do not match');
       return;
     }
 
+    const payload: RegisterEntity = {
+      ...this.registerData,
+      phoneNumber: this.registerData.phoneNumber?.trim() || null,
+    };
+
     this.isSubmitting = true;
-    this.authService.register(this.registerData).subscribe({
+    this.authService.register(payload).subscribe({
       next: (response: ApiResponse<string>) => {
         this.isSubmitting = false;
-        if (!response.success) {
-          this.toastService.error(response.error || 'Registration failed');
+        const isSuccess =
+          response.Success ?? response.success ?? response.isSuccess ?? false;
+        if (!isSuccess) {
+          this.toastService.error(response.message || 'Registration failed');
           return;
         }
         this.toastService.success(
@@ -107,7 +157,9 @@ export class RegisterComponent {
         const apiErrorCode = error.error?.error;
 
         if (error.status === 400 || apiErrorCode === 'VAL_001') {
-          this.toastService.error('Validation failed. Please check your input.');
+          this.toastService.error(
+            'Validation failed. Please check your input.',
+          );
           return;
         }
 
@@ -117,7 +169,9 @@ export class RegisterComponent {
         }
 
         if (error.status === 429) {
-          this.toastService.error('Too many attempts. Try again in 15 minutes.');
+          this.toastService.error(
+            'Too many attempts. Try again in 15 minutes.',
+          );
           return;
         }
 

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ToastService } from '../../common/Services/toast.service';
-import { ApiResponse } from '../../common/components/model/authmodel';
+import { ApiResponse } from '../../common/model/api.model';
 import { LoginEntity, ResponseEntity } from '../auth.model';
 import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
@@ -28,6 +28,8 @@ interface LoginFieldConfig {
 })
 export class LoginComponent implements OnInit {
   loginData = new LoginEntity();
+  isSubmitting = false;
+  showPassword = false;
   readonly loginFields: LoginFieldConfig[] = [
     {
       key: 'email',
@@ -68,12 +70,31 @@ export class LoginComponent implements OnInit {
     this.loginData[field.key] = value;
   }
 
-  onLogin() {
-    debugger;
+  getInputType(field: LoginFieldConfig): string {
+    if (field.key === 'password') {
+      return this.showPassword ? 'text' : 'password';
+    }
+    return field.type;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  onLogin(loginForm: NgForm) {
+    if (loginForm.invalid) {
+      loginForm.control.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
     this.authService.login(this.loginData).subscribe({
       next: (response: ApiResponse<ResponseEntity>) => {
-        if (!response.success) {
-          this.toast.error(response.error || 'Login failed');
+        this.isSubmitting = false;
+        const isSuccess =
+          response.Success ?? response.success ?? response.isSuccess ?? false;
+        if (!isSuccess) {
+          this.toast.error(response.message || 'Login failed');
           return;
         } else {
           this.toast.success(
@@ -83,6 +104,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error: () => {
+        this.isSubmitting = false;
         this.toast.error('Server error. Please try again later.');
       },
     });

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../common/Services/booking.service';
 import { ToastService } from '../../common/Services/toast.service';
-import { Booking, BookingStatus } from '../../common/model/booking.model';
+import { BookingResponseDto } from '../../common/model/api.model';
 import { BookingCardComponent } from '../../Component/booking-card/booking-card.component';
 
 @Component({
@@ -13,10 +13,9 @@ import { BookingCardComponent } from '../../Component/booking-card/booking-card.
   styleUrls: ['./my-bookings.component.scss'],
 })
 export class MyBookingsComponent implements OnInit {
-  bookings: Booking[] = [];
-  filteredBookings: Booking[] = [];
+  bookings: BookingResponseDto[] = [];
+  activeFilter: 'all' | 'cancelled' = 'all';
   isLoading = false;
-  activeFilter: 'all' | 'upcoming' | 'past' | 'cancelled' = 'all';
 
   constructor(
     private bookingService: BookingService,
@@ -30,83 +29,33 @@ export class MyBookingsComponent implements OnInit {
   loadBookings(): void {
     this.isLoading = true;
     this.bookingService.getMyBookings().subscribe({
-      next: (response) => {
-        console.log('Booking API Response:', response);
-        if (response.success && response.data) {
-          console.log('Bookings data:', response.data);
-          this.bookings = response.data;
-          this.applyFilter();
-        } else {
-          console.error('Failed to load bookings:', response);
-          this.toast.error('Failed to load bookings');
-        }
+      next: (data) => {
+        this.bookings = data;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading bookings:', error);
-        this.toast.error('Error loading bookings');
+        this.toast.error('Failed to load bookings');
         this.isLoading = false;
       },
     });
   }
 
-  setFilter(filter: 'all' | 'upcoming' | 'past' | 'cancelled'): void {
+  setFilter(filter: 'all' | 'cancelled'): void {
     this.activeFilter = filter;
-    this.applyFilter();
   }
 
-  applyFilter(): void {
-    const now = new Date();
-
-    switch (this.activeFilter) {
-      case 'upcoming':
-        this.filteredBookings = this.bookings.filter(
-          (b) =>
-            new Date(b.show?.showDate || b.bookingDate) >= now &&
-            b.status === BookingStatus.Confirmed,
-        );
-        break;
-      case 'past':
-        this.filteredBookings = this.bookings.filter(
-          (b) =>
-            new Date(b.show?.showDate || b.bookingDate) < now ||
-            b.status === BookingStatus.Completed,
-        );
-        break;
-      case 'cancelled':
-        this.filteredBookings = this.bookings.filter(
-          (b) => b.status === BookingStatus.Cancelled,
-        );
-        break;
-      default:
-        this.filteredBookings = [...this.bookings];
+  get filteredBookings(): BookingResponseDto[] {
+    if (this.activeFilter === 'cancelled') {
+      return this.bookings.filter((b) => b.status === 'Cancelled');
     }
+    return this.bookings;
   }
 
-  onBookingCancelled(bookingId: number): void {
-    this.loadBookings();
-  }
-
-  getBookingCount(filter: string): number {
-    const now = new Date();
-    switch (filter) {
-      case 'upcoming':
-        return this.bookings.filter(
-          (b) =>
-            new Date(b.show?.showDate || b.bookingDate) >= now &&
-            b.status === BookingStatus.Confirmed,
-        ).length;
-      case 'past':
-        return this.bookings.filter(
-          (b) =>
-            new Date(b.show?.showDate || b.bookingDate) < now ||
-            b.status === BookingStatus.Completed,
-        ).length;
-      case 'cancelled':
-        return this.bookings.filter((b) => b.status === BookingStatus.Cancelled)
-          .length;
-      default:
-        return this.bookings.length;
+  getBookingCount(filter: 'all' | 'cancelled'): number {
+    if (filter === 'cancelled') {
+      return this.bookings.filter((b) => b.status === 'Cancelled').length;
     }
+    return this.bookings.length;
   }
 }

@@ -1,0 +1,29 @@
+<div class="seat-map-container">
+    <div class="screen-indicator">
+        <div class="screen-curve"></div>
+        <p>All eyes this way please!</p>
+    </div>
+
+    <div class="layout-grid">
+        <div *ngFor="let row of rows" class="row">
+            <div class="row-label">{{ row }}</div>
+            <div class="seats-container">
+                <div *ngFor="let seat of seatsByRow[row]" [class]="'seat ' + getSeatClass(seat)"
+                    [class.aisle-right]="seat.isAisle" (click)="toggleSeat(seat)"
+                    [title]="'Seat ' + seat.seatNumber + ' - ' + (seat.basePrice | currency:'INR')">
+                    <span class="seat-tooltip">
+                        {{ seat.seatNumber }}<br>
+                        {{ seat.basePrice | currency:'INR' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout-legend">
+        <div class="legend-item"><span class="legend-box available"></span> Available</div>
+        <div class="legend-item"><span class="legend-box selected"></span> Selected</div>
+        <div class="legend-item"><span class="legend-box occupied"></span> Occupied</div>
+        <div class="legend-item"><span class="legend-box premium"></span> Premium</div>
+    </div>
+</div>

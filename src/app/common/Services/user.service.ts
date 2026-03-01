@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.services';
-import { ApiResponse } from '../components/model/authmodel';
+import { ApiResponse } from '../model/api.model';
 import {
   User,
   UpdateUserProfileRequest,
@@ -16,14 +16,14 @@ export class UserService {
 
   // Get current user profile
   getUserProfile(): Observable<ApiResponse<User>> {
-    return this.apiService.get<ApiResponse<User>>('/Auth/profile');
+    return this.apiService.get<User>('/Auth/profile');
   }
 
   // Update user profile
   updateUserProfile(
     data: UpdateUserProfileRequest,
   ): Observable<ApiResponse<User>> {
-    return this.apiService.put<ApiResponse<User>>('/Auth/profile', data);
+    return this.apiService.put<User>('/Auth/profile', data);
   }
 
 

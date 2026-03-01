@@ -1,0 +1,71 @@
+<div class="event-detail-page" *ngIf="!isLoading; else loading">
+    <div class="event-hero"
+        [style.background-image]="'linear-gradient(to bottom, rgba(0,0,0,0.3), #0a0a0b), url(' + event.bannerImageUrl + ')'">
+        <div class="event-hero__content">
+            <div class="event-badge">{{ event.language }}</div>
+            <h1 class="event-title">{{ event.title }}</h1>
+            <div class="event-meta">
+                <span><i class="fas fa-film"></i> {{ event.eventType === 1 ? 'Movie' : 'Event' }}</span>
+                <span><i class="fas fa-calendar-alt"></i> {{ event.startDateTime | date:'mediumDate' }}</span>
+                <span><i class="fas fa-map-marker-alt"></i> {{ event.venueName }}, {{ event.city }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-container">
+        <div class="detail-left">
+            <section class="description-section">
+                <h2>About the Event</h2>
+                <p>{{ event.description }}</p>
+            </section>
+
+            <section class="selection-section">
+                <h2>Select Your Seats</h2>
+                <app-seat-layout [seats]="seats" (selectionChange)="onSelectionChange($event)">
+                </app-seat-layout>
+            </section>
+        </div>
+
+        <div class="detail-right">
+            <div class="booking-summary-card">
+                <h3>Booking Summary</h3>
+
+                <div class="summary-item" *ngIf="selectedSeats.length > 0; else noSelection">
+                    <div class="selected-seats-list">
+                        <div *ngFor="let seat of selectedSeats" class="seat-badge">
+                            {{ seat.seatNumber }} ({{ seat.row }})
+                        </div>
+                    </div>
+
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span>Ticket Price ({{ selectedSeats.length }})</span>
+                            <span>{{ totalAmount | currency:'INR' }}</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total Amount</span>
+                            <span>{{ totalAmount | currency:'INR' }}</span>
+                        </div>
+                    </div>
+
+                    <button class="book-btn" (click)="proceedToBook()">
+                        Proceed to Payment <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <ng-template #noSelection>
+                    <div class="no-selection-msg">
+                        <i class="fas fa-chair"></i>
+                        <p>Please select your seats to see the total amount.</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div class="global-loading">
+        <div class="loader"></div>
+    </div>
+</ng-template>

@@ -29,4 +29,8 @@ export const routes: Routes = [
     component: MyBookingsComponent,
     canActivate: [authGuard],
   },
+  {
+    path: 'event/:id',
+    loadComponent: () => import('./Pages/event-detail/event-detail.component').then(m => m.EventDetailComponent)
+  },
 ];

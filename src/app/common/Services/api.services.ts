@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '../model/api.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  // private baseUrl = API_CONFIG.BASE_URL;
   public baseUrl = 'https://localhost:7243/api';
 
   constructor(private http: HttpClient) {}
@@ -24,28 +24,28 @@ export class ApiService {
     return headers;
   }
 
-  get<T>(endpoint: string): Observable<T> {
+  get<T>(endpoint: string): Observable<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    return this.http.get<T>(url, { headers: this.getHeaders() });
+    return this.http.get<ApiResponse<T>>(url, { headers: this.getHeaders() });
   }
 
-  post<T>(endpoint: string, data: any): Observable<T> {
+  post<T>(endpoint: string, data: any): Observable<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    return this.http.post<T>(url, data, {
+    return this.http.post<ApiResponse<T>>(url, data, {
       headers: this.getHeaders(),
     });
   }
 
-  put<T>(endpoint: string, data: any): Observable<T> {
+  put<T>(endpoint: string, data: any): Observable<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    return this.http.put<T>(url, data, {
+    return this.http.put<ApiResponse<T>>(url, data, {
       headers: this.getHeaders(),
     });
   }
 
-  delete<T>(endpoint: string): Observable<T> {
+  delete<T>(endpoint: string): Observable<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    return this.http.delete<T>(url, {
+    return this.http.delete<ApiResponse<T>>(url, {
       headers: this.getHeaders(),
     });
   }

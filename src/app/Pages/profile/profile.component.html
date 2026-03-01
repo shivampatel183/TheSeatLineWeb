@@ -61,10 +61,10 @@
           <label>Name</label>
           <p>{{ user?.firstName || 'Not provided' }}</p>
         </div>
-        <!-- <div class="info-item">
+        <div class="info-item">
           <label>Last Name</label>
           <p>{{ user?.lastName || 'Not provided' }}</p>
-        </div> -->
+        </div>
         <div class="info-item">
           <label>Email</label>
           <p>{{ user?.email || 'Not provided' }}</p>
@@ -89,28 +89,48 @@
 
       <!-- Edit Mode -->
       <div class="edit-form" *ngIf="isEditMode">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>First Name *</label>
-            <input type="text" [(ngModel)]="editData.firstName" required />
+        <form #profileForm="ngForm" (ngSubmit)="saveProfile(profileForm)" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" name="firstName" [(ngModel)]="editData.firstName" required #firstName="ngModel" />
+              <small class="text-red-600 text-xs" *ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">
+                First Name is required.
+              </small>
+            </div>
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" name="lastName" [(ngModel)]="editData.lastName" required #lastName="ngModel" />
+              <small class="text-red-600 text-xs" *ngIf="lastName.invalid && (lastName.touched || lastName.dirty)">
+                Last Name is required.
+              </small>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                name="phoneNumber"
+                [(ngModel)]="editData.phoneNumber"
+                pattern="^[0-9+()\\-\\s]{7,15}$"
+                #phoneNumber="ngModel"
+              />
+              <small class="text-red-600 text-xs" *ngIf="phoneNumber.invalid && (phoneNumber.touched || phoneNumber.dirty)">
+                Enter a valid phone number or leave it empty.
+              </small>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth *</label>
+              <input type="date" name="dateOfBirth" [(ngModel)]="editData.dateOfBirth" required #dateOfBirth="ngModel" />
+              <small class="text-red-600 text-xs" *ngIf="dateOfBirth.invalid && (dateOfBirth.touched || dateOfBirth.dirty)">
+                Date of Birth is required.
+              </small>
+            </div>
           </div>
-          <!-- <div class="form-group">
-            <label>Last Name *</label>
-            <input type="text" [(ngModel)]="editData.lastName" required />
-          </div> -->
-          <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" [(ngModel)]="editData.phoneNumber" />
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="toggleEditMode()">Cancel</button>
+            <button type="submit" class="btn-primary" [disabled]="profileForm.invalid || isLoading">Save Changes</button>
           </div>
-          <div class="form-group">
-            <label>Date of Birth</label>
-            <input type="date" [(ngModel)]="editData.dateOfBirth" />
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn-secondary" (click)="toggleEditMode()">Cancel</button>
-          <button class="btn-primary" (click)="saveProfile()">Save Changes</button>
-        </div>
+        </form>
       </div>
     </div>
 

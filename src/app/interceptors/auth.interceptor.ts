@@ -47,7 +47,9 @@ export class AuthInterceptor implements HttpInterceptor {
       console.error('Refresh token request failed, logging out...');
       this.isRefreshing = false;
       this.authService.logout();
-      return throwError(() => new Error('Session expired. Please login again.'));
+      return throwError(
+        () => new Error('Session expired. Please login again.'),
+      );
     }
 
     if (!this.isRefreshing) {
@@ -55,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
 
       const refreshToken = localStorage.getItem('refreshToken');
-      
+
       if (!refreshToken) {
         console.error('No refresh token available, logging out...');
         this.isRefreshing = false;
@@ -67,10 +69,14 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.authService.refreshToken().pipe(
         switchMap((res: any) => {
           this.isRefreshing = false;
-          if (res.success && res.data && res.data.token) {
+          const isSuccess =
+            res?.Success ?? res?.success ?? res?.isSuccess ?? false;
+          if (isSuccess && res.data && res.data.accessToken) {
             console.log('Token refreshed successfully, retrying request...');
-            this.refreshTokenSubject.next(res.data.token);
-            return next.handle(this.addTokenHeader(request, res.data.token));
+            this.refreshTokenSubject.next(res.data.accessToken);
+            return next.handle(
+              this.addTokenHeader(request, res.data.accessToken),
+            );
           } else {
             console.error('Token refresh failed, logging out...');
             this.authService.logout();

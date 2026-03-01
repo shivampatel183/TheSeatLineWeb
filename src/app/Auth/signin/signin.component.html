@@ -8,16 +8,36 @@
           <p class="auth-subtitle">Get early access to trending events in your city.</p>
         </div>
 
-        <form (ngSubmit)="onRegister()" class="auth-form">
+        <form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm" class="auth-form" novalidate>
           <div *ngFor="let field of registerFields" class="auth-field">
             <label [for]="field.name" class="auth-label">{{ field.label }}</label>
-            <input [id]="field.name" [type]="field.type" [name]="field.name" [placeholder]="field.placeholder"
-              [autocomplete]="field.autocomplete" [ngModel]="getFieldValue(field)"
-              (ngModelChange)="setFieldValue(field, $event)" required class="auth-input" />
+            <div class="relative">
+              <input [id]="field.name" [type]="getInputType(field)" [name]="field.name" [placeholder]="field.placeholder"
+                [autocomplete]="field.autocomplete" [ngModel]="getFieldValue(field)"
+                (ngModelChange)="setFieldValue(field, $event)" #control="ngModel" [required]="true"
+                [minlength]="field.key === 'password' || field.key === 'confirmPassword' ? 8 : null"
+                class="auth-input" [class.pr-20]="field.key === 'password' || field.key === 'confirmPassword'" />
+              <button
+                *ngIf="field.key === 'password' || field.key === 'confirmPassword'"
+                type="button"
+                (click)="togglePasswordVisibility(field.key)"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-600"
+              >
+                {{
+                  field.key === 'password'
+                    ? (showPassword ? 'Hide' : 'Show')
+                    : (showConfirmPassword ? 'Hide' : 'Show')
+                }}
+              </button>
+            </div>
+            <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
+              <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
+              <span *ngIf="control.errors?.['minlength']">{{ field.label }} must be at least 8 characters.</span>
+            </small>
           </div>
 
           <label class="auth-checkbox">
-            <input type="checkbox" class="auth-checkbox-input" required />
+            <input type="checkbox" class="auth-checkbox-input" name="termsAccepted" [(ngModel)]="termsAccepted" required />
             <span class="auth-checkbox-label">
               I agree to the
               <a href="#" class="auth-link">Terms &amp; Conditions</a>
@@ -26,7 +46,7 @@
             </span>
           </label>
 
-          <button type="submit" [disabled]="isSubmitting" class="auth-submit">
+          <button type="submit" [disabled]="registerForm.invalid || isSubmitting" class="auth-submit">
             {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
           </button>
         </form>

@@ -40,11 +40,12 @@ export class GoogleLoginComponent implements OnInit {
   handleCredentialResponse = (response: any) => {
     this.authService.loginWithGoogle(response.credential).subscribe({
       next: (res) => {
-        if (res.success) {
+        const isSuccess = res.Success ?? res.success ?? res.isSuccess ?? false;
+        if (isSuccess) {
           this.ToastService.success('Google login successful');
           this.router.navigate(['/']);
         } else {
-          this.ToastService.error(res.error || 'Google login failed');
+          this.ToastService.error(res.error || res.message || 'Google login failed');
         }
       },
       error: () => {

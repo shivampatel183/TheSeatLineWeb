@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../common/Services/user.service';
 import { AuthService } from '../../Auth/auth.service';
@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.userService.getUserProfile().subscribe({
       next: (response) => {
-        if (response.success && response.data) {
+        if (response.Success && response.data) {
           this.user = response.data;
           this.populateEditData();
         } else {
@@ -78,9 +78,28 @@ export class ProfileComponent implements OnInit {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         phoneNumber: this.user.phoneNumber || '',
-        dateOfBirth: this.user.dateOfBirth || '',
+        dateOfBirth: this.toDateInputValue(this.user.dateOfBirth),
       };
     }
+  }
+
+  private toDateInputValue(dateString?: string): string {
+    if (!dateString) {
+      return '';
+    }
+
+    // If API sends ISO datetime (e.g., 2026-02-10T00:00:00), keep only date part for <input type="date">.
+    const isoDateMatch = dateString.match(/^\d{4}-\d{2}-\d{2}/);
+    if (isoDateMatch) {
+      return isoDateMatch[0];
+    }
+
+    const parsed = new Date(dateString);
+    if (Number.isNaN(parsed.getTime())) {
+      return '';
+    }
+
+    return parsed.toISOString().split('T')[0];
   }
 
   toggleEditMode(): void {
@@ -90,11 +109,23 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  saveProfile(): void {
+  saveProfile(profileForm: NgForm): void {
+    if (profileForm.invalid) {
+      profileForm.control.markAllAsTouched();
+      return;
+    }
+
+    const payload: UpdateUserProfileRequest = {
+      firstName: this.editData.firstName.trim(),
+      lastName: this.editData.lastName.trim(),
+      dateOfBirth: this.editData.dateOfBirth || undefined,
+      phoneNumber: this.editData.phoneNumber?.trim() || undefined,
+    };
+
     this.isLoading = true;
-    this.userService.updateUserProfile(this.editData).subscribe({
+    this.userService.updateUserProfile(payload).subscribe({
       next: (response) => {
-        if (response.success && response.data) {
+        if (response.Success && response.data) {
           this.user = response.data;
           this.isEditMode = false;
           this.toast.success('Profile updated successfully');
@@ -114,7 +145,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  
   logout(): void {
     this.authService.logout();
   }

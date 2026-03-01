@@ -16,94 +16,10 @@
         </button>
       </form>
     </div>
-    <div class="hero__layout">
-      <div class="hero__content">
-        <div>
-          <h1 class="hero__title">Never Miss Your Favorite Events</h1>
-          <p class="hero__subtitle">
-            Discover, book, and enjoy the best events in your city. Your personalized entertainment platform powered by
-            real-time availability.
-          </p>
-        </div>
-
-        <div class="hero__actions">
-          <button routerLink="/register" class="hero__button hero__button--primary">Get Started</button>
-          <button class="hero__button hero__button--secondary">Learn More</button>
-        </div>
-
-        <div class="hero__stats">
-          <div>
-            <p class="hero__stat-value">10K+</p>
-            <p class="hero__stat-label">Events Listed</p>
-          </div>
-          <div>
-            <p class="hero__stat-value">50K+</p>
-            <p class="hero__stat-label">Happy Users</p>
-          </div>
-          <div>
-            <p class="hero__stat-value">24/7</p>
-            <p class="hero__stat-label">Support</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero__media-wrap">
-        <div class="hero__media-card">
-          <div class="hero__media-content">
-            <p class="hero__media-text">Your Events Await</p>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<section class="home home--features">
-  <div class="home__container">
-    <div class="section-headline">
-      <h2 class="section-headline__title">Why Choose The Seat Line?</h2>
-      <p class="section-headline__subtitle">Experience the best event booking platform</p>
-    </div>
-
-    <div class="feature-grid">
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--rose"><span>🎟️</span></div>
-        <h3 class="feature-card__title">Easy Booking</h3>
-        <p class="feature-card__text">Book your favorite events in just a few clicks. Fast, secure, and reliable.</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--blue"><span>📱</span></div>
-        <h3 class="feature-card__title">Mobile Apps</h3>
-        <p class="feature-card__text">Access your bookings anywhere, anytime with our mobile-optimized platform.</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--green"><span>✨</span></div>
-        <h3 class="feature-card__title">Personalized</h3>
-        <p class="feature-card__text">Get recommendations tailored to your preferences and interests.</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--purple"><span>💳</span></div>
-        <h3 class="feature-card__title">Secure Payment</h3>
-        <p class="feature-card__text">Multiple payment options with bank-level security for your peace of mind.</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--orange"><span>🎁</span></div>
-        <h3 class="feature-card__title">Exclusive Offers</h3>
-        <p class="feature-card__text">Access special discounts and exclusive deals for members.</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="feature-card__icon feature-card__icon--cyan"><span>🤝</span></div>
-        <h3 class="feature-card__title">24/7 Support</h3>
-        <p class="feature-card__text">Our dedicated support team is here to help whenever you need us.</p>
-      </article>
-    </div>
-  </div>
-</section>
+<app-event-list></app-event-list>
 
 <app-city-selector [isOpen]="showCityPopup" [cities]="availableCities" [selectedCity]="currentCity"
   [canClose]="currentCity !== 'Select city' || availableCities.length === 0" (closeRequested)="closeCityPopup()"
