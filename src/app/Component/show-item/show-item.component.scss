@@ -1,0 +1,162 @@
+.show-item {
+  display: flex;
+  align-items: center;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+
+  &:hover {
+    transform: translateX(8px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding-right: 1.5rem;
+    border-right: 2px dashed var(--border-color);
+
+    .day {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .date {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1;
+      margin: 2px 0;
+    }
+
+    .month {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+  }
+
+  &__info {
+    flex-grow: 1;
+
+    .info-top {
+      margin-bottom: 0.5rem;
+      
+      .venue {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-main);
+      }
+
+      .city {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+    }
+
+    .info-bottom {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+
+      i {
+        color: var(--primary);
+        margin-right: 4px;
+      }
+    }
+  }
+
+  &__price {
+    text-align: right;
+    padding: 0 1.5rem;
+
+    .label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+  }
+
+  &__action {
+    .book-btn {
+      padding: 0.6rem 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-alt);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .show-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+
+    &__date {
+      flex-direction: row;
+      min-width: unset;
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px dashed var(--border-color);
+      padding-right: 0;
+      padding-bottom: 0.75rem;
+      justify-content: flex-start;
+      gap: 1rem;
+
+      .date {
+        font-size: 1.25rem;
+      }
+    }
+
+    &__info {
+        width: 100%;
+    }
+
+    &__price {
+      text-align: left;
+      padding: 0;
+      margin-top: 0.5rem;
+    }
+
+    &__action {
+        width: 100%;
+        .book-btn {
+            width: 100%;
+        }
+    }
+  }
+}

@@ -1,71 +1,65 @@
-<div class="event-detail-page" *ngIf="!isLoading; else loading">
-    <div class="event-hero"
-        [style.background-image]="'linear-gradient(to bottom, rgba(0,0,0,0.3), #0a0a0b), url(' + event.bannerImageUrl + ')'">
-        <div class="event-hero__content">
-            <div class="event-badge">{{ event.language }}</div>
-            <h1 class="event-title">{{ event.title }}</h1>
-            <div class="event-meta">
-                <span><i class="fas fa-film"></i> {{ event.eventType === 1 ? 'Movie' : 'Event' }}</span>
-                <span><i class="fas fa-calendar-alt"></i> {{ event.startDateTime | date:'mediumDate' }}</span>
-                <span><i class="fas fa-map-marker-alt"></i> {{ event.venueName }}, {{ event.city }}</span>
+<div class="event-detail" *ngIf="!isLoading; else loading">
+    <!-- Hero Banner Section -->
+    <header class="event-hero"
+        [style.backgroundImage]="'linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.9)), url(' + event.bannerImageUrl + ')'">
+        <div class="event-hero__container">
+            <div class="event-hero__content">
+                <nav class="breadcrumb">
+                    <a routerLink="/">Home</a>
+                    <span class="separator">/</span>
+                    <span class="current">Event Details</span>
+                </nav>
+                <div class="badge" *ngIf="event.language">{{ event.language }}</div>
+                <h1 class="title">{{ event.title }}</h1>
+                <div class="meta">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>{{ formattedDate }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ event.venueName }}, {{ event.city }}</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="detail-container">
-        <div class="detail-left">
-            <section class="description-section">
-                <h2>About the Event</h2>
-                <p>{{ event.description }}</p>
-            </section>
-
-            <section class="selection-section">
-                <h2>Select Your Seats</h2>
-                <app-seat-layout [seats]="seats" (selectionChange)="onSelectionChange($event)">
-                </app-seat-layout>
-            </section>
-        </div>
-
-        <div class="detail-right">
-            <div class="booking-summary-card">
-                <h3>Booking Summary</h3>
-
-                <div class="summary-item" *ngIf="selectedSeats.length > 0; else noSelection">
-                    <div class="selected-seats-list">
-                        <div *ngFor="let seat of selectedSeats" class="seat-badge">
-                            {{ seat.seatNumber }} ({{ seat.row }})
-                        </div>
-                    </div>
-
-                    <div class="price-breakdown">
-                        <div class="price-row">
-                            <span>Ticket Price ({{ selectedSeats.length }})</span>
-                            <span>{{ totalAmount | currency:'INR' }}</span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total Amount</span>
-                            <span>{{ totalAmount | currency:'INR' }}</span>
-                        </div>
-                    </div>
-
-                    <button class="book-btn" (click)="proceedToBook()">
-                        Proceed to Payment <i class="fas fa-arrow-right"></i>
-                    </button>
+    <main class="event-main">
+        <div class="event-main__container">
+            <div class="event-layout">
+                <!-- Left Column: Details -->
+                <div class="event-layout__details">
+                    <section class="details-section">
+                        <h2 class="section-title">About the Event</h2>
+                        <div class="description" [innerHTML]="event.description"></div>
+                    </section>
                 </div>
 
-                <ng-template #noSelection>
-                    <div class="no-selection-msg">
-                        <i class="fas fa-chair"></i>
-                        <p>Please select your seats to see the total amount.</p>
+                <!-- Right Column: Shows List -->
+                <div class="event-layout__shows">
+                    <div class="shows-header">
+                        <h2 class="section-title">Available Shows</h2>
+                        <p class="section-subtitle">Select a show to view more details</p>
                     </div>
-                </ng-template>
+
+                    <div class="shows-list">
+                        <app-show-item *ngFor="let show of shows" [show]="show"></app-show-item>
+
+                        <div class="no-shows" *ngIf="shows.length === 0">
+                            <i class="far fa-calendar-times"></i>
+                            <p>No shows currently scheduled.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>
 
 <ng-template #loading>
-    <div class="global-loading">
+    <div class="loading-state">
         <div class="loader"></div>
+        <p>Fetching event details...</p>
     </div>
 </ng-template>

@@ -1,0 +1,26 @@
+<div class="show-item">
+    <div class="show-item__date">
+        <span class="day">{{ formatDate(show.showDate).split(',')[0] }}</span>
+        <span class="date">{{ formatDate(show.showDate).split(',')[1].trim().split(' ')[1] }}</span>
+        <span class="month">{{ formatDate(show.showDate).split(',')[1].trim().split(' ')[0] }}</span>
+    </div>
+
+    <div class="show-item__info">
+        <div class="info-top">
+            <h4 class="venue">{{ show.venueName }}</h4>
+            <span class="city">{{ show.city }}</span>
+        </div>
+        <div class="info-bottom">
+            <span class="time"><i class="far fa-clock"></i> {{ show.showTime }}</span>
+        </div>
+    </div>
+
+    <div class="show-item__price">
+        <span class="label">Starting from</span>
+        <span class="value">{{ show.price | currency:'INR':'symbol':'1.0-0' }}</span>
+    </div>
+
+    <div class="show-item__action">
+        <button class="book-btn">Details</button>
+    </div>
+</div>

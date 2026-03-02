@@ -68,3 +68,12 @@ export interface CreateBookingRequest {
   eventId: string;
   seatIds: string[];
 }
+export interface ShowSelectDTO {
+  id: string;
+  eventId: string;
+  venueName: string;
+  city: string;
+  showDate: string;
+  showTime: string;
+  price: number;
+}
