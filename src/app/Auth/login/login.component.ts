@@ -91,8 +91,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginData).subscribe({
       next: (response: ApiResponse<ResponseEntity>) => {
         this.isSubmitting = false;
-        const isSuccess =
-          response.Success ?? response.success ?? response.isSuccess ?? false;
+        const isSuccess = response.success ?? false;
         if (!isSuccess) {
           this.toast.error(response.message || 'Login failed');
           return;

@@ -10,8 +10,8 @@ export class ShowService {
   constructor(private apiService: ApiService) {}
 
   getShowsByEventId(eventId: string): Observable<ShowSelectDTO[]> {
-    return this.apiService.get<ShowSelectDTO[]>(`/show/event/${eventId}`).pipe(
-      map(response => response.data)
-    );
+    return this.apiService
+      .get<ShowSelectDTO[]>(`/event/${eventId}`)
+      .pipe(map((response) => response.data));
   }
 }

@@ -141,8 +141,7 @@ export class RegisterComponent {
     this.authService.register(payload).subscribe({
       next: (response: ApiResponse<string>) => {
         this.isSubmitting = false;
-        const isSuccess =
-          response.Success ?? response.success ?? response.isSuccess ?? false;
+        const isSuccess = response.success ?? false;
         if (!isSuccess) {
           this.toastService.error(response.message || 'Registration failed');
           return;

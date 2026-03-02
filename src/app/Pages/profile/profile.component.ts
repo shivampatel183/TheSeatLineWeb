@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.userService.getUserProfile().subscribe({
       next: (response) => {
-        if (response.Success && response.data) {
+        if (response.success && response.data) {
           this.user = response.data;
           this.populateEditData();
         } else {
@@ -125,7 +125,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     this.userService.updateUserProfile(payload).subscribe({
       next: (response) => {
-        if (response.Success && response.data) {
+        if (response.success && response.data) {
           this.user = response.data;
           this.isEditMode = false;
           this.toast.success('Profile updated successfully');

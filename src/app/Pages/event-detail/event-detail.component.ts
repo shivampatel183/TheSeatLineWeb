@@ -12,7 +12,7 @@ import { forkJoin } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ShowItemComponent, RouterLink],
   templateUrl: './event-detail.component.html',
-  styleUrl: './event-detail.component.scss'
+  styleUrl: './event-detail.component.scss',
 })
 export class EventDetailComponent implements OnInit {
   event!: EventSelectDTO;
@@ -22,7 +22,7 @@ export class EventDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
-    private showService: ShowService
+    private showService: ShowService,
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +30,7 @@ export class EventDetailComponent implements OnInit {
     if (eventId) {
       forkJoin({
         event: this.eventService.getEventById(eventId),
-        shows: this.showService.getShowsByEventId(eventId)
+        shows: this.showService.getShowsByEventId(eventId),
       }).subscribe({
         next: (data) => {
           this.event = data.event;
@@ -40,7 +40,7 @@ export class EventDetailComponent implements OnInit {
         error: (err) => {
           console.error('Error loading event data', err);
           this.isLoading = false;
-        }
+        },
       });
     }
   }
@@ -51,7 +51,7 @@ export class EventDetailComponent implements OnInit {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 }

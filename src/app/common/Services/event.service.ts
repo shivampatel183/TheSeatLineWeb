@@ -10,14 +10,14 @@ export class EventService {
   constructor(private apiService: ApiService) {}
 
   getEvents(): Observable<EventSelectDTO[]> {
-    return this.apiService.get<EventSelectDTO[]>('/event').pipe(
-      map(response => response.data)
-    );
+    return this.apiService
+      .get<EventSelectDTO[]>('/Event')
+      .pipe(map((response) => response.data));
   }
 
   getEventById(id: string): Observable<EventSelectDTO> {
-    return this.apiService.get<EventSelectDTO>(`/event/${id}`).pipe(
-      map(response => response.data)
-    );
+    return this.apiService
+      .get<EventSelectDTO>(`/Event/${id}`)
+      .pipe(map((response) => response.data));
   }
 }
