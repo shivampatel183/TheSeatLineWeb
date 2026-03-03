@@ -3,6 +3,14 @@
   background: var(--bg-alt);
 }
 
+.event-header {
+  padding: 2rem 0 1rem;
+
+  &__container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
 
   &__shell {
     border: 1px solid var(--border-color);
