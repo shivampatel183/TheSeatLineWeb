@@ -8,6 +8,7 @@
                     <span class="current">Event Details</span>
                 </nav>
 
+
                 <div class="event-header__grid">
                     <figure class="event-header__media">
                         <img [src]="event.bannerImageUrl" [alt]="event.title + ' banner'" />
@@ -32,10 +33,10 @@
                             </div>
                         </div>
 
-                        <!-- <div class="stat-card">
-                                <span class="stat-label">Shows</span>
-                                <span class="stat-value">{{ shows.length }}</span>
-                            </div> -->
+                        <div class="stat-card">
+                            <span class="stat-label">Shows</span>
+                            <span class="stat-value">{{ shows.length }}</span>
+                        </div>
                         <span class="stat-label">City</span>
                         <span class="stat-value stat-value--text">{{ event.city }}</span>
                     </section>

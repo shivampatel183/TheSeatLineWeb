@@ -20,4 +20,10 @@ export class EventService {
       .get<EventSelectDTO>(`/Event/${id}`)
       .pipe(map((response) => response.data));
   }
+
+  getEventByCity(cityName: string): Observable<EventSelectDTO[]> {
+    return this.apiService
+      .get<EventSelectDTO[]>(`/Event?CityName=${cityName}`)
+      .pipe(map((response) => response.data));
+  }
 }

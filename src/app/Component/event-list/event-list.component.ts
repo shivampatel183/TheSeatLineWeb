@@ -10,17 +10,17 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [CommonModule, EventCardComponent],
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.scss'
+  styleUrl: './event-list.component.scss',
 })
 export class EventListComponent implements OnInit {
   events$!: Observable<EventSelectDTO[]>;
   categories = ['All', 'Movies', 'Music', 'Sports', 'Comedy'];
   activeCategory = 'All';
-
+  city = localStorage.getItem('city') || '';
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.events$ = this.eventService.getEvents();
+    this.events$ = this.eventService.getEventByCity(this.city);
   }
 
   setCategory(category: string): void {
