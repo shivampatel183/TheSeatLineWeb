@@ -1,8 +1,9 @@
 <nav class="navbar">
   <div class="navbar__container">
     <div class="navbar__brand-group">
-      <div class="navbar__logo" aria-hidden="true">TS</div>
-      <a routerLink="/" class="navbar__brand-link" (click)="closeMobileMenu()">The Seat Line</a>
+
+      <a routerLink="/" class="navbar__brand-link" (click)="closeMobileMenu()"><img class="navbar__brand-logo"
+          src="/seat-main.png" alt="The Seat Line Logo"></a>
     </div>
 
     <div class="navbar__links" aria-label="Primary navigation">
@@ -58,10 +59,13 @@
 <div class="navbar__spacer"></div>
 
 <div class="mobile-sidebar" *ngIf="isMobileMenuOpen">
-  <button type="button" class="mobile-sidebar__backdrop" (click)="closeMobileMenu()" aria-label="Close navigation menu"></button>
-  <aside id="mobile-nav-panel" class="mobile-sidebar__panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <button type="button" class="mobile-sidebar__backdrop" (click)="closeMobileMenu()"
+    aria-label="Close navigation menu"></button>
+  <aside id="mobile-nav-panel" class="mobile-sidebar__panel" role="dialog" aria-modal="true"
+    aria-label="Mobile navigation">
     <button type="button" class="mobile-sidebar__close" (click)="closeMobileMenu()" aria-label="Close menu">
-      <svg xmlns="http://www.w3.org/2000/svg" class="navbar__toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" class="navbar__toggle-icon" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>

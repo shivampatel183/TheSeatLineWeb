@@ -10,7 +10,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [CommonModule, ShowItemComponent, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './event-detail.component.html',
   styleUrl: './event-detail.component.scss',
 })

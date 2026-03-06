@@ -1,0 +1,16 @@
+<div class="event-layout__shows">
+    <div class="shows-header">
+        <h2 class="section-title">Available Shows</h2>
+        <p class="section-subtitle">Select a show to view more details</p>
+    </div>
+
+    <div class="shows-list">
+        <app-show-item *ngFor="let show of shows" [show]="show">
+        </app-show-item>
+
+        <div class="no-shows" *ngIf="!shows || shows.length === 0">
+            <i class="far fa-calendar-times"></i>
+            <p>No shows currently scheduled.</p>
+        </div>
+    </div>
+</div>
