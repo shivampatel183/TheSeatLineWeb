@@ -12,15 +12,17 @@
           <span class="hero__location-icon" aria-hidden="true">
             <i class="fas fa-map-marker-alt"></i>
           </span>
-          <span class="hero__location-text">{{ currentCity }}</span>
+          <span class="hero__location-text">{{ selectedCity?.name || 'Select city' }}</span>
         </button>
       </form>
     </div>
   </div>
 </section>
 
-<app-event-list></app-event-list>
+<!-- Pass the selected city slug to event list -->
+<app-event-list [citySlug]="selectedCity?.slug ?? null"></app-event-list>
 
-<app-city-selector [isOpen]="showCityPopup" [cities]="availableCities" [selectedCity]="currentCity"
-  [canClose]="currentCity !== 'Select city' || availableCities.length === 0" (closeRequested)="closeCityPopup()"
-  (citySelected)="selectCity($event)"></app-city-selector>
+<app-city-selector [isOpen]="showCityPopup" [cities]="availableCityNames" [selectedCity]="selectedCity?.name || ''"
+  [canClose]="selectedCity !== null || availableCities.length === 0" (closeRequested)="closeCityPopup()"
+  (citySelected)="selectCityByName($event)">
+</app-city-selector>

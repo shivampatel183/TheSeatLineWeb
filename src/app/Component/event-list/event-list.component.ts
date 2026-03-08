@@ -20,7 +20,7 @@ export class EventListComponent implements OnInit {
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.events$ = this.eventService.getEventByCity(this.city);
+    this.events$ = this.eventService.getEventByCitySlug(this.city);
   }
 
   setCategory(category: string): void {

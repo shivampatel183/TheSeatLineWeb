@@ -1,4 +1,4 @@
-<div class="event-detail" *ngIf="!isLoading; else loading">
+<div class="event-detail" *ngIf="!isLoading && event as ev; else stateBlock">
     <header class="event-header">
         <div class="event-header__container">
             <div class="event-header__shell">
@@ -11,16 +11,17 @@
 
                 <div class="event-header__grid">
                     <figure class="event-header__media">
-                        <img [src]="event.bannerImageUrl" [alt]="event.title + ' banner'" />
+                        <img [src]="ev.bannerImageUrl" [alt]="ev.title + ' banner'" />
                     </figure>
 
                     <section class="event-header__content">
                         <div class="event-header__chips">
-                            <span class="chip chip--lang" *ngIf="event.language">{{ event.language }}</span>
-                            <span class="chip chip--type">{{ event.eventType === 1 ? 'Movie' : 'Event' }}</span>
+                            <span class="chip chip--lang" *ngIf="ev.language">{{ ev.language }}</span>
+                            <span class="chip chip--type">{{ ev.eventType === 1 ? 'Movie' : 'Event' }}</span>
+                            <span class="chip chip--type" *ngIf="ev.citySlug">{{ ev.citySlug }}</span>
                         </div>
 
-                        <h1 class="title">{{ event.title }}</h1>
+                        <h1 class="title">{{ ev.title }}</h1>
 
                         <div class="meta">
                             <div class="meta-item">
@@ -29,7 +30,11 @@
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>{{ event.venueName }}, {{ event.city }}</span>
+                                <span>{{ ev.venueName }}, {{ ev.city }}, {{ ev.state }}</span>
+                            </div>
+                            <div class="meta-item" *ngIf="ev.timezone">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ ev.timezone }}</span>
                             </div>
                         </div>
 
@@ -47,7 +52,36 @@
                 <div class="event-layout__details">
                     <section class="details-section">
                         <h2 class="section-title">About the Event</h2>
-                        <div class="description" [innerHTML]="event.description"></div>
+                        <div class="description" [innerHTML]="ev.description"></div>
+                    </section>
+
+                    <section class="details-section" *ngIf="parsedPerformers.length > 0">
+                        <h2 class="section-title">Performers</h2>
+                        <p>{{ parsedPerformers.join(', ') }}</p>
+                    </section>
+
+                    <section class="details-section">
+                        <h2 class="section-title">Event Info</h2>
+                        <p *ngIf="ev.ageRestriction && ev.ageRestriction > 0">Age Restriction: {{ ev.ageRestriction }}+</p>
+                        <p *ngIf="ev.maxCapacity">Max Capacity: {{ ev.maxCapacity }}</p>
+                        <p>Status: {{ getStatusLabel(ev.status || 0) }}</p>
+                    </section>
+
+                    <section class="details-section">
+                        <h2 class="section-title">Shows</h2>
+                        <div *ngIf="shows.length > 0; else noShows">
+                            <div class="meta-item" *ngFor="let show of shows">
+                                <i class="fas fa-ticket-alt"></i>
+                                <span>
+                                    {{ formatShowDateTime(show.startDateTime) }} - {{ formatShowDateTime(show.endDateTime) }}
+                                    | {{ getStatusLabel(show.status) }}
+                                    | Seats: {{ show.availableSeats }}
+                                </span>
+                            </div>
+                        </div>
+                        <ng-template #noShows>
+                            <p>No shows currently scheduled.</p>
+                        </ng-template>
                     </section>
                 </div>
 
@@ -57,9 +91,15 @@
     </main>
 </div>
 
-<ng-template #loading>
-    <div class="loading-state">
+<ng-template #stateBlock>
+    <div class="loading-state" *ngIf="isLoading; else errorState">
         <div class="loader"></div>
         <p>Fetching event details...</p>
+    </div>
+</ng-template>
+
+<ng-template #errorState>
+    <div class="loading-state">
+        <p>Unable to load event details.</p>
     </div>
 </ng-template>

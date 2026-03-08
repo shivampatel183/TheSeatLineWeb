@@ -8,25 +8,23 @@ import { EventSelectDTO } from '../../common/model/api.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './event-card.component.html',
-  styleUrl: './event-card.component.scss'
+  styleUrl: './event-card.component.scss',
 })
 export class EventCardComponent {
   @Input() event!: EventSelectDTO;
 
-  get formattedDate(): string {
-    if (!this.event?.startDateTime) return '';
-    return new Date(this.event.startDateTime).toLocaleDateString('en-IN', {
+  get formattedDate(date: Date): string {
+    return date.toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 
-  get formattedTime(): string {
-    if (!this.event?.startDateTime) return '';
-    return new Date(this.event.startDateTime).toLocaleTimeString('en-IN', {
+  get formattedTime(date: Date): string {
+    return date.toLocaleTimeString('en-IN', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 }

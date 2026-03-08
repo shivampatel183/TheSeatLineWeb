@@ -21,9 +21,9 @@ export class EventService {
       .pipe(map((response) => response.data));
   }
 
-  getEventByCity(cityName: string): Observable<EventSelectDTO[]> {
+  getEventByCitySlug(citySlug: string): Observable<EventSelectDTO[]> {
     return this.apiService
-      .get<EventSelectDTO[]>(`/Event?CityName=${cityName}`)
+      .get<EventSelectDTO[]>(`/Event?CitySlug=${encodeURIComponent(citySlug)}`)
       .pipe(map((response) => response.data));
   }
 }

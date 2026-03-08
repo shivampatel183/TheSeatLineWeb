@@ -29,11 +29,33 @@ export interface EventSelectDTO {
   title: string;
   description: string;
   eventType: number;
-  language: string;
+  language: string | null;
   startDateTime: string;
+  endDateTime?: string;
   bannerImageUrl: string;
   venueName: string;
   city: string;
+  citySlug?: string;
+  state?: string;
+  status?: number;
+  timezone?: string;
+  performers?: string | string[] | null;
+  ageRestriction?: number;
+  maxCapacity?: number;
+  isRecurring?: boolean;
+  recurrenceRule?: string | null;
+  images?: string[];
+  categoryName?: string | null;
+  tags?: string[];
+  shows?: EventShowDTO[];
+}
+
+export interface EventShowDTO {
+  id: string;
+  startDateTime: string;
+  endDateTime: string;
+  status: number;
+  availableSeats: number;
 }
 
 export interface SeatSelectDTO {

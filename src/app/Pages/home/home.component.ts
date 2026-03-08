@@ -4,6 +4,7 @@ import { ApiService } from '../../common/Services/api.services';
 import { firstValueFrom } from 'rxjs';
 import { CitySelectorComponent } from '../../common/components/city-selector/city-selector.component';
 import { EventListComponent } from '../../Component/event-list/event-list.component';
+import { AvailableCity } from '../../common/model/availablecity.model';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +14,12 @@ import { EventListComponent } from '../../Component/event-list/event-list.compon
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  private readonly SELECTED_CITY_KEY = 'city';
-  private readonly VISITOR_CITY_KEY = 'visitorCity';
+  private readonly SELECTED_CITY_KEY = 'selectedCity';
+  private readonly VISITOR_CITY_KEY = 'visitorCityName';
   private readonly AVAILABLE_CITIES_KEY = 'availableCities';
 
-  currentCity = 'Select city';
-  availableCities: string[] = [];
+  selectedCity: AvailableCity | null = null; // full city object
+  availableCities: AvailableCity[] = [];
   showCityPopup = false;
 
   constructor(private apiApiService: ApiService) {}
@@ -30,16 +31,21 @@ export class HomeComponent implements OnInit {
   private async initializeCitySelection(): Promise<void> {
     this.availableCities = await this.fetchAvailableCities();
 
-    const selectedCity = this.getStoredSelectedCity();
-    if (selectedCity && this.isCityAvailable(selectedCity)) {
-      this.setSelectedCity(selectedCity);
+    const savedCity = this.getStoredSelectedCity();
+    if (savedCity && this.isCityAvailable(savedCity)) {
+      this.setSelectedCity(savedCity);
       return;
     }
 
-    const visitorCity = await this.getOrDetectVisitorCity();
-    if (visitorCity && this.isCityAvailable(visitorCity)) {
-      this.setSelectedCity(visitorCity);
-      return;
+    const visitorCityName = await this.getOrDetectVisitorCity();
+    if (visitorCityName) {
+      const matchingCity = this.availableCities.find(
+        (c) => c.name.toLowerCase() === visitorCityName.toLowerCase(),
+      );
+      if (matchingCity) {
+        this.setSelectedCity(matchingCity);
+        return;
+      }
     }
 
     if (this.availableCities.length > 0) {
@@ -47,23 +53,31 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private getStoredSelectedCity(): string {
+  private getStoredSelectedCity(): AvailableCity | null {
     try {
-      const storedCity = localStorage.getItem(this.SELECTED_CITY_KEY);
-      return storedCity?.trim() || 'Select city';
-    } catch {
-      return 'Select city';
+      const stored = localStorage.getItem(this.SELECTED_CITY_KEY);
+      if (!stored) return null;
+      const city = JSON.parse(stored);
+      if (
+        city &&
+        typeof city.name === 'string' &&
+        typeof city.slug === 'string'
+      ) {
+        return city as AvailableCity;
+      }
+    } catch (e) {
+      console.error('Error parsing stored city:', e);
     }
+    return null;
   }
 
-  private async fetchAvailableCities(): Promise<string[]> {
-    // Try to load from cache first
+  private async fetchAvailableCities(): Promise<AvailableCity[]> {
     try {
-      const cachedCities = localStorage.getItem(this.AVAILABLE_CITIES_KEY);
-      if (cachedCities) {
-        const parsedCities = JSON.parse(cachedCities);
-        if (Array.isArray(parsedCities) && parsedCities.length > 0) {
-          return parsedCities;
+      const cached = localStorage.getItem(this.AVAILABLE_CITIES_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       }
     } catch (e) {
@@ -72,73 +86,48 @@ export class HomeComponent implements OnInit {
 
     try {
       const response = await firstValueFrom(
-        this.apiApiService.get<any>(`/City`),
+        this.apiApiService.get<any>('/City'),
       );
-      const sources = Array.isArray(response?.data)
+      const cities = Array.isArray(response?.data)
         ? response.data
-        : Array.isArray(response?.data?.items)
-          ? response.data.items
-          : Array.isArray(response)
-            ? response
-            : [];
+        : Array.isArray(response)
+          ? response
+          : [];
 
-      const uniqueCities: string[] = Array.from(
-        new Set(
-          sources
-            .map(
-              (item: any) =>
-                item?.name ||
-                item?.cityName ||
-                item?.city ||
-                item?.venueCity ||
-                item?.location?.city,
-            )
-            .filter(
-              (city: unknown): city is string =>
-                typeof city === 'string' && city.trim().length > 0,
-            )
-            .map((city: string) => city.trim()),
-        ),
-      );
+      const validCities = cities.filter(
+        (c: any) =>
+          c && typeof c.name === 'string' && typeof c.slug === 'string',
+      ) as AvailableCity[];
 
-      uniqueCities.sort((a: string, b: string) => a.localeCompare(b));
+      validCities.sort((a, b) => a.name.localeCompare(b.name));
 
-      // Store in cache
-      if (uniqueCities.length > 0) {
-        try {
-          localStorage.setItem(this.AVAILABLE_CITIES_KEY, JSON.stringify(uniqueCities));
-        } catch (e) {
-          console.error('Error caching cities:', e);
-        }
+      if (validCities.length > 0) {
+        localStorage.setItem(
+          this.AVAILABLE_CITIES_KEY,
+          JSON.stringify(validCities),
+        );
       }
 
-      return uniqueCities;
-    } catch {
+      return validCities;
+    } catch (error) {
+      console.error('Failed to fetch cities', error);
       return [];
     }
   }
 
   private async getOrDetectVisitorCity(): Promise<string> {
-    const storedVisitorCity = this.getLocalStorageValue(this.VISITOR_CITY_KEY);
-    if (storedVisitorCity) {
-      return storedVisitorCity;
-    }
+    const stored = this.getLocalStorageValue(this.VISITOR_CITY_KEY);
+    if (stored) return stored;
 
     try {
       const response = await fetch('https://ipapi.co/json/');
-      if (!response.ok) {
-        return '';
-      }
-
+      if (!response.ok) return '';
       const data = await response.json();
-      const detectedCity =
-        typeof data?.city === 'string' ? data.city.trim() : '';
-      if (!detectedCity) {
-        return '';
+      const city = typeof data?.city === 'string' ? data.city.trim() : '';
+      if (city) {
+        localStorage.setItem(this.VISITOR_CITY_KEY, city);
       }
-
-      localStorage.setItem(this.VISITOR_CITY_KEY, detectedCity);
-      return detectedCity;
+      return city;
     } catch {
       return '';
     }
@@ -152,10 +141,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private isCityAvailable(city: string): boolean {
-    return this.availableCities.some(
-      (availableCity) => availableCity.toLowerCase() === city.toLowerCase(),
-    );
+  private isCityAvailable(city: AvailableCity): boolean {
+    return this.availableCities.some((c) => c.slug === city.slug);
   }
 
   openCityPopup(): void {
@@ -163,22 +150,33 @@ export class HomeComponent implements OnInit {
   }
 
   closeCityPopup(): void {
-    if (this.currentCity !== 'Select city' || this.availableCities.length === 0) {
+    if (this.selectedCity !== null || this.availableCities.length === 0) {
       this.showCityPopup = false;
     }
   }
 
-  selectCity(city: string): void {
+  selectCity(city: AvailableCity): void {
     this.setSelectedCity(city);
     this.showCityPopup = false;
   }
 
-  private setSelectedCity(city: string): void {
-    this.currentCity = city;
+  private setSelectedCity(city: AvailableCity): void {
+    this.selectedCity = city;
     try {
-      localStorage.setItem(this.SELECTED_CITY_KEY, city);
-    } catch {
-      // no-op when localStorage is unavailable
+      localStorage.setItem(this.SELECTED_CITY_KEY, JSON.stringify(city));
+    } catch (e) {
+      console.error('Could not save selected city', e);
+    }
+  }
+
+  get availableCityNames(): string[] {
+    return this.availableCities.map((c) => c.name);
+  }
+
+  selectCityByName(cityName: string): void {
+    const city = this.availableCities.find((c) => c.name === cityName);
+    if (city) {
+      this.selectCity(city);
     }
   }
 }
