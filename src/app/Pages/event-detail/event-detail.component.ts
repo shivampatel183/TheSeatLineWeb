@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EventService } from '../../common/Services/event.service';
-import { EventSelectDTO, EventShowDTO } from '../../common/model/api.model';
+import { EventSelectDTO } from '../../common/model/api.model';
 
 @Component({
   selector: 'app-event-detail',
@@ -13,7 +13,6 @@ import { EventSelectDTO, EventShowDTO } from '../../common/model/api.model';
 })
 export class EventDetailComponent implements OnInit {
   event: EventSelectDTO | null = null;
-  shows: EventShowDTO[] = [];
   isLoading = true;
   hasError = false;
 
@@ -28,7 +27,6 @@ export class EventDetailComponent implements OnInit {
       this.eventService.getEventById(eventId).subscribe({
         next: (data) => {
           this.event = data;
-          this.shows = Array.isArray(data?.shows) ? data.shows : [];
           this.isLoading = false;
         },
         error: (err) => {
@@ -76,16 +74,5 @@ export class EventDetailComponent implements OnInit {
       default:
         return 'Unknown';
     }
-  }
-
-  formatShowDateTime(dateTime: string): string {
-    return new Date(dateTime).toLocaleString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
   }
 }

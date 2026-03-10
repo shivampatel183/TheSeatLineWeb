@@ -27,6 +27,7 @@ export interface AuthResponse {
 export interface EventSelectDTO {
   id: string;
   title: string;
+  slug: string;
   description: string;
   eventType: number;
   language: string | null;

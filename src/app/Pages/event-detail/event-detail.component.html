@@ -50,42 +50,36 @@
             <div class="event-layout">
                 <!-- Left Column: Details -->
                 <div class="event-layout__details">
-                    <section class="details-section">
+                    <section class="details-section details-section--about">
                         <h2 class="section-title">About the Event</h2>
                         <div class="description" [innerHTML]="ev.description"></div>
                     </section>
 
                     <section class="details-section" *ngIf="parsedPerformers.length > 0">
                         <h2 class="section-title">Performers</h2>
-                        <p>{{ parsedPerformers.join(', ') }}</p>
+                        <ul class="performer-list">
+                            <li class="performer-item" *ngFor="let performer of parsedPerformers">{{ performer }}</li>
+                        </ul>
                     </section>
 
                     <section class="details-section">
                         <h2 class="section-title">Event Info</h2>
-                        <p *ngIf="ev.ageRestriction && ev.ageRestriction > 0">Age Restriction: {{ ev.ageRestriction }}+</p>
-                        <p *ngIf="ev.maxCapacity">Max Capacity: {{ ev.maxCapacity }}</p>
-                        <p>Status: {{ getStatusLabel(ev.status || 0) }}</p>
-                    </section>
-
-                    <section class="details-section">
-                        <h2 class="section-title">Shows</h2>
-                        <div *ngIf="shows.length > 0; else noShows">
-                            <div class="meta-item" *ngFor="let show of shows">
-                                <i class="fas fa-ticket-alt"></i>
-                                <span>
-                                    {{ formatShowDateTime(show.startDateTime) }} - {{ formatShowDateTime(show.endDateTime) }}
-                                    | {{ getStatusLabel(show.status) }}
-                                    | Seats: {{ show.availableSeats }}
-                                </span>
+                        <div class="info-list">
+                            <div class="info-row" *ngIf="ev.ageRestriction && ev.ageRestriction > 0">
+                                <span class="info-label">Age Restriction</span>
+                                <span class="info-value">{{ ev.ageRestriction }}+</span>
+                            </div>
+                            <div class="info-row" *ngIf="ev.maxCapacity">
+                                <span class="info-label">Max Capacity</span>
+                                <span class="info-value">{{ ev.maxCapacity }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Status</span>
+                                <span class="info-value">{{ getStatusLabel(ev.status || 0) }}</span>
                             </div>
                         </div>
-                        <ng-template #noShows>
-                            <p>No shows currently scheduled.</p>
-                        </ng-template>
                     </section>
                 </div>
-
-                <!-- <app-show-list [shows]="shows"></app-show-list> -->
             </div>
         </div>
     </main>
