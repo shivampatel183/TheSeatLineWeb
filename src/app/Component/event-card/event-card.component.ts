@@ -13,7 +13,9 @@ import { EventSelectDTO } from '../../common/model/api.model';
 export class EventCardComponent {
   @Input() event!: EventSelectDTO;
 
-  get formattedDate(date: Date): string {
+  formattedDate(dateInput: string | Date): string {
+    const date = this.toDate(dateInput);
+    if (!date) return '';
     return date.toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
@@ -21,10 +23,17 @@ export class EventCardComponent {
     });
   }
 
-  get formattedTime(date: Date): string {
+  formattedTime(dateInput: string | Date): string {
+    const date = this.toDate(dateInput);
+    if (!date) return '';
     return date.toLocaleTimeString('en-IN', {
       hour: '2-digit',
       minute: '2-digit',
     });
+  }
+
+  private toDate(value: string | Date): Date | null {
+    const date = value instanceof Date ? value : new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 }

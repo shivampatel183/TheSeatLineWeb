@@ -1,4 +1,4 @@
-<div class="event-card">
+<div class="event-card" [routerLink]="['/event', event.id]">
     <div class="event-card__image-wrapper">
         <img [src]="event.bannerImageUrl" [alt]="event.title" class="event-card__image" />
         <div class="event-card__badge" *ngIf="event.language">
@@ -31,8 +31,6 @@
             </div>
         </div>
 
-        <div class="event-card__footer">
-            <button class="event-card__btn" [routerLink]="['/event', event.id]">Book Now</button>
-        </div>
+
     </div>
 </div>

@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
 
   &__image-wrapper {
     position: relative;
@@ -106,6 +107,12 @@
       box-shadow: 0 4px 12px rgba(244, 63, 94, 0.16);
     }
   }
+}
+.event-card:hover {
+  border: solid 0.1px var(--primary);
+}
+.event-card:hover .event-card__image {
+  transform: scale(1.05);
 }
 
 /* Mobile Responsive Adjustments */
