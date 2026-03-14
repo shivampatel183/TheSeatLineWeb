@@ -19,13 +19,13 @@
 }
 
 .navbar__container {
-  max-width: 72rem;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem var(--space-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--space-xs);
 }
 
 .navbar__brand-group,
@@ -46,13 +46,13 @@
   object-fit: contain;
 }
 .navbar__links {
-  gap: 1.5rem;
+  gap: var(--space-md);
 }
 .navbar__actions {
-  gap: 0.75rem;
+  gap: var(--space-xs);
 }
 .navbar__profile-actions {
-  gap: 0.875rem;
+  gap: var(--space-sm);
 }
 
 .navbar__logo {
@@ -91,7 +91,7 @@
 .mobile-menu__profile-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-xs);
 }
 
 .navbar__link:hover,
@@ -283,7 +283,7 @@
 
 @media (min-width: 640px) {
   .navbar__container {
-    padding: 0.3rem 1.5rem;
+    padding: 0.3rem var(--container-padding);
   }
 
   .navbar__logo {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { EventService } from '../../common/Services/event.service';
 import { EventSelectDTO } from '../../common/model/api.model';
 
@@ -18,6 +18,7 @@ export class EventDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private eventService: EventService,
   ) {}
 
@@ -75,4 +76,20 @@ export class EventDetailComponent implements OnInit {
         return 'Unknown';
     }
   }
+
+  getStatusClass(status: number): string {
+    switch (status) {
+      case 1: return 'active';
+      case 2: return 'sold-out';
+      case 3: return 'cancelled';
+      default: return 'unknown';
+    }
+  }
+
+  goToShows(): void {
+    if (this.event?.id) {
+      this.router.navigate(['/event', this.event.id, 'shows']);
+    }
+  }
 }
+

@@ -16,13 +16,13 @@
 
 /* Card Header */
 .card-header {
-  padding: 1.25rem;
+  padding: var(--card-padding);
   background: var(--bg-card-gradient);
   color: var(--text-on-primary);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: var(--space-sm);
 }
 
 .venue-info h3 {
@@ -74,17 +74,17 @@
 
 /* Show Info */
 .show-info {
-  padding: 1rem 1.25rem;
+  padding: var(--card-padding);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: var(--space-xs);
 }
 
 .info-row {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: var(--space-xs);
   color: var(--text-light);
   font-size: 0.875rem;
 }
@@ -101,10 +101,10 @@
 
 /* Booking Details */
 .booking-details {
-  padding: 1rem 1.25rem;
+  padding: var(--card-padding);
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: var(--space-xs);
   flex: 1;
 }
 
@@ -161,13 +161,13 @@
 
 /* Card Footer */
 .card-footer {
-  padding: 1rem 1.25rem;
+  padding: var(--card-padding);
   background: var(--bg-alt);
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-sm);
 }
 
 .total-amount {
@@ -192,7 +192,7 @@
 
 .actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-xs);
 }
 
 .cancel-btn {
@@ -225,7 +225,7 @@
 @media (max-width: 480px) {
   .card-header {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-xs);
   }
 
   .status-badges {

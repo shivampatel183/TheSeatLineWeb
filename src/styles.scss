@@ -40,6 +40,21 @@
 
   /* Fonts */
   --font-family: "Outfit", sans-serif;
+
+  /* Spacing Values */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Layout & Components */
+  --container-max-width: 72rem;
+  --container-padding: var(--space-md);
+  --section-padding: var(--space-lg) 0;
+  --card-padding: var(--space-md);
+  --gap-list: var(--space-sm);
+  --gap-grid: var(--space-md);
 }
 
 @layer components {

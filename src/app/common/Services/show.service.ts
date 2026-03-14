@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ApiService } from './api.services';
-import { ShowSelectDTO } from '../model/api.model';
+import { ShowSelectDTO, EventShowListDTO } from '../model/api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +9,9 @@ import { ShowSelectDTO } from '../model/api.model';
 export class ShowService {
   constructor(private apiService: ApiService) {}
 
-  getShowsByEventId(eventId: string): Observable<ShowSelectDTO[]> {
+  getShowsByEventId(eventId: string): Observable<EventShowListDTO[]> {
     return this.apiService
-      .get<ShowSelectDTO[]>(`/event/${eventId}`)
+      .get<EventShowListDTO[]>(`/EventShow/event/${eventId}`)
       .pipe(map((response) => response.data));
   }
 }

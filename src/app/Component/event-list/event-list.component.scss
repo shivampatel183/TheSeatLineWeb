@@ -1,15 +1,15 @@
 .events-section {
-  padding: 2rem 1rem;
-  max-width: 72rem;
+  padding: var(--space-lg) var(--space-sm);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   background: linear-gradient(to-br, #f8fafc, #ffffff, #fef2f2);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-md);
     padding: 0 0.25rem;
   }
 
@@ -28,12 +28,19 @@
 
   &__filter {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     background: #ffffff;
     padding: 0.375rem;
     border-radius: 999px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
@@ -46,6 +53,8 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
     background: var(--primary-light);
@@ -62,7 +71,7 @@
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.25rem;
+  gap: var(--gap-grid);
   padding: 0 0.25rem;
 
   &__item {
@@ -100,7 +109,7 @@
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 1.25rem;
+  gap: var(--gap-grid);
 }
 
 .skeleton-card {
@@ -133,7 +142,7 @@
   .events-section__header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: var(--space-sm);
   }
 
   .events-section__title {
@@ -143,16 +152,29 @@
 
 @media (max-width: 768px) {
   .events-section {
-    padding: 1.25rem 0.75rem;
+    padding: var(--space-md) var(--space-xs);
+  }
+
+  .events-section__title {
+    font-size: 1.5rem;
+  }
+
+  .events-section__filter {
+    border-radius: var(--radius-md);
+  }
+
+  .filter-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
   }
 
   .events-grid {
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
   }
 
   .skeleton-grid {
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
   }
 }

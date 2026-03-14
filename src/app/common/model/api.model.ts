@@ -100,3 +100,13 @@ export interface ShowSelectDTO {
   showTime: string;
   price: number;
 }
+
+export interface EventShowListDTO {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  startDateTime: string;
+  endDateTime: string;
+  status: number;
+  maxCapacity: number;
+}

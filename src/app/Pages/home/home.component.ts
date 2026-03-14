@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   private readonly VISITOR_CITY_KEY = 'visitorCityName';
   private readonly AVAILABLE_CITIES_KEY = 'availableCities';
 
-  selectedCity: AvailableCity | null = null; // full city object
+  selectedCity: AvailableCity | null = null;
   availableCities: AvailableCity[] = [];
   showCityPopup = false;
 
