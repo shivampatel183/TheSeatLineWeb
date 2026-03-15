@@ -1,0 +1,269 @@
+<div class="venue-detail-page" *ngIf="!isLoading && venue as v; else stateBlock">
+    <main class="venue-main">
+        <div class="venue-main__container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a routerLink="/">Home</a>
+                <span class="separator">/</span>
+                <span class="current">{{ v.name }}</span>
+            </nav>
+
+            <div class="venue-layout">
+                <!-- Left Column: Content -->
+                <div class="venue-layout__content">
+                    <!-- Hero Card -->
+                    <section class="hero-card">
+                        <!-- Gallery -->
+                        <figure class="hero-card__media" *ngIf="galleryImages.length > 0">
+                            <img [src]="galleryImages[activeGalleryIndex]" [alt]="v.name + ' image'" />
+                            <div class="gallery-nav" *ngIf="galleryImages.length > 1">
+                                <button class="gallery-nav__btn" (click)="prevImage()" aria-label="Previous image">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="gallery-nav__btn" (click)="nextImage()" aria-label="Next image">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="gallery-dots" *ngIf="galleryImages.length > 1">
+                                <button *ngFor="let img of galleryImages; let i = index"
+                                    class="gallery-dots__dot"
+                                    [class.gallery-dots__dot--active]="i === activeGalleryIndex"
+                                    (click)="setActiveImage(i)"
+                                    [attr.aria-label]="'View image ' + (i + 1)">
+                                </button>
+                            </div>
+                        </figure>
+
+                        <div class="hero-card__body">
+                            <div class="hero-card__chips">
+                                <span class="chip chip--status" [class.chip--active]="v.isActive">
+                                    {{ v.isActive ? 'Active' : 'Inactive' }}
+                                </span>
+                                <span class="chip chip--city" *ngIf="v.cityName">{{ v.cityName }}</span>
+                            </div>
+                            <h1 class="hero-card__title">{{ v.name }}</h1>
+                            <div class="hero-card__meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ fullAddress }}</span>
+                                </div>
+                                <div class="meta-item" *ngIf="v.totalCapacity">
+                                    <i class="fas fa-users"></i>
+                                    <span>Total Capacity: {{ v.totalCapacity | number }}</span>
+                                </div>
+                                <div class="meta-item" *ngIf="v.timezone">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ v.timezone }}</span>
+                                </div>
+                            </div>
+                            <div class="hero-card__actions">
+                                <a *ngIf="mapUrl" [href]="mapUrl" target="_blank" rel="noopener"
+                                    class="btn btn-primary">
+                                    <i class="fas fa-directions"></i> Get Directions
+                                </a>
+                                <a *ngIf="v.websiteUrl" [href]="v.websiteUrl" target="_blank" rel="noopener"
+                                    class="btn btn-secondary">
+                                    <i class="fas fa-globe"></i> Visit Website
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Amenities -->
+                    <section class="details-section" *ngIf="v.amenities && v.amenities.length > 0">
+                        <h2 class="section-title">
+                            <i class="fas fa-concierge-bell section-title__icon"></i> Amenities
+                        </h2>
+                        <div class="tag-grid">
+                            <span class="tag" *ngFor="let amenity of v.amenities">
+                                <i class="fas fa-check-circle tag__icon"></i>
+                                {{ amenity }}
+                            </span>
+                        </div>
+                    </section>
+
+                    <!-- Accessibility -->
+                    <section class="details-section" *ngIf="v.accessibilityFeatures && v.accessibilityFeatures.length > 0">
+                        <h2 class="section-title">
+                            <i class="fas fa-wheelchair section-title__icon"></i> Accessibility
+                        </h2>
+                        <div class="tag-grid">
+                            <span class="tag tag--accessibility" *ngFor="let feature of v.accessibilityFeatures">
+                                <i class="fas fa-universal-access tag__icon"></i>
+                                {{ feature }}
+                            </span>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column: Sidebar -->
+                <aside class="venue-layout__sidebar">
+                    <!-- Quick Info Card -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-card__header">
+                            <h3 class="sidebar-card__title">Venue Info</h3>
+                        </div>
+                        <div class="sidebar-card__body">
+                            <div class="info-list">
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Name</span>
+                                        <span class="info-value">{{ v.name }}</span>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Address</span>
+                                        <span class="info-value">{{ v.addressLine1 }}<span *ngIf="v.addressLine2">, {{
+                                                v.addressLine2 }}</span></span>
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-city"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">City</span>
+                                        <span class="info-value">{{ v.cityName }}</span>
+                                    </div>
+                                </div>
+                                <div class="info-row" *ngIf="v.postalCode">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-mail-bulk"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Postal Code</span>
+                                        <span class="info-value">{{ v.postalCode }}</span>
+                                    </div>
+                                </div>
+                                <div class="info-row" *ngIf="v.totalCapacity">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Capacity</span>
+                                        <span class="info-value">{{ v.totalCapacity | number }}</span>
+                                    </div>
+                                </div>
+                                <div class="info-row" *ngIf="v.timezone">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Timezone</span>
+                                        <span class="info-value">{{ v.timezone }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Card -->
+                    <div class="sidebar-card" *ngIf="v.contactEmail || v.contactPhone || v.websiteUrl">
+                        <div class="sidebar-card__header">
+                            <h3 class="sidebar-card__title">Contact</h3>
+                        </div>
+                        <div class="sidebar-card__body">
+                            <div class="info-list">
+                                <div class="info-row" *ngIf="v.contactEmail">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Email</span>
+                                        <a class="info-value info-value--link" [href]="'mailto:' + v.contactEmail">{{
+                                            v.contactEmail }}</a>
+                                    </div>
+                                </div>
+                                <div class="info-row" *ngIf="v.contactPhone">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Phone</span>
+                                        <a class="info-value info-value--link" [href]="'tel:' + v.contactPhone">{{
+                                            v.contactPhone }}</a>
+                                    </div>
+                                </div>
+                                <div class="info-row" *ngIf="v.websiteUrl">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-globe"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Website</span>
+                                        <a class="info-value info-value--link" [href]="v.websiteUrl" target="_blank"
+                                            rel="noopener">{{ v.websiteUrl }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Loading Skeleton -->
+<ng-template #stateBlock>
+    <div class="skeleton-page" *ngIf="isLoading; else errorState">
+        <div class="skeleton-page__container">
+            <div class="skeleton-breadcrumb">
+                <div class="skeleton-line skeleton-line--sm"></div>
+            </div>
+            <div class="skeleton-layout">
+                <div class="skeleton-content">
+                    <div class="skeleton-hero">
+                        <div class="skeleton-img skeleton-img--hero"></div>
+                        <div class="skeleton-hero__body">
+                            <div class="skeleton-line skeleton-line--sm"></div>
+                            <div class="skeleton-line skeleton-line--lg"></div>
+                            <div class="skeleton-line skeleton-line--md"></div>
+                            <div class="skeleton-line skeleton-line--md"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-line skeleton-line--md"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--lg"></div>
+                    </div>
+                </div>
+                <div class="skeleton-sidebar">
+                    <div class="skeleton-card">
+                        <div class="skeleton-line skeleton-line--md"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--lg"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-line skeleton-line--md"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                        <div class="skeleton-line skeleton-line--full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Error State -->
+<ng-template #errorState>
+    <div class="error-state">
+        <div class="error-state__icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Something went wrong</h3>
+        <p>Unable to load venue details. Please try again later.</p>
+        <a routerLink="/" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </div>
+</ng-template>

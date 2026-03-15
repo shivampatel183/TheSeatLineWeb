@@ -34,6 +34,7 @@ export interface EventSelectDTO {
   startDateTime: string;
   endDateTime?: string;
   bannerImageUrl: string;
+  venueId: string;
   venueName: string;
   city: string;
   citySlug?: string;
