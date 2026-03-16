@@ -5,7 +5,7 @@
             <nav class="breadcrumb">
                 <a routerLink="/">Home</a>
                 <span class="separator">/</span>
-                <a [routerLink]="['/event', ev.id]">{{ ev.title }}</a>
+                <a [routerLink]="['/event', eventSlug, ev.id]">{{ ev.title }}</a>
                 <span class="separator">/</span>
                 <span class="current">Shows</span>
             </nav>
@@ -30,7 +30,7 @@
                         </div>
                         <h3>No Shows Available</h3>
                         <p>There are no shows scheduled for this event right now. Check back later!</p>
-                        <a [routerLink]="['/event', ev.id]" class="btn btn-secondary">
+                        <a [routerLink]="['/event', eventSlug, ev.id]" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Back to Event
                         </a>
                     </div>
@@ -169,7 +169,7 @@
         </div>
         <h3>Something went wrong</h3>
         <p>Unable to load event details. Please try again.</p>
-        <a *ngIf="eventId" [routerLink]="['/event', eventId]" class="btn btn-secondary">
+        <a *ngIf="eventId && eventSlug" [routerLink]="['/event', eventSlug, eventId]" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Go Back to Event
         </a>
     </div>

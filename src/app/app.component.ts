@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastComponent } from './common/components/toast/toast.component';
 import { NavbarComponent } from './Component/navbar/navbar.component';
@@ -10,10 +10,16 @@ import { FooterComponent } from './Component/footer/footer.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'TheSeatLineWeb';
 
   ngOnInit() {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
     const existingVisitorCity = localStorage.getItem('visitorCity');
     if (existingVisitorCity) {
       return;

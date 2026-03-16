@@ -36,7 +36,7 @@
             <span class="amount">{{ booking.totalAmount | currency:'INR' }}</span>
         </div>
         <div class="actions" *ngIf="booking.status === 'Pending'">
-            <button class="pay-btn" [routerLink]="['/event', booking.eventId]">
+            <button class="pay-btn" [routerLink]="eventLink" [disabled]="!eventLink">
                 Complete Payment <i class="fas fa-chevron-right"></i>
             </button>
         </div>

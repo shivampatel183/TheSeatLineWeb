@@ -82,6 +82,7 @@ export interface BookingResponseDto {
   id: string;
   bookingReference: string;
   eventId: string;
+  eventSlug?: string | null;
   status: string;
   totalAmount: number;
   holdExpiresAt: string;

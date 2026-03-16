@@ -1,4 +1,4 @@
-<div class="event-card" [routerLink]="['/event', event.id]">
+<div class="event-card" [routerLink]="['/event', event.slug, event.id]">
     <div class="event-card__image-wrapper">
         <img [src]="event.bannerImageUrl" [alt]="event.title" class="event-card__image" />
         <div class="event-card__badge" *ngIf="event.language">

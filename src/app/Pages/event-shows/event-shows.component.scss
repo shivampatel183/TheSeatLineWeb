@@ -4,7 +4,6 @@
 
 // ─── Layout ───────────────────────────────────────────────
 .event-shows-page {
-  min-height: 100vh;
   background: var(--bg-alt);
 }
 
@@ -49,7 +48,6 @@
   grid-template-columns: 1fr 340px;
   gap: var(--gap-grid);
   align-items: start;
-  min-height: calc(100vh - 10rem);
 
   &__shows {
     display: grid;
@@ -109,7 +107,10 @@
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
     box-shadow: var(--shadow-sm);
     animation: fadeSlideUp 0.4s ease-out both;
 
@@ -183,7 +184,9 @@
 
     .expand-icon {
       color: var(--text-muted);
-      transition: color 0.2s ease, background-color 0.2s ease;
+      transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -343,7 +346,10 @@
   border-radius: var(--radius-md);
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   border: none;
   font-size: 0.88rem;
   text-decoration: none;
@@ -627,10 +633,19 @@
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 
-  &--sm { width: 30%; }
-  &--md { width: 55%; }
-  &--lg { width: 80%; height: 18px; }
-  &--full { width: 100%; }
+  &--sm {
+    width: 30%;
+  }
+  &--md {
+    width: 55%;
+  }
+  &--lg {
+    width: 80%;
+    height: 18px;
+  }
+  &--full {
+    width: 100%;
+  }
 }
 
 // ─── Animations ───────────────────────────────────────────
@@ -657,8 +672,12 @@
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 // ─── Responsive ───────────────────────────────────────────

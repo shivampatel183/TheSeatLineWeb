@@ -30,15 +30,24 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'event/:id',
-    loadComponent: () => import('./Pages/event-detail/event-detail.component').then(m => m.EventDetailComponent)
+    path: 'event/:slug/:id',
+    loadComponent: () =>
+      import('./Pages/event-detail/event-detail.component').then(
+        (m) => m.EventDetailComponent,
+      ),
   },
   {
-    path: 'event/:id/shows',
-    loadComponent: () => import('./Pages/event-shows/event-shows.component').then(m => m.EventShowsComponent)
+    path: 'event/:slug/:id/shows',
+    loadComponent: () =>
+      import('./Pages/event-shows/event-shows.component').then(
+        (m) => m.EventShowsComponent,
+      ),
   },
   {
     path: 'venue/:id',
-    loadComponent: () => import('./Pages/venue-detail/venue-detail.component').then(m => m.VenueDetailComponent)
+    loadComponent: () =>
+      import('./Pages/venue-detail/venue-detail.component').then(
+        (m) => m.VenueDetailComponent,
+      ),
   },
 ];

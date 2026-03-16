@@ -15,6 +15,7 @@ export class EventDetailComponent implements OnInit {
   event: EventSelectDTO | null = null;
   isLoading = true;
   hasError = false;
+  currentSlug: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +25,7 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id');
+    this.currentSlug = this.route.snapshot.paramMap.get('slug');
     if (eventId) {
       this.eventService.getEventById(eventId).subscribe({
         next: (data) => {
@@ -79,17 +81,23 @@ export class EventDetailComponent implements OnInit {
 
   getStatusClass(status: number): string {
     switch (status) {
-      case 1: return 'active';
-      case 2: return 'sold-out';
-      case 3: return 'cancelled';
-      default: return 'unknown';
+      case 1:
+        return 'active';
+      case 2:
+        return 'sold-out';
+      case 3:
+        return 'cancelled';
+      default:
+        return 'unknown';
     }
   }
 
   goToShows(): void {
-    if (this.event?.id) {
-      this.router.navigate(['/event', this.event.id, 'shows']);
+    const eventId = this.event?.id;
+    const slug = this.event?.slug || this.currentSlug;
+
+    if (eventId && slug) {
+      this.router.navigate(['/event', slug, eventId, 'shows']);
     }
   }
 }
-

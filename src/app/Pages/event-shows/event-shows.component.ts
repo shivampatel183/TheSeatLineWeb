@@ -26,6 +26,7 @@ export class EventShowsComponent implements OnInit {
   hasError = false;
   expandedDate: string | null = null;
   eventId: string | null = null;
+  currentSlug: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +36,7 @@ export class EventShowsComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.paramMap.get('id');
+    this.currentSlug = this.route.snapshot.paramMap.get('slug');
     if (this.eventId) {
       this.fetchData(this.eventId);
     } else {
@@ -144,5 +146,9 @@ export class EventShowsComponent implements OnInit {
       month: 'long',
       year: 'numeric',
     });
+  }
+
+  get eventSlug(): string | null {
+    return this.event?.slug || this.currentSlug;
   }
 }
