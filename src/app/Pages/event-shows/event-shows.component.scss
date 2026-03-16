@@ -2,7 +2,6 @@
   display: block;
 }
 
-// ─── Layout ───────────────────────────────────────────────
 .event-shows-page {
   background: var(--bg-alt);
 }
@@ -57,12 +56,9 @@
 
   &__sidebar {
     position: sticky;
-    top: 5.5rem;
-    align-self: start;
   }
 }
 
-// ─── Shows Header ─────────────────────────────────────────
 .shows-header {
   display: flex;
   align-items: flex-start;
@@ -96,7 +92,6 @@
   }
 }
 
-// ─── Accordion ────────────────────────────────────────────
 .accordion {
   display: flex;
   flex-direction: column;
@@ -214,7 +209,6 @@
   }
 }
 
-// ─── Shows Grid ───────────────────────────────────────────
 .shows-grid {
   display: grid;
   gap: var(--space-xs);
@@ -222,7 +216,6 @@
   padding-top: var(--space-sm);
 }
 
-// ─── Show Card ────────────────────────────────────────────
 .show-card {
   display: flex;
   align-items: center;
@@ -287,7 +280,6 @@
     color: var(--text-muted);
     display: flex;
     align-items: center;
-    gap: 0.3rem;
 
     i {
       font-size: 0.72rem;
@@ -296,12 +288,9 @@
 
   &__action {
     display: flex;
-    justify-content: flex-end;
-    flex-shrink: 0;
   }
 }
 
-// ─── Status Badges ────────────────────────────────────────
 .status-badge {
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-full);
@@ -336,7 +325,6 @@
   }
 }
 
-// ─── Buttons ──────────────────────────────────────────────
 .btn {
   display: inline-flex;
   align-items: center;
@@ -385,31 +373,9 @@
     }
   }
 
-  &-ghost {
-    background: transparent;
-    color: var(--text-muted);
-    padding: 0.5rem 0;
-    font-weight: 600;
-    font-size: 0.85rem;
-
-    &:hover {
-      color: var(--primary);
-    }
-
-    i {
-      font-size: 0.75rem;
-      transition: transform 0.2s ease;
-    }
-
-    &:hover i {
-      transform: translateX(-3px);
-    }
-  }
-
   &-sm {
     padding: 0.5rem 1rem;
     font-size: 0.82rem;
-    border-radius: var(--radius-md);
   }
 
   &:disabled {
@@ -423,102 +389,6 @@
   }
 }
 
-// ─── Event Summary Sidebar ────────────────────────────────
-.event-summary {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 5.5rem;
-
-  &__media {
-    margin: 0;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.03);
-    }
-  }
-
-  &__body {
-    padding: var(--card-padding);
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  &__title {
-    margin: 0;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--text-main);
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-  }
-
-  &__meta {
-    display: grid;
-    gap: 0.5rem;
-
-    &-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.55rem;
-      font-size: 0.85rem;
-      color: var(--text-light);
-      line-height: 1.4;
-
-      i {
-        color: var(--primary);
-        margin-top: 0.15rem;
-        font-size: 0.82rem;
-        flex-shrink: 0;
-      }
-    }
-  }
-
-  &__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    padding-top: 0.25rem;
-  }
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  padding: 0.22rem 0.65rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-
-  &--lang {
-    background: var(--primary);
-    color: var(--text-on-primary);
-  }
-
-  &--type {
-    background: var(--primary-light);
-    color: var(--primary-hover);
-    border: 1px solid #fecdd3;
-  }
-}
-
-// ─── Empty & Error States ─────────────────────────────────
 .empty-state,
 .error-state {
   display: flex;
@@ -570,12 +440,6 @@
   }
 }
 
-// ─── Back Link ────────────────────────────────────────────
-.back-link {
-  padding-top: var(--space-xs);
-}
-
-// ─── Skeleton Loading ─────────────────────────────────────
 .skeleton-page {
   min-height: 100vh;
   background: var(--bg-alt);
@@ -599,11 +463,7 @@
   align-items: start;
 }
 
-.skeleton-shows {
-  display: grid;
-  gap: var(--space-sm);
-}
-
+.skeleton-shows,
 .skeleton-sidebar {
   display: grid;
   gap: var(--space-sm);
@@ -618,42 +478,46 @@
   gap: var(--space-xs);
 }
 
-.skeleton-img {
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-lg);
+.skeleton-img,
+.skeleton-line {
   background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-img {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
 }
 
 .skeleton-line {
   height: 14px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
 
   &--sm {
     width: 30%;
   }
+
   &--md {
     width: 55%;
   }
+
   &--lg {
     width: 80%;
     height: 18px;
   }
+
   &--full {
     width: 100%;
   }
 }
 
-// ─── Animations ───────────────────────────────────────────
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -665,6 +529,7 @@
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -675,24 +540,21 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
 }
 
-// ─── Responsive ───────────────────────────────────────────
 @media (max-width: 1024px) {
-  .event-layout {
+  .event-layout,
+  .skeleton-layout {
     grid-template-columns: 1fr;
   }
 
   .event-layout__sidebar {
     order: -1;
     position: static;
-  }
-
-  .skeleton-layout {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -758,15 +620,7 @@
     }
   }
 
-  .event-summary {
-    &__media {
-      aspect-ratio: 21 / 9;
-    }
-  }
-
-  .skeleton-layout {
-    .skeleton-sidebar {
-      order: -1;
-    }
+  .skeleton-layout .skeleton-sidebar {
+    order: -1;
   }
 }

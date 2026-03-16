@@ -44,6 +44,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'event/:slug/:id/shows/:showId/book',
+    loadComponent: () =>
+      import('./Pages/show-booking/show-booking.component').then(
+        (m) => m.ShowBookingComponent,
+      ),
+  },
+  {
     path: 'venue/:id',
     loadComponent: () =>
       import('./Pages/venue-detail/venue-detail.component').then(

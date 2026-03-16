@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ShowService } from '../../common/Services/show.service';
 import { EventService } from '../../common/Services/event.service';
 import { EventShowListDTO, EventSelectDTO } from '../../common/model/api.model';
@@ -15,7 +15,7 @@ interface GroupedShows {
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './event-shows.component.html',
-  styleUrl: './event-shows.component.scss'
+  styleUrl: './event-shows.component.scss',
 })
 export class EventShowsComponent implements OnInit {
   shows: EventShowListDTO[] = [];
@@ -30,8 +30,9 @@ export class EventShowsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private showService: ShowService,
-    private eventService: EventService
+    private eventService: EventService,
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +49,7 @@ export class EventShowsComponent implements OnInit {
   fetchData(eventId: string): void {
     forkJoin({
       shows: this.showService.getShowsByEventId(eventId),
-      event: this.eventService.getEventById(eventId)
+      event: this.eventService.getEventById(eventId),
     }).subscribe({
       next: (data) => {
         this.shows = data.shows;
@@ -60,7 +61,7 @@ export class EventShowsComponent implements OnInit {
         console.error('Error loading data', err);
         this.hasError = true;
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -80,16 +81,18 @@ export class EventShowsComponent implements OnInit {
 
     this.sortedDates = Object.keys(this.groupedShows).sort();
 
-    this.sortedDates.forEach(date => {
+    this.sortedDates.forEach((date) => {
       this.groupedShows[date].sort((a, b) => {
         if (!a.startDateTime || !b.startDateTime) return 0;
-        return new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime();
+        return (
+          new Date(a.startDateTime).getTime() -
+          new Date(b.startDateTime).getTime()
+        );
       });
     });
 
-    // Expand the first date by default
     if (this.sortedDates.length > 0) {
-      this.expandedDate = this.sortedDates[0];
+      [this.expandedDate] = this.sortedDates;
     }
   }
 
@@ -107,7 +110,7 @@ export class EventShowsComponent implements OnInit {
       weekday: 'long',
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
     });
   }
 
@@ -116,25 +119,33 @@ export class EventShowsComponent implements OnInit {
     return date.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
     });
   }
 
   getStatusClass(status: number): string {
     switch (status) {
-      case 1: return 'status-active';
-      case 2: return 'status-sold-out';
-      case 3: return 'status-cancelled';
-      default: return 'status-unknown';
+      case 1:
+        return 'status-active';
+      case 2:
+        return 'status-sold-out';
+      case 3:
+        return 'status-cancelled';
+      default:
+        return 'status-unknown';
     }
   }
 
   getStatusLabel(status: number): string {
     switch (status) {
-      case 1: return 'Available';
-      case 2: return 'Sold Out';
-      case 3: return 'Cancelled';
-      default: return 'Unknown';
+      case 1:
+        return 'Available';
+      case 2:
+        return 'Sold Out';
+      case 3:
+        return 'Cancelled';
+      default:
+        return 'Unknown';
     }
   }
 
@@ -150,5 +161,20 @@ export class EventShowsComponent implements OnInit {
 
   get eventSlug(): string | null {
     return this.event?.slug || this.currentSlug;
+  }
+
+  goToBooking(show: EventShowListDTO): void {
+    if (show.status !== 1) {
+      return;
+    }
+
+    const eventId = this.event?.id || this.eventId;
+    const slug = this.eventSlug;
+
+    if (!eventId || !slug) {
+      return;
+    }
+
+    this.router.navigate(['/event', slug, eventId, 'shows', show.id, 'book']);
   }
 }

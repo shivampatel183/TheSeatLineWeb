@@ -112,3 +112,12 @@ export interface EventShowListDTO {
   status: number;
   maxCapacity: number;
 }
+
+export interface TicketCategoryDTO {
+  id: string;
+  eventShowId: string;
+  name: string;
+  price: number;
+  totalQuantity: number;
+  soldQuantity: number;
+}

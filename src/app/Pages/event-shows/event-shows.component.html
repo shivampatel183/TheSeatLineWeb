@@ -1,7 +1,6 @@
 <div class="event-shows-page" *ngIf="!isLoading && event as ev; else stateBlock">
     <main class="event-main">
         <div class="event-main__container">
-            <!-- Breadcrumb -->
             <nav class="breadcrumb">
                 <a routerLink="/">Home</a>
                 <span class="separator">/</span>
@@ -11,7 +10,6 @@
             </nav>
 
             <div class="event-layout">
-                <!-- Left Column: Shows -->
                 <div class="event-layout__shows">
                     <div class="shows-header">
                         <div>
@@ -23,7 +21,6 @@
                         </span>
                     </div>
 
-                    <!-- Empty State -->
                     <div class="empty-state" *ngIf="!hasError && sortedDates.length === 0">
                         <div class="empty-state__icon">
                             <i class="fas fa-calendar-times"></i>
@@ -35,12 +32,9 @@
                         </a>
                     </div>
 
-                    <!-- Accordion -->
                     <div class="accordion" *ngIf="!hasError && sortedDates.length > 0">
                         <div class="accordion__item" *ngFor="let date of sortedDates; let i = index"
                             [class.is-expanded]="expandedDate === date" [style.animation-delay]="(i * 60) + 'ms'">
-
-                            <!-- Accordion Header -->
                             <button class="accordion__header" (click)="toggleAccordion(date)">
                                 <div class="date-info">
                                     <div class="date-info__icon-wrap">
@@ -48,8 +42,9 @@
                                     </div>
                                     <div class="date-info__text">
                                         <span class="date-info__label">{{ formatDateHeader(date) }}</span>
-                                        <span class="date-info__count">{{ getShowCountForDate(date) }}
-                                            show{{ getShowCountForDate(date) > 1 ? 's' : '' }}</span>
+                                        <span class="date-info__count">
+                                            {{ getShowCountForDate(date) }} show{{ getShowCountForDate(date) > 1 ? 's' : '' }}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="expand-icon">
@@ -58,7 +53,6 @@
                                 </div>
                             </button>
 
-                            <!-- Accordion Content -->
                             <div class="accordion__content" *ngIf="expandedDate === date">
                                 <div class="shows-grid">
                                     <div class="show-card" *ngFor="let show of groupedShows[date]; let j = index"
@@ -66,12 +60,10 @@
                                         [class.show-card--soldout]="show.status === 2"
                                         [class.show-card--cancelled]="show.status === 3"
                                         [style.animation-delay]="(j * 50) + 'ms'">
-
                                         <div class="show-card__left">
                                             <div class="show-card__time">
                                                 <i class="fas fa-clock"></i>
-                                                <span>{{ formatTime(show.startDateTime) }} – {{
-                                                    formatTime(show.endDateTime) }}</span>
+                                                <span>{{ formatTime(show.startDateTime) }} - {{ formatTime(show.endDateTime) }}</span>
                                             </div>
                                             <div class="show-card__meta">
                                                 <span class="status-badge" [ngClass]="getStatusClass(show.status)">
@@ -86,8 +78,9 @@
                                         </div>
 
                                         <div class="show-card__action">
-                                            <button class="btn btn-primary btn-sm" [disabled]="show.status !== 1">
-                                                {{ show.status === 1 ? 'Select Show' : 'Unavailable' }}
+                                            <button class="btn btn-primary btn-sm" [disabled]="show.status !== 1"
+                                                (click)="goToBooking(show)">
+                                                {{ show.status === 1 ? 'Book Tickets' : 'Unavailable' }}
                                                 <i class="fas fa-arrow-right" *ngIf="show.status === 1"></i>
                                             </button>
                                         </div>
@@ -96,11 +89,8 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
-                <!-- Right Column: Event Summary Sidebar -->
                 <aside class="event-layout__sidebar">
                     <div class="event-summary">
                         <figure class="event-summary__media" *ngIf="ev.bannerImageUrl">
@@ -134,7 +124,6 @@
     </main>
 </div>
 
-<!-- Loading Skeleton -->
 <ng-template #stateBlock>
     <div class="skeleton-page" *ngIf="isLoading; else errorState">
         <div class="skeleton-page__container">
@@ -161,7 +150,6 @@
     </div>
 </ng-template>
 
-<!-- Error State -->
 <ng-template #errorState>
     <div class="error-state">
         <div class="error-state__icon">
