@@ -1,153 +1,110 @@
 <div class="event-shows-page" *ngIf="!isLoading && event as ev; else stateBlock">
     <main class="event-main">
         <div class="event-main__container">
-            <nav class="breadcrumb">
-                <a routerLink="/">Home</a>
-                <span class="separator">/</span>
-                <a [routerLink]="['/event', eventSlug, ev.id]">{{ ev.title }}</a>
-                <span class="separator">/</span>
-                <span class="current">Shows</span>
-            </nav>
+            <section class="shows-shell">
+                <a [routerLink]="['/event', eventSlug, ev.id]" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to event</span>
+                </a>
 
-            <div class="event-layout">
-                <div class="event-layout__shows">
-                    <div class="shows-header">
-                        <div>
-                            <h1 class="shows-header__title">Select a Show</h1>
-                            <p class="shows-header__subtitle">Choose a date and time to continue your booking.</p>
-                        </div>
-                        <span class="shows-header__count" *ngIf="shows.length > 0">
-                            {{ shows.length }} show{{ shows.length > 1 ? 's' : '' }}
+                <header class="shows-header">
+                    <p class="shows-header__step">Step 1 of 3</p>
+                    <h1 class="shows-header__title">Choose a show</h1>
+                    <p class="shows-header__event">{{ ev.title }}</p>
+
+                    <div class="shows-meta">
+                        <span class="shows-meta__item" *ngIf="formattedEventDate">{{ formattedEventDate }}</span>
+                        <span class="shows-meta__item" *ngIf="ev.venueName">
+                            {{ ev.venueName }}<span *ngIf="ev.city">, {{ ev.city }}</span>
+                        </span>
+                        <span class="shows-meta__item">
+                            {{ shows.length }} show{{ shows.length === 1 ? '' : 's' }}
                         </span>
                     </div>
+                </header>
 
-                    <div class="empty-state" *ngIf="!hasError && sortedDates.length === 0">
-                        <div class="empty-state__icon">
-                            <i class="fas fa-calendar-times"></i>
-                        </div>
-                        <h3>No Shows Available</h3>
-                        <p>There are no shows scheduled for this event right now. Check back later!</p>
-                        <a [routerLink]="['/event', eventSlug, ev.id]" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Event
-                        </a>
-                    </div>
-
-                    <div class="accordion" *ngIf="!hasError && sortedDates.length > 0">
-                        <div class="accordion__item" *ngFor="let date of sortedDates; let i = index"
-                            [class.is-expanded]="expandedDate === date" [style.animation-delay]="(i * 60) + 'ms'">
-                            <button class="accordion__header" (click)="toggleAccordion(date)">
-                                <div class="date-info">
-                                    <div class="date-info__icon-wrap">
-                                        <i class="fas fa-calendar-day"></i>
-                                    </div>
-                                    <div class="date-info__text">
-                                        <span class="date-info__label">{{ formatDateHeader(date) }}</span>
-                                        <span class="date-info__count">
-                                            {{ getShowCountForDate(date) }} show{{ getShowCountForDate(date) > 1 ? 's' : '' }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="expand-icon">
-                                    <i class="fas"
-                                        [ngClass]="expandedDate === date ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                                </div>
-                            </button>
-
-                            <div class="accordion__content" *ngIf="expandedDate === date">
-                                <div class="shows-grid">
-                                    <div class="show-card" *ngFor="let show of groupedShows[date]; let j = index"
-                                        [class.show-card--available]="show.status === 1"
-                                        [class.show-card--soldout]="show.status === 2"
-                                        [class.show-card--cancelled]="show.status === 3"
-                                        [style.animation-delay]="(j * 50) + 'ms'">
-                                        <div class="show-card__left">
-                                            <div class="show-card__time">
-                                                <i class="fas fa-clock"></i>
-                                                <span>{{ formatTime(show.startDateTime) }} - {{ formatTime(show.endDateTime) }}</span>
-                                            </div>
-                                            <div class="show-card__meta">
-                                                <span class="status-badge" [ngClass]="getStatusClass(show.status)">
-                                                    <i class="fas"
-                                                        [ngClass]="show.status === 1 ? 'fa-check-circle' : show.status === 2 ? 'fa-ban' : 'fa-times-circle'"></i>
-                                                    {{ getStatusLabel(show.status) }}
-                                                </span>
-                                                <span class="show-card__capacity" *ngIf="show.maxCapacity">
-                                                    <i class="fas fa-chair"></i> {{ show.maxCapacity }} seats
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="show-card__action">
-                                            <button class="btn btn-primary btn-sm" [disabled]="show.status !== 1"
-                                                (click)="goToBooking(show)">
-                                                {{ show.status === 1 ? 'Book Tickets' : 'Unavailable' }}
-                                                <i class="fas fa-arrow-right" *ngIf="show.status === 1"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                <section class="date-list" *ngIf="!hasError && sortedDates.length > 0; else emptyShows">
+                    <section class="date-group" *ngFor="let date of sortedDates">
+                        <button type="button" class="date-group__header"
+                            [class.date-group__header--open]="expandedDate === date" (click)="toggleAccordion(date)">
+                            <div class="date-group__header-text">
+                                <h2 class="date-group__title">{{ formatDateHeader(date) }}</h2>
+                                <span class="date-group__count">
+                                    {{ groupedShows[date].length }} show{{ groupedShows[date].length === 1 ? '' : 's' }}
+                                </span>
                             </div>
+
+                            <span class="date-group__icon">
+                                <i class="fas"
+                                    [ngClass]="expandedDate === date ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                            </span>
+                        </button>
+
+                        <div class="shows-list" *ngIf="expandedDate === date">
+                            <article class="show-card" *ngFor="let show of groupedShows[date]"
+                                [class.show-card--available]="show.status === 1"
+                                [class.show-card--soldout]="show.status === 2"
+                                [class.show-card--cancelled]="show.status === 3">
+                                <div class="show-card__info">
+                                    <div class="show-card__meta">
+                                        <h3 class="show-card__time">
+                                            {{ formatTime(show.startDateTime) }} - {{ formatTime(show.endDateTime) }}
+                                        </h3>
+                                        <!-- <span class="status-badge" [ngClass]="getStatusClass(show.status)">
+                                            {{ getStatusLabel(show.status) }}
+                                        </span> -->
+                                    </div>
+
+                                    <p class="show-card__details" *ngIf="show.maxCapacity">
+                                        {{ show.maxCapacity }} seats
+                                    </p>
+                                </div>
+
+                                <div class="show-card__actions">
+                                    <button class="btn btn-primary btn-sm" [disabled]="show.status !== 1"
+                                        (click)="goToBooking(show)">
+                                        {{ show.status === 1 ? 'Book' : 'Unavailable' }}
+                                    </button>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="summary-card" *ngIf="!hasError && sortedDates.length > 0">
+                    <div class="summary-card__totals">
+                        <div>
+                            <span class="summary-card__label">Dates</span>
+                            <strong>{{ sortedDates.length }}</strong>
+                        </div>
+                        <div>
+                            <span class="summary-card__label">Available</span>
+                            <strong>{{ availableShowsCount }}</strong>
                         </div>
                     </div>
-                </div>
 
-                <aside class="event-layout__sidebar">
-                    <div class="event-summary">
-                        <figure class="event-summary__media" *ngIf="ev.bannerImageUrl">
-                            <img [src]="ev.bannerImageUrl" [alt]="ev.title + ' banner'" />
-                        </figure>
-                        <div class="event-summary__body">
-                            <h2 class="event-summary__title">{{ ev.title }}</h2>
-                            <div class="event-summary__meta">
-                                <div class="event-summary__meta-item" *ngIf="ev.venueName">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>{{ ev.venueName }}<span *ngIf="ev.city">, {{ ev.city }}</span></span>
-                                </div>
-                                <div class="event-summary__meta-item" *ngIf="formattedEventDate">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>{{ formattedEventDate }}</span>
-                                </div>
-                                <div class="event-summary__meta-item" *ngIf="ev.language">
-                                    <i class="fas fa-language"></i>
-                                    <span>{{ ev.language }}</span>
-                                </div>
-                            </div>
-                            <div class="event-summary__chips">
-                                <span class="chip chip--type">{{ ev.eventType === 1 ? 'Movie' : 'Event' }}</span>
-                                <span class="chip chip--lang" *ngIf="ev.language">{{ ev.language }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
+                    <p class="summary-card__note">Choose any available show to continue to tickets.</p>
+                </section>
+            </section>
         </div>
     </main>
 </div>
 
-<ng-template #stateBlock>
-    <div class="skeleton-page" *ngIf="isLoading; else errorState">
-        <div class="skeleton-page__container">
-            <div class="skeleton-breadcrumb">
-                <div class="skeleton-line skeleton-line--sm"></div>
-            </div>
-            <div class="skeleton-layout">
-                <div class="skeleton-shows">
-                    <div class="skeleton-line skeleton-line--lg"></div>
-                    <div class="skeleton-line skeleton-line--md"></div>
-                    <div class="skeleton-card" *ngFor="let s of [1,2,3]">
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--md"></div>
-                    </div>
-                </div>
-                <div class="skeleton-sidebar">
-                    <div class="skeleton-img"></div>
-                    <div class="skeleton-line skeleton-line--lg"></div>
-                    <div class="skeleton-line skeleton-line--md"></div>
-                    <div class="skeleton-line skeleton-line--sm"></div>
-                </div>
-            </div>
+<ng-template #emptyShows>
+    <div class="empty-state">
+        <div class="empty-state__icon">
+            <i class="fas fa-calendar-times"></i>
         </div>
+        <h3>No shows available</h3>
+        <p>There are no scheduled shows for this event right now.</p>
+        <a [routerLink]="['/event', eventSlug, event?.id || eventId]" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to event
+        </a>
     </div>
+</ng-template>
+
+<ng-template #stateBlock>
+    <app-preloader *ngIf="isLoading; else errorState" mode="page" message="Loading event shows..."></app-preloader>
 </ng-template>
 
 <ng-template #errorState>

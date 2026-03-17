@@ -457,83 +457,6 @@
 }
 
 // ─── Skeleton Loading ─────────────────────────────────────
-.skeleton-page {
-  min-height: 100vh;
-  background: var(--bg-alt);
-  padding: var(--space-lg) 0;
-
-  &__container {
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-  }
-}
-
-.skeleton-breadcrumb {
-  margin-bottom: var(--space-lg);
-}
-
-.skeleton-layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: var(--gap-grid);
-  align-items: start;
-}
-
-.skeleton-content {
-  display: grid;
-  gap: var(--space-md);
-}
-
-.skeleton-sidebar {
-  display: grid;
-  gap: var(--space-sm);
-}
-
-.skeleton-hero {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-
-  &__body {
-    padding: var(--card-padding);
-    display: grid;
-    gap: var(--space-xs);
-  }
-}
-
-.skeleton-card {
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--card-padding);
-  display: grid;
-  gap: var(--space-xs);
-}
-
-.skeleton-img {
-  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
-
-  &--hero {
-    aspect-ratio: 21 / 9;
-  }
-}
-
-.skeleton-line {
-  height: 14px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
-
-  &--sm { width: 30%; }
-  &--md { width: 55%; }
-  &--lg { width: 80%; height: 18px; }
-  &--full { width: 100%; }
-}
 
 // ─── Animations ───────────────────────────────────────────
 @keyframes fadeSlideUp {
@@ -547,10 +470,6 @@
   }
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
 
 // ─── Responsive ───────────────────────────────────────────
 @media (max-width: 1024px) {
@@ -563,9 +482,6 @@
     align-self: start;
   }
 
-  .skeleton-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 768px) {
@@ -595,9 +511,4 @@
     order: 0;
   }
 
-  .skeleton-layout {
-    .skeleton-sidebar {
-      order: 0;
-    }
-  }
 }

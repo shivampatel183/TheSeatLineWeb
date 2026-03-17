@@ -1,8 +1,6 @@
 <div class="profile-container">
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <app-preloader *ngIf="isLoading" mode="overlay" [message]="loadingMessage"></app-preloader>
 
   <!-- Profile Header -->
   <div class="profile-header">

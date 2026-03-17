@@ -24,10 +24,6 @@
     </div>
 
     <ng-template #loading>
-        <div class="loading-state">
-            <div class="skeleton-grid">
-                <div *ngFor="let i of [1,2,3,4]" class="skeleton-card"></div>
-            </div>
-        </div>
+        <app-preloader message="Loading events..."></app-preloader>
     </ng-template>
 </section>

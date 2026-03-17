@@ -696,6 +696,15 @@ main {
   letter-spacing: -0.01em;
 }
 
+.event-summary__eyebrow {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-hover);
+}
+
 .event-summary__meta {
   display: grid;
   gap: 0.5rem;
@@ -745,6 +754,122 @@ main {
   background: var(--primary-light);
   color: var(--primary-hover);
   border: 1px solid #fecdd3;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  border: none;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-on-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.25);
+}
+
+.btn-primary i {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) i {
+  transform: translateX(2px);
+}
+
+.btn-secondary {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-alt);
+  border-color: var(--text-muted);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  border-color: var(--border-color);
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.empty-state,
+.error-state {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 2rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.empty-state__icon,
+.error-state__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.empty-state__icon i,
+.error-state__icon i {
+  font-size: 1.6rem;
+  color: var(--primary);
+}
+
+.error-state__icon i {
+  color: #ef4444;
+}
+
+.empty-state h3,
+.error-state h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.empty-state p,
+.error-state p {
+  margin: 0 0 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  max-width: 320px;
 }
 
 @media (min-width: 640px) {

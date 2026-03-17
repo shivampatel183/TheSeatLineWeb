@@ -10,11 +10,12 @@ import {
   UpdateUserProfileRequest,
   ChangePasswordRequest,
 } from '../../common/model/master.model';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PreloaderComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
@@ -23,6 +24,7 @@ export class ProfileComponent implements OnInit {
   isEditMode = false;
   isChangingPassword = false;
   isLoading = false;
+  loadingMessage = 'Loading your profile...';
 
   editData: UpdateUserProfileRequest = {
     firstName: '',
@@ -54,6 +56,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUserProfile(): void {
+    this.loadingMessage = 'Loading your profile...';
     this.isLoading = true;
     this.userService.getUserProfile().subscribe({
       next: (response) => {
@@ -122,6 +125,7 @@ export class ProfileComponent implements OnInit {
       phoneNumber: this.editData.phoneNumber?.trim() || undefined,
     };
 
+    this.loadingMessage = 'Saving your profile...';
     this.isLoading = true;
     this.userService.updateUserProfile(payload).subscribe({
       next: (response) => {

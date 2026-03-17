@@ -5,6 +5,7 @@ import { ShowService } from '../../common/Services/show.service';
 import { EventService } from '../../common/Services/event.service';
 import { EventShowListDTO, EventSelectDTO } from '../../common/model/api.model';
 import { forkJoin } from 'rxjs';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 
 interface GroupedShows {
   [date: string]: EventShowListDTO[];
@@ -13,7 +14,7 @@ interface GroupedShows {
 @Component({
   selector: 'app-event-shows',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PreloaderComponent],
   templateUrl: './event-shows.component.html',
   styleUrl: './event-shows.component.scss',
 })
@@ -90,18 +91,11 @@ export class EventShowsComponent implements OnInit {
         );
       });
     });
-
-    if (this.sortedDates.length > 0) {
-      [this.expandedDate] = this.sortedDates;
-    }
+    this.expandedDate = this.sortedDates[0] ?? null;
   }
 
   toggleAccordion(date: string): void {
     this.expandedDate = this.expandedDate === date ? null : date;
-  }
-
-  getShowCountForDate(date: string): number {
-    return this.groupedShows[date]?.length || 0;
   }
 
   formatDateHeader(dateString: string): string {
@@ -161,6 +155,10 @@ export class EventShowsComponent implements OnInit {
 
   get eventSlug(): string | null {
     return this.event?.slug || this.currentSlug;
+  }
+
+  get availableShowsCount(): number {
+    return this.shows.filter((show) => show.status === 1).length;
   }
 
   goToBooking(show: EventShowListDTO): void {

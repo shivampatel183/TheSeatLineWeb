@@ -4,11 +4,12 @@ import { EventService } from '../../common/Services/event.service';
 import { EventCardComponent } from '../event-card/event-card.component';
 import { EventSelectDTO } from '../../common/model/api.model';
 import { Observable } from 'rxjs';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, EventCardComponent],
+  imports: [CommonModule, EventCardComponent, PreloaderComponent],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
 })

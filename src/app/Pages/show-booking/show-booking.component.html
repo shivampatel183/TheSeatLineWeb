@@ -1,76 +1,44 @@
 <div class="show-booking-page" *ngIf="!isLoading && !hasError && event && show; else stateBlock">
     <main class="booking-main">
         <div class="booking-main__container">
-            <nav class="breadcrumb">
-                <a routerLink="/">Home</a>
-                <span class="separator">/</span>
-                <a [routerLink]="['/event', eventSlug, event.id]">{{ event.title }}</a>
-                <span class="separator">/</span>
-                <a [routerLink]="['/event', eventSlug, event.id, 'shows']">Shows</a>
-                <span class="separator">/</span>
-                <span class="current">Book Tickets</span>
-            </nav>
+            <section class="booking-shell">
+                <a [routerLink]="['/event', eventSlug, event.id, 'shows']" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to shows</span>
+                </a>
 
-            <div class="booking-layout">
-                <section class="booking-content">
-                    <div class="booking-hero">
-                        <div>
-                            <p class="booking-hero__eyebrow">Step 2 of 3</p>
-                            <h1 class="booking-hero__title">Choose your tickets</h1>
-                            <p class="booking-hero__subtitle">
-                                Select one or more tickets across the same or different categories. Seat layout comes next.
-                            </p>
-                        </div>
-                        <a [routerLink]="['/event', eventSlug, event.id, 'shows']" class="action-btn action-btn--ghost">
-                            <i class="fas fa-arrow-left"></i> Back to shows
-                        </a>
+                <header class="booking-header">
+                    <p class="booking-header__step">Step 2 of 3</p>
+                    <h1 class="booking-header__title">Choose tickets</h1>
+                    <p class="booking-header__event">{{ event.title }}</p>
+
+                    <div class="booking-meta">
+                        <span class="booking-meta__item">{{ formattedShowDate }}</span>
+                        <span class="booking-meta__item">{{ timeRange }}</span>
+                        <span class="booking-meta__item" *ngIf="event.venueName">
+                            {{ event.venueName }}<span *ngIf="event.city">, {{ event.city }}</span>
+                        </span>
                     </div>
+                </header>
 
-                    <div class="show-summary">
-                        <div class="show-summary__item">
-                            <span class="show-summary__label">Event</span>
-                            <strong>{{ event.title }}</strong>
-                        </div>
-                        <div class="show-summary__item">
-                            <span class="show-summary__label">Date</span>
-                            <strong>{{ formattedShowDate }}</strong>
-                        </div>
-                        <div class="show-summary__item">
-                            <span class="show-summary__label">Time</span>
-                            <strong>{{ timeRange }}</strong>
-                        </div>
-                        <div class="show-summary__item" *ngIf="event.venueName">
-                            <span class="show-summary__label">Venue</span>
-                            <strong>{{ event.venueName }}<span *ngIf="event.city">, {{ event.city }}</span></strong>
-                        </div>
-                    </div>
-
-                    <div class="mix-note">
-                        <i class="fas fa-layer-group"></i>
-                        <span>You can mix categories and add multiple tickets before moving to the seat layout step.</span>
-                    </div>
-
-                    <div class="category-list" *ngIf="ticketCategories.length > 0; else emptyCategories">
-                        <article class="category-card" *ngFor="let category of ticketCategories">
-                            <div class="category-card__head">
-                                <div>
-                                    <h2 class="category-card__name">{{ category.name }}</h2>
-                                    <p class="category-card__availability">
-                                        {{ getAvailableTickets(category) }} left out of {{ category.totalQuantity }}
-                                    </p>
-                                </div>
+                <section class="category-list" *ngIf="ticketCategories.length > 0; else emptyCategories">
+                    <article class="category-card" *ngFor="let category of ticketCategories"
+                        [class.category-card--selected]="getQuantity(category.id) > 0">
+                        <div class="category-card__info">
+                            <div class="category-card__meta">
+                                <h2 class="category-card__name">{{ category.name }}</h2>
                                 <div class="category-card__price">{{ category.price | currency:'INR' }}</div>
                             </div>
 
-                            <div class="category-card__meta">
-                                <span>Sold {{ category.soldQuantity }}</span>
-                                <span>Available {{ getAvailableTickets(category) }}</span>
-                            </div>
+                            <p class="category-card__availability">
+                                {{ getAvailableTickets(category) }} available
+                            </p>
+                        </div>
 
+                        <div class="category-card__actions">
                             <div class="quantity-picker">
                                 <button type="button" class="quantity-picker__btn"
-                                    [disabled]="getQuantity(category.id) === 0"
-                                    (click)="decrement(category)">
+                                    [disabled]="getQuantity(category.id) === 0" (click)="decrement(category)">
                                     -
                                 </button>
                                 <div class="quantity-picker__value">{{ getQuantity(category.id) }}</div>
@@ -80,49 +48,35 @@
                                     +
                                 </button>
                             </div>
-                        </article>
-                    </div>
+                        </div>
+                    </article>
                 </section>
 
-                <aside class="booking-sidebar">
-                    <div class="summary-card">
-                        <p class="summary-card__eyebrow">Your Selection</p>
-                        <h2 class="summary-card__title">Ticket summary</h2>
-                        <p class="summary-card__subtitle">Review the mix of categories before seat selection.</p>
-
-                        <div class="summary-empty" *ngIf="!hasSelection">
-                            Pick tickets from one or more categories to continue.
-                        </div>
-
-                        <div class="summary-list" *ngIf="hasSelection">
-                            <div class="summary-list__row" *ngFor="let item of selectedCategories">
-                                <span>{{ item.name }} x {{ item.quantity }}</span>
-                                <strong>{{ item.price * item.quantity | currency:'INR' }}</strong>
-                            </div>
-                        </div>
-
-                        <div class="summary-totals">
-                            <div class="summary-totals__row">
-                                <span>Total tickets</span>
-                                <strong>{{ totalSelectedTickets }}</strong>
-                            </div>
-                            <div class="summary-totals__row summary-totals__row--grand">
-                                <span>Total amount</span>
-                                <strong>{{ totalAmount | currency:'INR' }}</strong>
-                            </div>
-                        </div>
-
-                        <button type="button" class="action-btn action-btn--primary" [disabled]="!hasSelection"
-                            (click)="continueToSeatLayout()">
-                            Continue to Seat Layout
-                        </button>
-
-                        <p class="summary-card__note">
-                            Next step: seat layout, attendee details, and booking confirmation.
-                        </p>
+                <section class="summary-card">
+                    <div class="summary-card__chips" *ngIf="hasSelection">
+                        <span class="summary-card__chip" *ngFor="let item of selectedCategories">
+                            {{ item.name }} x{{ item.quantity }}
+                        </span>
                     </div>
-                </aside>
-            </div>
+
+                    <div class="summary-card__totals">
+                        <div>
+                            <span class="summary-card__label">Tickets</span>
+                            <strong>{{ totalSelectedTickets }}</strong>
+                        </div>
+                        <div>
+                            <span class="summary-card__label">Total</span>
+                            <strong>{{ totalAmount | currency:'INR' }}</strong>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-block" [disabled]="!hasSelection"
+                        (click)="continueToSeatLayout()">
+                        Continue
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </section>
+            </section>
         </div>
     </main>
 </div>
@@ -132,22 +86,17 @@
         <div class="empty-state__icon">
             <i class="fas fa-ticket-alt"></i>
         </div>
-        <h3>No Ticket Categories Found</h3>
+        <h3>No ticket categories found</h3>
         <p>This show does not have any bookable ticket categories right now.</p>
         <a *ngIf="eventId && eventSlug" [routerLink]="['/event', eventSlug, eventId, 'shows']"
-            class="action-btn action-btn--ghost">
+            class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to shows
         </a>
     </div>
 </ng-template>
 
 <ng-template #stateBlock>
-    <div class="loading-state" *ngIf="isLoading; else errorState">
-        <div class="loading-state__card">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Loading show booking details...</p>
-        </div>
-    </div>
+    <app-preloader *ngIf="isLoading; else errorState" mode="page" message="Loading booking details..."></app-preloader>
 </ng-template>
 
 <ng-template #errorState>
@@ -158,7 +107,7 @@
         <h3>Something went wrong</h3>
         <p>{{ errorMessage }}</p>
         <a *ngIf="eventId && eventSlug" [routerLink]="['/event', eventSlug, eventId, 'shows']"
-            class="action-btn action-btn--ghost">
+            class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to shows
         </a>
     </div>

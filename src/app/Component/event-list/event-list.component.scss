@@ -102,25 +102,6 @@
   }
 }
 
-.loading-state {
-  padding: 0 0.25rem;
-}
-
-.skeleton-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: var(--gap-grid);
-}
-
-.skeleton-card {
-  aspect-ratio: 2 / 3;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  background: linear-gradient(90deg, #f8fafc 25%, #eef2f7 50%, #f8fafc 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -129,12 +110,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
   }
 }
 
@@ -169,11 +144,6 @@
   }
 
   .events-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-xs);
-  }
-
-  .skeleton-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-xs);
   }

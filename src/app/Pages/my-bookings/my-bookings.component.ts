@@ -4,11 +4,12 @@ import { BookingService } from '../../common/Services/booking.service';
 import { ToastService } from '../../common/Services/toast.service';
 import { BookingResponseDto } from '../../common/model/api.model';
 import { BookingCardComponent } from '../../Component/booking-card/booking-card.component';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 
 @Component({
   selector: 'app-my-bookings',
   standalone: true,
-  imports: [CommonModule, BookingCardComponent],
+  imports: [CommonModule, BookingCardComponent, PreloaderComponent],
   templateUrl: './my-bookings.component.html',
   styleUrls: ['./my-bookings.component.scss'],
 })

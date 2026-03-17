@@ -6,6 +6,7 @@ import { EventService } from '../../common/Services/event.service';
 import { ShowService } from '../../common/Services/show.service';
 import { TicketCategoryService } from '../../common/Services/ticket-category.service';
 import { ToastService } from '../../common/Services/toast.service';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 import {
   EventSelectDTO,
   EventShowListDTO,
@@ -22,7 +23,7 @@ interface SelectedCategorySummary {
 @Component({
   selector: 'app-show-booking',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PreloaderComponent],
   templateUrl: './show-booking.component.html',
   styleUrl: './show-booking.component.scss',
 })
@@ -64,14 +65,15 @@ export class ShowBookingComponent implements OnInit {
     forkJoin({
       event: this.eventService.getEventById(eventId),
       shows: this.showService.getShowsByEventId(eventId),
-      categories: this.ticketCategoryService.getTicketCategoriesByEventShowId(
-        showId,
-      ),
+      categories:
+        this.ticketCategoryService.getTicketCategoriesByEventShowId(showId),
     }).subscribe({
       next: ({ event, shows, categories }) => {
         this.event = event;
         this.show = shows.find((item) => item.id === showId) || null;
-        this.ticketCategories = [...categories].sort((a, b) => a.price - b.price);
+        this.ticketCategories = [...categories].sort(
+          (a, b) => a.price - b.price,
+        );
         this.isLoading = false;
 
         if (!this.show) {
@@ -162,7 +164,10 @@ export class ShowBookingComponent implements OnInit {
   }
 
   get totalSelectedTickets(): number {
-    return this.selectedCategories.reduce((sum, item) => sum + item.quantity, 0);
+    return this.selectedCategories.reduce(
+      (sum, item) => sum + item.quantity,
+      0,
+    );
   }
 
   get totalAmount(): number {

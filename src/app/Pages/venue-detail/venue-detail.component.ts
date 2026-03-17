@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { VenueService, VenueDetailDTO } from '../../common/Services/venue.service';
+import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 
 @Component({
   selector: 'app-venue-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PreloaderComponent],
   templateUrl: './venue-detail.component.html',
   styleUrl: './venue-detail.component.scss',
 })

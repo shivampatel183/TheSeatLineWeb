@@ -156,43 +156,8 @@
     </main>
 </div>
 
-<!-- Loading Skeleton -->
 <ng-template #stateBlock>
-    <div class="skeleton-page" *ngIf="isLoading; else errorState">
-        <div class="skeleton-page__container">
-            <div class="skeleton-breadcrumb">
-                <div class="skeleton-line skeleton-line--sm"></div>
-            </div>
-            <div class="skeleton-layout">
-                <div class="skeleton-content">
-                    <div class="skeleton-hero">
-                        <div class="skeleton-img skeleton-img--hero"></div>
-                        <div class="skeleton-hero__body">
-                            <div class="skeleton-line skeleton-line--sm"></div>
-                            <div class="skeleton-line skeleton-line--lg"></div>
-                            <div class="skeleton-line skeleton-line--md"></div>
-                            <div class="skeleton-line skeleton-line--md"></div>
-                        </div>
-                    </div>
-                    <div class="skeleton-card">
-                        <div class="skeleton-line skeleton-line--md"></div>
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--lg"></div>
-                    </div>
-                </div>
-                <div class="skeleton-sidebar">
-                    <div class="skeleton-card">
-                        <div class="skeleton-line skeleton-line--md"></div>
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--full"></div>
-                        <div class="skeleton-line skeleton-line--lg"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-preloader *ngIf="isLoading; else errorState" mode="page" message="Loading event details..."></app-preloader>
 </ng-template>
 
 <!-- Error State -->

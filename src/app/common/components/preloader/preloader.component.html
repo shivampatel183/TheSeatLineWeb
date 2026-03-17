@@ -1,0 +1,7 @@
+<div class="preloader" [class.preloader--section]="mode === 'section'" [class.preloader--page]="mode === 'page'"
+  [class.preloader--overlay]="mode === 'overlay'">
+  <div class="loading-container" role="status" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>{{ message }}</p>
+  </div>
+</div>
