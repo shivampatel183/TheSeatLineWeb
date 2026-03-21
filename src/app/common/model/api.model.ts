@@ -46,10 +46,15 @@ export interface EventSelectDTO {
   maxCapacity?: number;
   isRecurring?: boolean;
   recurrenceRule?: string | null;
-  images?: string[];
+  images?: EventImageDTO[] | string[] | string | null;
   categoryName?: string | null;
   tags?: string[];
   shows?: EventShowDTO[];
+}
+
+export interface EventImageDTO {
+  imageUrl: string;
+  sortOrder: number;
 }
 
 export interface EventShowDTO {

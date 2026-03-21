@@ -7,6 +7,7 @@ import { ToastService } from '../../common/Services/toast.service';
 import { ApiResponse } from '../../common/model/api.model';
 import { RegisterEntity } from '../auth.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { GoogleLoginComponent } from '../../Component/google-login/google-login.component';
 
 type RegisterFieldKey =
   | 'firstName'
@@ -27,7 +28,7 @@ interface RegisterFieldConfig {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, GoogleLoginComponent],
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css'],
 })

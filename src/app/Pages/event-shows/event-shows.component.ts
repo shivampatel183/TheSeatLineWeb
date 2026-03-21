@@ -117,6 +117,18 @@ export class EventShowsComponent implements OnInit {
     });
   }
 
+  getDayName(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', { weekday: 'short' });
+  }
+
+  getDayNumber(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', { day: '2-digit' });
+  }
+
+  getMonthShort(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', { month: 'short' });
+  }
+
   getStatusClass(status: number): string {
     switch (status) {
       case 1:

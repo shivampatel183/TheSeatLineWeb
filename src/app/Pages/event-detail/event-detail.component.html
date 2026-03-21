@@ -12,10 +12,28 @@
                 <!-- Left Column: Content -->
                 <div class="event-layout__content">
                     <!-- Hero Card -->
-                    <section class="hero-card" *ngIf="ev.bannerImageUrl">
-                        <figure class="hero-card__media">
-                            <img [src]="ev.bannerImageUrl" [alt]="ev.title + ' banner'" />
+                    <section class="hero-card">
+                        <figure class="hero-card__media" *ngIf="galleryImages.length > 0">
+                            <img [src]="galleryImages[activeGalleryIndex]" [alt]="ev.title + ' image'" />
+                            <div class="gallery-nav" *ngIf="galleryImages.length > 1">
+                                <button type="button" class="gallery-nav__btn" (click)="prevImage()"
+                                    aria-label="Previous image">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button type="button" class="gallery-nav__btn" (click)="nextImage()"
+                                    aria-label="Next image">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="gallery-dots" *ngIf="galleryImages.length > 1">
+                                <button *ngFor="let img of galleryImages; let i = index" type="button"
+                                    class="gallery-dots__dot"
+                                    [class.gallery-dots__dot--active]="i === activeGalleryIndex"
+                                    (click)="setActiveImage(i)" [attr.aria-label]="'View image ' + (i + 1)">
+                                </button>
+                            </div>
                         </figure>
+
                         <div class="hero-card__body">
                             <div class="hero-card__chips">
                                 <span class="chip chip--lang" *ngIf="ev.language">{{ ev.language }}</span>
@@ -30,8 +48,9 @@
                                 </div>
                                 <div class="meta-item">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span><a class="venue-link" [routerLink]="['/venue', ev.venueId]">{{ ev.venueName }}</a><span *ngIf="ev.city">, {{ ev.city }}</span><span
-                                            *ngIf="ev.state">, {{ ev.state }}</span></span>
+                                    <span><a class="venue-link" [routerLink]="['/venue', ev.venueId]">{{ ev.venueName
+                                            }}</a><span *ngIf="ev.city">, {{ ev.city }}</span><span *ngIf="ev.state">,
+                                            {{ ev.state }}</span></span>
                                 </div>
                                 <div class="meta-item" *ngIf="ev.timezone">
                                     <i class="fas fa-clock"></i>
@@ -90,7 +109,8 @@
                                     </div>
                                     <div class="info-row__content">
                                         <span class="info-label">Venue</span>
-                                        <span class="info-value"><a class="venue-link" [routerLink]="['/venue', ev.venueId]">{{ ev.venueName }}</a></span>
+                                        <span class="info-value"><a class="venue-link"
+                                                [routerLink]="['/venue', ev.venueId]">{{ ev.venueName }}</a></span>
                                     </div>
                                 </div>
                                 <div class="info-row" *ngIf="ev.city">

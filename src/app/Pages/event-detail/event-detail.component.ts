@@ -17,6 +17,7 @@ export class EventDetailComponent implements OnInit {
   isLoading = true;
   hasError = false;
   currentSlug: string | null = null;
+  activeGalleryIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class EventDetailComponent implements OnInit {
       this.eventService.getEventById(eventId).subscribe({
         next: (data) => {
           this.event = data;
+          this.activeGalleryIndex = 0;
           this.isLoading = false;
         },
         error: (err) => {
@@ -64,6 +66,56 @@ export class EventDetailComponent implements OnInit {
       return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
+    }
+  }
+
+  get galleryImages(): string[] {
+    const imageSet = new Set<string>();
+    const addImage = (value?: string | null): void => {
+      const trimmedValue = value?.trim();
+      if (trimmedValue) {
+        imageSet.add(trimmedValue);
+      }
+    };
+
+    addImage(this.event?.bannerImageUrl);
+
+    const additionalImages = this.event?.images;
+    if (Array.isArray(additionalImages)) {
+      for (const item of additionalImages) {
+        if (typeof item === 'string') {
+          for (const url of item.split(',')) {
+            addImage(url);
+          }
+          continue;
+        }
+
+        if (item && typeof item.imageUrl === 'string') {
+          addImage(item.imageUrl);
+        }
+      }
+    } else if (typeof additionalImages === 'string') {
+      for (const url of additionalImages.split(',')) {
+        addImage(url);
+      }
+    }
+
+    return Array.from(imageSet);
+  }
+
+  setActiveImage(index: number): void {
+    this.activeGalleryIndex = index;
+  }
+
+  nextImage(): void {
+    if (this.galleryImages.length > 0) {
+      this.activeGalleryIndex = (this.activeGalleryIndex + 1) % this.galleryImages.length;
+    }
+  }
+
+  prevImage(): void {
+    if (this.galleryImages.length > 0) {
+      this.activeGalleryIndex = (this.activeGalleryIndex - 1 + this.galleryImages.length) % this.galleryImages.length;
     }
   }
 

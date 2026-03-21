@@ -2,83 +2,107 @@
     <main class="booking-main">
         <div class="booking-main__container">
             <section class="booking-shell">
-                <a [routerLink]="['/event', eventSlug, event.id, 'shows']" class="back-link">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to shows</span>
-                </a>
+                <nav class="breadcrumb-nav">
+                    <a [routerLink]="['/event', eventSlug, event.id, 'shows']" class="back-link">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Back to shows</span>
+                    </a>
+                </nav>
 
                 <header class="booking-header">
-                    <p class="booking-header__step">Step 2 of 3</p>
-                    <h1 class="booking-header__title">Choose tickets</h1>
+                    <div class="booking-header__badge">Step 2 of 3</div>
+                    <h1 class="booking-header__title">Choose Your Tickets</h1>
                     <p class="booking-header__event">{{ event.title }}</p>
 
                     <div class="booking-meta">
-                        <span class="booking-meta__item">{{ formattedShowDate }}</span>
-                        <span class="booking-meta__item">{{ timeRange }}</span>
-                        <span class="booking-meta__item" *ngIf="event.venueName">
-                            {{ event.venueName }}<span *ngIf="event.city">, {{ event.city }}</span>
-                        </span>
+                        <div class="booking-meta__pill">
+                            <i class="far fa-calendar-alt"></i>
+                            <span>{{ formattedShowDate }}</span>
+                        </div>
+                        <div class="booking-meta__pill">
+                            <i class="far fa-clock"></i>
+                            <span>{{ timeRange }}</span>
+                        </div>
+                        <div class="booking-meta__pill" *ngIf="event.venueName">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ event.venueName }}</span>
+                        </div>
                     </div>
                 </header>
 
                 <section class="category-list" *ngIf="ticketCategories.length > 0; else emptyCategories">
                     <article class="category-card" *ngFor="let category of ticketCategories"
                         [class.category-card--selected]="getQuantity(category.id) > 0">
-                        <div class="category-card__info">
-                            <div class="category-card__meta">
+                        <div class="category-card__main">
+                            <div class="category-card__info">
                                 <h2 class="category-card__name">{{ category.name }}</h2>
-                                <div class="category-card__price">{{ category.price | currency:'INR' }}</div>
+                                <p class="category-card__availability" [class.low-stock]="getAvailableTickets(category) < 10">
+                                    <i class="fas" [ngClass]="getAvailableTickets(category) < 10 ? 'fa-fire-alt' : 'fa-check-circle'"></i>
+                                    {{ getAvailableTickets(category) }} tickets remaining
+                                </p>
                             </div>
-
-                            <p class="category-card__availability">
-                                {{ getAvailableTickets(category) }} available
-                            </p>
+                            <div class="category-card__pricing">
+                                <div class="price-label">Per Ticket</div>
+                                <div class="price-value">{{ category.price | currency:'INR' }}</div>
+                            </div>
                         </div>
 
                         <div class="category-card__actions">
-                            <div class="quantity-picker">
-                                <button type="button" class="quantity-picker__btn"
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn"
                                     [disabled]="getQuantity(category.id) === 0" (click)="decrement(category)">
-                                    -
+                                    <i class="fas fa-minus"></i>
                                 </button>
-                                <div class="quantity-picker__value">{{ getQuantity(category.id) }}</div>
-                                <button type="button" class="quantity-picker__btn"
+                                <div class="quantity-display">
+                                    <span class="quantity-value">{{ getQuantity(category.id) }}</span>
+                                </div>
+                                <button type="button" class="quantity-btn quantity-btn--plus"
                                     [disabled]="getQuantity(category.id) >= getAvailableTickets(category)"
                                     (click)="increment(category)">
-                                    +
+                                    <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
                     </article>
                 </section>
 
-                <section class="summary-card">
-                    <div class="summary-card__chips" *ngIf="hasSelection">
-                        <span class="summary-card__chip" *ngFor="let item of selectedCategories">
-                            {{ item.name }} x{{ item.quantity }}
-                        </span>
-                    </div>
-
-                    <div class="summary-card__totals">
-                        <div>
-                            <span class="summary-card__label">Tickets</span>
-                            <strong>{{ totalSelectedTickets }}</strong>
-                        </div>
-                        <div>
-                            <span class="summary-card__label">Total</span>
-                            <strong>{{ totalAmount | currency:'INR' }}</strong>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn btn-primary btn-block" [disabled]="!hasSelection"
-                        (click)="continueToSeatLayout()">
-                        Continue
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </section>
+                <div class="summary-buffer"></div> <!-- Purely for spacing above sticky summary -->
             </section>
         </div>
     </main>
+
+    <!-- Professional Sticky Footer -->
+    <footer class="booking-footer" [class.booking-footer--active]="hasSelection">
+        <div class="booking-footer__container">
+            <div class="booking-footer__content">
+                <div class="booking-footer__selection">
+                    <div class="selection-summary" *ngIf="hasSelection">
+                        <span class="selection-count">{{ totalSelectedTickets }} Tickets Selected</span>
+                        <div class="selection-details">
+                            <span class="category-pill" *ngFor="let item of selectedCategories">
+                                {{ item.name }} x{{ item.quantity }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="selection-empty" *ngIf="!hasSelection">
+                        Please select at least one ticket to continue
+                    </div>
+                </div>
+
+                <div class="booking-footer__actions">
+                    <div class="total-price" *ngIf="hasSelection">
+                        <span class="total-label">Grand Total</span>
+                        <span class="total-value">{{ totalAmount | currency:'INR' }}</span>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-checkout" [disabled]="!hasSelection"
+                        (click)="continueToSeatLayout()">
+                        <span>Review & Pay</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 
 <ng-template #emptyCategories>

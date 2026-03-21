@@ -1,17 +1,33 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ToastComponent } from './common/components/toast/toast.component';
 import { NavbarComponent } from './Component/navbar/navbar.component';
 import { FooterComponent } from './Component/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastComponent, NavbarComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ToastComponent,
+    NavbarComponent,
+    FooterComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'TheSeatLineWeb';
+
+  constructor(public router: Router) {}
+
+  get isAuthRoute(): boolean {
+    return (
+      this.router.url.startsWith('/login') ||
+      this.router.url.startsWith('/register')
+    );
+  }
 
   ngOnInit() {
     if ('scrollRestoration' in history) {
