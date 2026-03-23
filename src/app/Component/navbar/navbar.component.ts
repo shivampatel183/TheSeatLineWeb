@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../Auth/auth.service';
 
@@ -10,10 +10,17 @@ import { AuthService } from '../../Auth/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent implements OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = false;
+  isNavbarVisible = true;
+  private lastScrollTop = 0;
+  private readonly scrollDelta = 10;
 
   constructor(public authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.lastScrollTop = this.getScrollTop();
+  }
 
   get userName(): string {
     const rawUser = localStorage.getItem('accessToken');
@@ -30,38 +37,68 @@ export class NavbarComponent implements OnDestroy {
     }
   }
 
-  toggleMobileMenu() {
+  toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    if (this.isMobileMenuOpen) {
+      this.isNavbarVisible = true;
+    }
     this.setBodyScrollLock(this.isMobileMenuOpen);
   }
 
-  closeMobileMenu() {
+  closeMobileMenu(): void {
     this.isMobileMenuOpen = false;
     this.setBodyScrollLock(false);
   }
 
   @HostListener('window:resize')
-  onResize() {
+  onResize(): void {
     if (window.innerWidth >= 768 && this.isMobileMenuOpen) {
       this.closeMobileMenu();
     }
   }
 
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (this.isMobileMenuOpen) {
+      return;
+    }
+
+    const currentScrollTop = this.getScrollTop();
+    const scrollDifference = currentScrollTop - this.lastScrollTop;
+
+    if (currentScrollTop <= 0) {
+      this.isNavbarVisible = true;
+      this.lastScrollTop = 0;
+      return;
+    }
+
+    if (Math.abs(scrollDifference) < this.scrollDelta) {
+      return;
+    }
+
+    this.isNavbarVisible = scrollDifference < 0;
+    this.lastScrollTop = currentScrollTop;
+  }
+
   @HostListener('document:keydown.escape')
-  onEscape() {
+  onEscape(): void {
     this.closeMobileMenu();
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.closeMobileMenu();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.setBodyScrollLock(false);
   }
 
-  private setBodyScrollLock(locked: boolean) {
+  private setBodyScrollLock(locked: boolean): void {
     document.body.style.overflow = locked ? 'hidden' : '';
+  }
+
+  private getScrollTop(): number {
+    return Math.max(window.scrollY || document.documentElement.scrollTop || 0, 0);
   }
 }
