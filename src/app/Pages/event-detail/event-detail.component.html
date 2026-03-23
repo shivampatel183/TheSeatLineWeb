@@ -34,145 +34,146 @@
                             </div>
                         </figure>
 
-                        <div class="hero-card__chips">
-                            <span class="chip chip--lang" *ngIf="ev.language">{{ ev.language }}</span>
-                            <span class="chip chip--type">{{ ev.eventType === 1 ? 'Movie' : 'Event' }}</span>
-                            <span class="chip chip--type" *ngIf="ev.citySlug">{{ ev.citySlug }}</span>
-                        </div>
-                        <h1 class="hero-card__title">{{ ev.title }}</h1>
-                        <div class="hero-card__meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>{{ formattedDate }}</span>
+                        <div class="hero-card__body">
+                            <div class="hero-card__chips">
+                                <span class="chip chip--lang" *ngIf="ev.language">{{ ev.language }}</span>
+                                <span class="chip chip--type">{{ ev.eventType === 1 ? 'Movie' : 'Event' }}</span>
+                                <span class="chip chip--type" *ngIf="ev.citySlug">{{ ev.citySlug }}</span>
                             </div>
-                            <div class="meta-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span><a class="venue-link" [routerLink]="['/venue', ev.venueId]">{{ ev.venueName
-                                        }}</a><span *ngIf="ev.city">, {{ ev.city }}</span><span *ngIf="ev.state">,
-                                        {{ ev.state }}</span></span>
-                            </div>
-                            <div class="meta-item" *ngIf="ev.timezone">
-                                <i class="fas fa-clock"></i>
-                                <span>{{ ev.timezone }}</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" (click)="goToShows()">
-                            Book Tickets <i class="fas fa-arrow-right"></i>
-                        </button>
-                </div>
-                </section>
-
-                <!-- About -->
-                <section class="details-section details-section--about" *ngIf="ev.description">
-                    <h2 class="section-title">
-                        <i class="fas fa-info-circle section-title__icon"></i> About the Event
-                    </h2>
-                    <div class="description" [innerHTML]="ev.description"></div>
-                </section>
-
-                <!-- Performers -->
-                <section class="details-section" *ngIf="parsedPerformers.length > 0">
-                    <h2 class="section-title">
-                        <i class="fas fa-users section-title__icon"></i> Performers
-                    </h2>
-                    <ul class="performer-list">
-                        <li class="performer-item" *ngFor="let performer of parsedPerformers">
-                            <i class="fas fa-star performer-item__icon"></i>
-                            {{ performer }}
-                        </li>
-                    </ul>
-                </section>
-            </div>
-
-            <!-- Right Column: Sidebar -->
-            <aside class="event-layout__sidebar">
-                <!-- Quick Info Card -->
-                <div class="sidebar-card">
-                    <div class="sidebar-card__header">
-                        <h3 class="sidebar-card__title">Event Info</h3>
-                    </div>
-                    <div class="sidebar-card__body">
-                        <div class="info-list">
-                            <div class="info-row">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-calendar-day"></i>
+                            <h1 class="hero-card__title">{{ ev.title }}</h1>
+                            <div class="hero-card__meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ formattedDate }}</span>
                                 </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Date</span>
-                                    <span class="info-value">{{ formattedDate }}</span>
-                                </div>
-                            </div>
-                            <div class="info-row">
-                                <div class="info-row__icon">
+                                <div class="meta-item">
                                     <i class="fas fa-map-marker-alt"></i>
+                                    <span><a class="venue-link" [routerLink]="['/venue', ev.venueId]">{{ ev.venueName
+                                            }}</a><span *ngIf="ev.city">, {{ ev.city }}</span><span *ngIf="ev.state">,
+                                            {{ ev.state }}</span></span>
                                 </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Venue</span>
-                                    <span class="info-value"><a class="venue-link"
-                                            [routerLink]="['/venue', ev.venueId]">{{ ev.venueName }}</a></span>
-                                </div>
-                            </div>
-                            <div class="info-row" *ngIf="ev.city">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-city"></i>
-                                </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">City</span>
-                                    <span class="info-value">{{ ev.city }}<span *ngIf="ev.state">, {{ ev.state
-                                            }}</span></span>
+                                <div class="meta-item" *ngIf="ev.timezone">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ ev.timezone }}</span>
                                 </div>
                             </div>
-                            <div class="info-row" *ngIf="ev.ageRestriction && ev.ageRestriction > 0">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-user-shield"></i>
+                            <button class="btn btn-primary" (click)="goToShows()">
+                                Book Tickets <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- About -->
+                    <section class="details-section details-section--about" *ngIf="ev.description">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle section-title__icon"></i> About the Event
+                        </h2>
+                        <div class="description" [innerHTML]="ev.description"></div>
+                    </section>
+
+                    <!-- Performers -->
+                    <section class="details-section" *ngIf="parsedPerformers.length > 0">
+                        <h2 class="section-title">
+                            <i class="fas fa-users section-title__icon"></i> Performers
+                        </h2>
+                        <ul class="performer-list">
+                            <li class="performer-item" *ngFor="let performer of parsedPerformers">
+                                <i class="fas fa-star performer-item__icon"></i>
+                                {{ performer }}
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+
+                <!-- Right Column: Sidebar -->
+                <aside class="event-layout__sidebar">
+                    <!-- Quick Info Card -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-card__header">
+                            <h3 class="sidebar-card__title">Event Info</h3>
+                        </div>
+                        <div class="sidebar-card__body">
+                            <div class="info-list">
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-calendar-day"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Date</span>
+                                        <span class="info-value">{{ formattedDate }}</span>
+                                    </div>
                                 </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Age Restriction</span>
-                                    <span class="info-value">{{ ev.ageRestriction }}+</span>
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Venue</span>
+                                        <span class="info-value"><a class="venue-link"
+                                                [routerLink]="['/venue', ev.venueId]">{{ ev.venueName }}</a></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="info-row" *ngIf="ev.maxCapacity">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-chair"></i>
+                                <div class="info-row" *ngIf="ev.city">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-city"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">City</span>
+                                        <span class="info-value">{{ ev.city }}<span *ngIf="ev.state">, {{ ev.state
+                                                }}</span></span>
+                                    </div>
                                 </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Max Capacity</span>
-                                    <span class="info-value">{{ ev.maxCapacity }}</span>
+                                <div class="info-row" *ngIf="ev.ageRestriction && ev.ageRestriction > 0">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Age Restriction</span>
+                                        <span class="info-value">{{ ev.ageRestriction }}+</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="info-row">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-circle-check"></i>
+                                <div class="info-row" *ngIf="ev.maxCapacity">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-chair"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Max Capacity</span>
+                                        <span class="info-value">{{ ev.maxCapacity }}</span>
+                                    </div>
                                 </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Status</span>
-                                    <span class="info-value status-text"
-                                        [ngClass]="'status--' + getStatusClass(ev.status || 0)">
-                                        {{ getStatusLabel(ev.status || 0) }}
-                                    </span>
+                                <div class="info-row">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-circle-check"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Status</span>
+                                        <span class="info-value status-text"
+                                            [ngClass]="'status--' + getStatusClass(ev.status || 0)">
+                                            {{ getStatusLabel(ev.status || 0) }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="info-row" *ngIf="ev.language">
-                                <div class="info-row__icon">
-                                    <i class="fas fa-language"></i>
-                                </div>
-                                <div class="info-row__content">
-                                    <span class="info-label">Language</span>
-                                    <span class="info-value">{{ ev.language }}</span>
+                                <div class="info-row" *ngIf="ev.language">
+                                    <div class="info-row__icon">
+                                        <i class="fas fa-language"></i>
+                                    </div>
+                                    <div class="info-row__content">
+                                        <span class="info-label">Language</span>
+                                        <span class="info-value">{{ ev.language }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- <div class="sidebar-card__footer">
+                        <!-- <div class="sidebar-card__footer">
                             <button class="btn btn-primary btn-block" (click)="goToShows()">
                                 <i class="fas fa-ticket-alt"></i> Book Tickets
                             </button>
                         </div> -->
-                </div>
-            </aside>
+                    </div>
+                </aside>
+            </div>
         </div>
-</div>
-</main>
+    </main>
 </div>
 
 <ng-template #stateBlock>
