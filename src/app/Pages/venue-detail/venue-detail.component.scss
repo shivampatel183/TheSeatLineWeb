@@ -107,7 +107,7 @@
   &__title {
     margin: 0;
     color: var(--text-main);
-    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-size: clamp(1.25rem, 4vw, 2.2rem);
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -520,7 +520,7 @@
 
 @media (max-width: 768px) {
   .venue-main {
-    padding: var(--space-md) 0 var(--space-lg);
+    padding: var(--space-sm) 0 var(--space-md);
 
     &__container {
       padding: 0 var(--space-sm);

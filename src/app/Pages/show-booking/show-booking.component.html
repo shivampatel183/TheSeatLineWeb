@@ -12,7 +12,9 @@
                 <header class="booking-header">
                     <div class="booking-header__badge">Step 2 of 3</div>
                     <h1 class="booking-header__title">Choose Your Tickets</h1>
-                    <p class="booking-header__event">{{ event.title }}</p>
+                    <p class="booking-header__event">
+                        {{ event.title }}
+                    </p>
 
                     <div class="booking-meta">
                         <div class="booking-meta__pill">
@@ -32,32 +34,29 @@
 
                 <section class="category-list" *ngIf="ticketCategories.length > 0; else emptyCategories">
                     <article class="category-card" *ngFor="let category of ticketCategories"
-                        [class.category-card--selected]="getQuantity(category.id) > 0">
+                        [class.category-card--selected]="getQuantity(category.id) > 0"
+                        [class.category-card--locked]="isCategoryLocked(category.id)">
                         <div class="category-card__main">
                             <div class="category-card__info">
                                 <h2 class="category-card__name">{{ category.name }}</h2>
-                                <p class="category-card__availability" [class.low-stock]="getAvailableTickets(category) < 10">
-                                    <i class="fas" [ngClass]="getAvailableTickets(category) < 10 ? 'fa-fire-alt' : 'fa-check-circle'"></i>
-                                    {{ getAvailableTickets(category) }} tickets remaining
-                                </p>
                             </div>
                             <div class="category-card__pricing">
-                                <div class="price-label">Per Ticket</div>
                                 <div class="price-value">{{ category.price | currency:'INR' }}</div>
                             </div>
                         </div>
 
                         <div class="category-card__actions">
-                            <div class="quantity-control">
+                            <div class="quantity-control" [class.quantity-control--locked]="isCategoryLocked(category.id)">
                                 <button type="button" class="quantity-btn"
-                                    [disabled]="getQuantity(category.id) === 0" (click)="decrement(category)">
+                                    [disabled]="getQuantity(category.id) === 0 || isCategoryLocked(category.id)"
+                                    (click)="decrement(category)">
                                     <i class="fas fa-minus"></i>
                                 </button>
                                 <div class="quantity-display">
                                     <span class="quantity-value">{{ getQuantity(category.id) }}</span>
                                 </div>
                                 <button type="button" class="quantity-btn quantity-btn--plus"
-                                    [disabled]="getQuantity(category.id) >= getAvailableTickets(category)"
+                                    [disabled]="getQuantity(category.id) >= getAvailableTickets(category) || totalSelectedTickets >= MAX_TICKETS || isCategoryLocked(category.id)"
                                     (click)="increment(category)">
                                     <i class="fas fa-plus"></i>
                                 </button>

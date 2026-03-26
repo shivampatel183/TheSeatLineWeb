@@ -10,7 +10,7 @@
 }
 
 .event-main {
-  padding: var(--space-lg) 0 calc(6rem + env(safe-area-inset-bottom, 0px));
+  padding: var(--space-md) 0 calc(5rem + env(safe-area-inset-bottom, 0px));
 
   &__container {
     max-width: 45rem;
@@ -334,17 +334,18 @@
 
 @media (max-width: 640px) {
   .date-group__header {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0.75rem;
+    gap: 0.75rem;
   }
 
   .date-group__date-box {
-    width: 48px;
-    height: 58px;
+    width: 42px;
+    height: 52px;
   }
 
   .shows-list {
     grid-template-columns: 1fr;
-    padding: 0 1rem 1rem;
+    padding: 0 0.75rem 0.75rem;
+    gap: 0.75rem;
   }
 }

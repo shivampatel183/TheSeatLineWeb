@@ -42,7 +42,6 @@
                                 
                                 <div class="date-group__info">
                                     <h2 class="date-group__title">{{ formatDateHeader(date) }}</h2>
-                                    <span class="date-group__subtitle">{{ groupedShows[date].length }} available slots</span>
                                 </div>
 
                                 <div class="date-group__indicator">
@@ -69,9 +68,6 @@
                                     </div>
 
                                     <div class="show-card__footer">
-                                        <div class="show-card__capacity" *ngIf="show.maxCapacity">
-                                            {{ show.maxCapacity }} Seats left
-                                        </div>
                                         <button class="btn btn-primary btn-book" [disabled]="show.status !== 1"
                                             (click)="goToBooking(show)">
                                             {{ show.status === 1 ? 'Select Show' : 'Sold Out' }}

@@ -73,8 +73,8 @@ button {
    RESPONSIVE TEXT UTILITIES
    =============================== */
 .text-responsive-h1 {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
 
   @media (min-width: 640px) {
     font-size: 2.25rem;
@@ -93,8 +93,8 @@ button {
 }
 
 .text-responsive-h2 {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: 1.25rem;
+  line-height: 1.6rem;
 
   @media (min-width: 640px) {
     font-size: 1.875rem;
@@ -108,8 +108,8 @@ button {
 }
 
 .text-responsive-body {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.2rem;
 
   @media (min-width: 640px) {
     font-size: 1rem;
@@ -126,8 +126,8 @@ button {
    RESPONSIVE SPACING UTILITIES
    =============================== */
 .py-responsive {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 
   @media (min-width: 640px) {
     padding-top: 3rem;
@@ -136,8 +136,8 @@ button {
 }
 
 .px-responsive {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 
   @media (min-width: 640px) {
     padding-left: 1.5rem;

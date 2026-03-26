@@ -32,12 +32,14 @@ export class ShowBookingComponent implements OnInit {
   show: EventShowListDTO | null = null;
   ticketCategories: TicketCategoryDTO[] = [];
   quantities: Record<string, number> = {};
+  activeCategoryId: string | null = null;
   isLoading = true;
   hasError = false;
   errorMessage = 'Unable to load booking details. Please try again.';
   eventId: string | null = null;
   showId: string | null = null;
   currentSlug: string | null = null;
+  readonly MAX_TICKETS = 10;
 
   constructor(
     private route: ActivatedRoute,
@@ -130,22 +132,41 @@ export class ShowBookingComponent implements OnInit {
     return this.quantities[categoryId] || 0;
   }
 
+  isCategoryLocked(categoryId: string): boolean {
+    return this.activeCategoryId !== null && this.activeCategoryId !== categoryId;
+  }
+
   decrement(category: TicketCategoryDTO): void {
     const nextValue = Math.max(this.getQuantity(category.id) - 1, 0);
     this.quantities = {
       ...this.quantities,
       [category.id]: nextValue,
     };
+
+    if (nextValue === 0) {
+      this.activeCategoryId = null;
+    }
   }
 
   increment(category: TicketCategoryDTO): void {
+    if (this.isCategoryLocked(category.id)) {
+      this.toast.warning('You can only select tickets from one category at a time');
+      return;
+    }
+
     const current = this.getQuantity(category.id);
     const available = this.getAvailableTickets(category);
+
+    if (this.totalSelectedTickets >= this.MAX_TICKETS) {
+      this.toast.warning(`Maximum ${this.MAX_TICKETS} tickets allowed per booking`);
+      return;
+    }
 
     if (current >= available) {
       return;
     }
 
+    this.activeCategoryId = category.id;
     this.quantities = {
       ...this.quantities,
       [category.id]: current + 1,
@@ -186,8 +207,6 @@ export class ShowBookingComponent implements OnInit {
       return;
     }
 
-    this.toast.warning(
-      'Seat layout and booking confirmation will be connected in the next step.',
-    );
+    
   }
 }
