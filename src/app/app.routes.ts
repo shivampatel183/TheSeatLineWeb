@@ -51,6 +51,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'event/:slug/:id/shows/:showId/review',
+    loadComponent: () =>
+      import('./Pages/review-payment/review-payment.component').then(
+        (m) => m.ReviewPaymentComponent,
+      ),
+  },
+  {
     path: 'venue/:id',
     loadComponent: () =>
       import('./Pages/venue-detail/venue-detail.component').then(

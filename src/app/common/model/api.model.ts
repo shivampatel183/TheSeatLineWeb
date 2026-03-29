@@ -126,3 +126,32 @@ export interface TicketCategoryDTO {
   totalQuantity: number;
   soldQuantity: number;
 }
+
+export interface BookingLineItemDto {
+  name: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
+export interface BookingInitResponseDto {
+  bookingId: string;
+  bookingReference: string;
+  status: string;
+  holdExpiresAt: string;
+  eventName: string;
+  venueName: string;
+  showDate: string;
+  lineItems: BookingLineItemDto[];
+  subTotal: number;
+  convenienceFee: number;
+  taxAmount: number;
+  discountAmount: number;
+  totalAmount: number;
+  currency: string;
+}
+
+export interface CreateCategoryBookingRequest {
+  eventShowId: string;
+  selections: { ticketCategoryId: string; quantity: number }[];
+}

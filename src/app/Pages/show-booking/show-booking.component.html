@@ -93,10 +93,16 @@
                         <span class="total-label">Grand Total</span>
                         <span class="total-value">{{ totalAmount | currency:'INR' }}</span>
                     </div>
-                    <button type="button" class="btn btn-primary btn-checkout" [disabled]="!hasSelection"
+                    <button type="button" class="btn btn-primary btn-checkout" [disabled]="!hasSelection || isSubmitting"
                         (click)="continueToSeatLayout()">
-                        <span>Review & Pay</span>
-                        <i class="fas fa-arrow-right"></i>
+                        <ng-container *ngIf="!isSubmitting">
+                            <span>Review & Pay</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </ng-container>
+                        <ng-container *ngIf="isSubmitting">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Holding Tickets…</span>
+                        </ng-container>
                     </button>
                 </div>
             </div>

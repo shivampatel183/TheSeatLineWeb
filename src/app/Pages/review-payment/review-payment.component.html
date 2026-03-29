@@ -1,0 +1,136 @@
+<div class="review-page" *ngIf="booking; else noData">
+    <main class="review-main">
+        <div class="review-main__container">
+            <section class="review-shell">
+
+                <!-- Timer Banner -->
+                <div class="timer-banner" [class.timer-banner--expired]="isExpired">
+                    <div class="timer-banner__icon">
+                        <i class="fas" [class.fa-clock]="!isExpired" [class.fa-exclamation-triangle]="isExpired"></i>
+                    </div>
+                    <div class="timer-banner__text" *ngIf="!isExpired">
+                        Complete payment within
+                        <strong class="timer-banner__countdown">{{ countdownText }}</strong>
+                    </div>
+                    <div class="timer-banner__text" *ngIf="isExpired">
+                        <strong>Session expired.</strong> Your held tickets have been released.
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <header class="review-header">
+                    <div class="review-header__badge">Step 3 of 3</div>
+                    <h1 class="review-header__title">Review & Pay</h1>
+                    <div class="review-header__ref">
+                        <i class="fas fa-hashtag"></i>
+                        <span>{{ booking.bookingReference }}</span>
+                    </div>
+                </header>
+
+                <!-- Event Info card -->
+                <div class="info-card">
+                    <h2 class="info-card__event-name">{{ booking.eventName }}</h2>
+                    <div class="info-card__meta">
+                        <div class="info-card__pill">
+                            <i class="far fa-calendar-alt"></i>
+                            <span>{{ formattedShowDate }}</span>
+                        </div>
+                        <div class="info-card__pill">
+                            <i class="far fa-clock"></i>
+                            <span>{{ formattedShowTime }}</span>
+                        </div>
+                        <div class="info-card__pill" *ngIf="booking.venueName">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ booking.venueName }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items -->
+                <div class="order-card">
+                    <div class="order-card__header">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Order Summary</span>
+                    </div>
+
+                    <div class="order-card__items">
+                        <div class="order-item" *ngFor="let item of booking.lineItems">
+                            <div class="order-item__left">
+                                <span class="order-item__name">{{ item.name }}</span>
+                                <span class="order-item__qty">× {{ item.quantity }}</span>
+                            </div>
+                            <div class="order-item__right">
+                                <span class="order-item__unit">{{ formatCurrency(item.unitPrice) }} each</span>
+                                <span class="order-item__total">{{ formatCurrency(item.lineTotal) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-card__divider"></div>
+
+                    <!-- Fee Breakdown -->
+                    <div class="fee-breakdown">
+                        <div class="fee-row">
+                            <span>Subtotal ({{ totalQuantity }} tickets)</span>
+                            <span>{{ formatCurrency(booking.subTotal) }}</span>
+                        </div>
+                        <div class="fee-row">
+                            <span>Convenience Fee</span>
+                            <span>{{ formatCurrency(booking.convenienceFee) }}</span>
+                        </div>
+                        <div class="fee-row">
+                            <span>Tax (GST)</span>
+                            <span>{{ formatCurrency(booking.taxAmount) }}</span>
+                        </div>
+                        <div class="fee-row fee-row--discount" *ngIf="booking.discountAmount > 0">
+                            <span>Discount</span>
+                            <span>- {{ formatCurrency(booking.discountAmount) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="order-card__divider"></div>
+
+                    <!-- Grand Total -->
+                    <div class="grand-total">
+                        <span class="grand-total__label">Total Amount</span>
+                        <span class="grand-total__value">{{ formatCurrency(booking.totalAmount) }}</span>
+                    </div>
+                </div>
+
+                <!-- Pay Button -->
+                <div class="review-actions">
+                    <button type="button" class="btn btn-primary btn-pay"
+                        [disabled]="isExpired || isProcessing"
+                        (click)="proceedToPay()">
+                        <span *ngIf="!isProcessing && !isExpired">
+                            Proceed to Pay {{ formatCurrency(booking.totalAmount) }}
+                        </span>
+                        <span *ngIf="isProcessing">
+                            <i class="fas fa-spinner fa-spin"></i> Processing…
+                        </span>
+                        <span *ngIf="isExpired">Session Expired</span>
+                    </button>
+
+                    <p class="review-actions__note" *ngIf="!isExpired">
+                        <i class="fas fa-lock"></i>
+                        Your payment is secured with 256-bit encryption.
+                    </p>
+                </div>
+
+            </section>
+        </div>
+    </main>
+</div>
+
+<ng-template #noData>
+    <div class="error-state">
+        <div class="error-state__icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>No Booking Data</h3>
+        <p>It looks like you arrived here without selecting tickets. Please go back and try again.</p>
+        <a routerLink="/" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Go Home
+        </a>
+    </div>
+</ng-template>

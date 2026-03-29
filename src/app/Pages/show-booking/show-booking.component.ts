@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { EventService } from '../../common/Services/event.service';
 import { ShowService } from '../../common/Services/show.service';
 import { TicketCategoryService } from '../../common/Services/ticket-category.service';
+import { BookingService } from '../../common/Services/booking.service';
 import { ToastService } from '../../common/Services/toast.service';
 import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
 import {
+  CreateCategoryBookingRequest,
   EventSelectDTO,
   EventShowListDTO,
   TicketCategoryDTO,
@@ -40,12 +42,15 @@ export class ShowBookingComponent implements OnInit {
   showId: string | null = null;
   currentSlug: string | null = null;
   readonly MAX_TICKETS = 10;
+  isSubmitting = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private eventService: EventService,
     private showService: ShowService,
     private ticketCategoryService: TicketCategoryService,
+    private bookingService: BookingService,
     private toast: ToastService,
   ) {}
 
@@ -133,7 +138,9 @@ export class ShowBookingComponent implements OnInit {
   }
 
   isCategoryLocked(categoryId: string): boolean {
-    return this.activeCategoryId !== null && this.activeCategoryId !== categoryId;
+    return (
+      this.activeCategoryId !== null && this.activeCategoryId !== categoryId
+    );
   }
 
   decrement(category: TicketCategoryDTO): void {
@@ -150,7 +157,9 @@ export class ShowBookingComponent implements OnInit {
 
   increment(category: TicketCategoryDTO): void {
     if (this.isCategoryLocked(category.id)) {
-      this.toast.warning('You can only select tickets from one category at a time');
+      this.toast.warning(
+        'You can only select tickets from one category at a time',
+      );
       return;
     }
 
@@ -158,7 +167,9 @@ export class ShowBookingComponent implements OnInit {
     const available = this.getAvailableTickets(category);
 
     if (this.totalSelectedTickets >= this.MAX_TICKETS) {
-      this.toast.warning(`Maximum ${this.MAX_TICKETS} tickets allowed per booking`);
+      this.toast.warning(
+        `Maximum ${this.MAX_TICKETS} tickets allowed per booking`,
+      );
       return;
     }
 
@@ -203,10 +214,48 @@ export class ShowBookingComponent implements OnInit {
   }
 
   continueToSeatLayout(): void {
-    if (!this.hasSelection) {
+    if (!this.hasSelection || !this.showId || this.isSubmitting) {
       return;
     }
 
-    
+    this.isSubmitting = true;
+
+    const request: CreateCategoryBookingRequest = {
+      eventShowId: this.showId,
+      selections: this.selectedCategories.map((cat) => ({
+        ticketCategoryId: cat.id,
+        quantity: cat.quantity,
+      })),
+    };
+
+    this.bookingService.createCategoryBooking(request).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        if (response.data) {
+          this.router.navigate(
+            [
+              '/event',
+              this.eventSlug,
+              this.eventId,
+              'shows',
+              this.showId,
+              'review',
+            ],
+            {
+              state: {
+                booking: response.data,
+                holdMessage: response.message || '',
+              },
+            },
+          );
+        }
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        const msg =
+          err?.error?.message || 'Failed to hold tickets. Please try again.';
+        this.toast.error(msg);
+      },
+    });
   }
 }
