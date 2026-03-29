@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ToastService } from '../../common/Services/toast.service';
@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
   loginData = new LoginEntity();
   isSubmitting = false;
   showPassword = false;
+  returnUrl: string = '/';
   readonly loginFields: LoginFieldConfig[] = [
     {
       key: 'email',
@@ -52,12 +53,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private toast: ToastService,
   ) {}
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigateByUrl(this.returnUrl);
     }
   }
 
@@ -98,7 +101,7 @@ export class LoginComponent implements OnInit {
           this.toast.success(
             response.message || 'Login Successful! Redirecting...',
           );
-          this.router.navigate(['/']);
+          this.router.navigateByUrl(this.returnUrl);
         }
       },
       error: () => {

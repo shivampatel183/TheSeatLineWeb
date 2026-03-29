@@ -1,7 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, of, catchError } from 'rxjs';
 import {
   LoginEntity,
   RegisterEntity,
@@ -26,15 +26,37 @@ export class AuthService {
   }
 
   private restoreSession() {
+    console.log('AuthService: Running synchronous restoreSession...');
     try {
       const storedUser = localStorage.getItem('currentUser');
       if (storedUser) {
-        this.currentUser.set(JSON.parse(storedUser));
+        const user = JSON.parse(storedUser);
+        console.log('AuthService: Synchronous restore found user:', user);
+        this.currentUser.set(user);
         this.isAuthenticated.set(true);
+      } else {
+        console.log('AuthService: No user found in localStorage during sync restore.');
       }
     } catch (e) {
-      console.error('Failed to restore session', e);
+      console.error('AuthService: Error during sync restoreSession:', e);
     }
+  }
+
+  initSession(): Observable<any> {
+    console.log('AuthService: Starting async initSession (refresh)...');
+    if (this.isAuthenticated()) {
+      console.log('AuthService: Session exists, starting background refresh...');
+      return this.refreshToken().pipe(
+        tap(res => console.log('AuthService: Async refresh successful:', res)),
+        catchError((err) => {
+          console.error('AuthService: Async refresh failed!', err);
+          this.logout('Refresh failure in initSession');
+          return of(null);
+        })
+      );
+    }
+    console.log('AuthService: No session to refresh.');
+    return of(null);
   }
 
   login(data: LoginEntity): Observable<ApiResponse<ResponseEntity>> {
@@ -80,7 +102,7 @@ export class AuthService {
     }
   }
 
-  logout() {
+  logout(reason: string = 'User request') {
     this.accessToken.set(null);
     this.currentUser.set(null);
     this.isAuthenticated.set(false);

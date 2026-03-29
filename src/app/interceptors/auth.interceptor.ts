@@ -37,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
-          console.log('401 Error detected, attempting token refresh...');
+          console.log('AuthInterceptor: 401 Error detected on API call:', req.url);
           return this.handle401Error(authReq, next);
         }
         return throwError(() => error);
@@ -60,13 +60,13 @@ export class AuthInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      console.log('Attempting to refresh access token via cookies...');
+      console.log('AuthInterceptor: Attempting to refresh access token via cookies...');
       return this.authService.refreshToken().pipe(
         switchMap((res: any) => {
           this.isRefreshing = false;
           const isSuccess = res?.success ?? false;
           if (isSuccess && res.data && res.data.accessToken) {
-            console.log('Token refreshed successfully via cookies, retrying request...');
+            console.log('AuthInterceptor: Token refreshed successfully via cookies, retrying request...');
             this.refreshTokenSubject.next(res.data.accessToken);
 
             const retriedReq = request.clone({
@@ -75,15 +75,15 @@ export class AuthInterceptor implements HttpInterceptor {
             });
             return next.handle(retriedReq);
           } else {
-            console.error('Token refresh failed, logging out...');
-            this.authService.logout();
+            console.error('AuthInterceptor: Token refresh failed in Interceptor!', res);
+            this.authService.logout('Token refresh failed in Interceptor');
             return throwError(() => new Error('Token refresh failed'));
           }
         }),
         catchError((err) => {
-          console.error('Error during token refresh:', err);
+          console.error('AuthInterceptor: Error during token refresh in Interceptor:', err);
           this.isRefreshing = false;
-          this.authService.logout();
+          this.authService.logout('Exception during refresh in Interceptor');
           return throwError(() => err);
         }),
       );

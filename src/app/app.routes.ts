@@ -49,6 +49,7 @@ export const routes: Routes = [
       import('./Pages/show-booking/show-booking.component').then(
         (m) => m.ShowBookingComponent,
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'event/:slug/:id/shows/:showId/review',
@@ -56,6 +57,7 @@ export const routes: Routes = [
       import('./Pages/review-payment/review-payment.component').then(
         (m) => m.ReviewPaymentComponent,
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'venue/:id',
