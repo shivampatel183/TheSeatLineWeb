@@ -23,12 +23,9 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    let authReq = req;
-    const token = localStorage.getItem('accessToken');
-
-    if (token) {
-      authReq = this.addTokenHeader(req, token);
-    }
+    let authReq = req.clone({
+      withCredentials: true
+    });
 
     return next.handle(authReq).pipe(
       catchError((error) => {
@@ -56,26 +53,15 @@ export class AuthInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      if (!refreshToken) {
-        console.error('No refresh token available, logging out...');
-        this.isRefreshing = false;
-        this.authService.logout();
-        return throwError(() => new Error('No refresh token available'));
-      }
-
-      console.log('Attempting to refresh access token...');
+      console.log('Attempting to refresh access token via cookies...');
       return this.authService.refreshToken().pipe(
         switchMap((res: any) => {
           this.isRefreshing = false;
           const isSuccess = res?.success ?? false;
-          if (isSuccess && res.data && res.data.accessToken) {
-            console.log('Token refreshed successfully, retrying request...');
-            this.refreshTokenSubject.next(res.data.accessToken);
-            return next.handle(
-              this.addTokenHeader(request, res.data.accessToken),
-            );
+          if (isSuccess) {
+            console.log('Token refreshed successfully via cookies, retrying request...');
+            this.refreshTokenSubject.next(true);
+            return next.handle(request.clone({ withCredentials: true }));
           } else {
             console.error('Token refresh failed, logging out...');
             this.authService.logout();
@@ -95,17 +81,11 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.refreshTokenSubject.pipe(
         filter((token) => token != null),
         take(1),
-        switchMap((jwt) => {
-          console.log('Using refreshed token for queued request');
-          return next.handle(this.addTokenHeader(request, jwt));
+        switchMap(() => {
+          console.log('Retrying queued request after token refresh');
+          return next.handle(request.clone({ withCredentials: true }));
         }),
       );
     }
-  }
-
-  private addTokenHeader(request: HttpRequest<any>, token: string) {
-    return request.clone({
-      headers: request.headers.set('Authorization', `Bearer ${token}`),
-    });
   }
 }

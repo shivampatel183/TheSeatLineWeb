@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import {
@@ -14,12 +14,16 @@ import { ApiService } from '../common/Services/api.services';
   providedIn: 'root',
 })
 export class AuthService {
+  // Using Signals for non-persistent session state
+  public currentUser = signal<ResponseEntity['user'] | null>(null);
+  public isAuthenticated = signal<boolean>(false);
+
   constructor(private apiApiService: ApiService) {}
 
   login(data: LoginEntity): Observable<ApiResponse<ResponseEntity>> {
     return this.apiApiService
       .post<ResponseEntity>(`/Auth/login`, data)
-      .pipe(tap((response) => this.saveTokens(response.data)));
+      .pipe(tap((response) => this.saveSession(response.data)));
   }
 
   register(data: RegisterEntity): Observable<ApiResponse<string>> {
@@ -30,36 +34,34 @@ export class AuthService {
   loginWithGoogle(idToken: string): Observable<ApiResponse<ResponseEntity>> {
     return this.apiApiService
       .post<ResponseEntity>(`/Auth/google-login`, { idToken })
-      .pipe(tap((response) => this.saveTokens(response.data)));
+      .pipe(tap((response) => this.saveSession(response.data)));
   }
 
   // Refresh Token
   refreshToken(): Observable<ApiResponse<ResponseEntity>> {
-    const payload = {
-      accessToken: localStorage.getItem('accessToken'),
-      refreshToken: localStorage.getItem('refreshToken'),
-    };
+    // Relying on HTTPOnly cookies, no payload needed conceptually but matching signature
+    const payload = {}; 
     return this.apiApiService
       .post<ResponseEntity>(`/Auth/refresh-token`, payload)
-      .pipe(tap((response) => this.saveTokens(response.data)));
+      .pipe(tap((response) => this.saveSession(response.data)));
   }
 
-  private saveTokens(data: ResponseEntity) {
+  private saveSession(data: ResponseEntity) {
     if (data) {
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('expiresAt', data.expiresAt);
-      localStorage.setItem('UserName', data.user.firstName);
-      localStorage.setItem('UserEmail', data.user.email);
+      if (data.user) {
+        this.currentUser.set(data.user);
+      }
+      this.isAuthenticated.set(true);
     }
   }
 
   logout() {
-    localStorage.clear();
+    this.currentUser.set(null);
+    this.isAuthenticated.set(false);
     window.location.href = '/login';
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('accessToken');
+    return this.isAuthenticated();
   }
 }
