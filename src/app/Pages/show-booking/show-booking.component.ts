@@ -22,6 +22,8 @@ interface SelectedCategorySummary {
   price: number;
 }
 
+import { SeatLayoutComponent } from '../../Component/seat-layout/seat-layout.component';
+
 @Component({
   selector: 'app-show-booking',
   standalone: true,
@@ -43,6 +45,12 @@ export class ShowBookingComponent implements OnInit {
   currentSlug: string | null = null;
   readonly MAX_TICKETS = 10;
   isSubmitting = false;
+
+  // Seat Layout State
+  seats: any[] = [];
+  onSeatsSelected(selected: any[]): void {
+    // Placeholder for seat selection logic
+  }
 
   constructor(
     private route: ActivatedRoute,

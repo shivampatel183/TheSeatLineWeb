@@ -27,6 +27,13 @@ export class AuthInterceptor implements HttpInterceptor {
       withCredentials: true
     });
 
+    const token = this.authService.accessToken();
+    if (token) {
+      authReq = authReq.clone({
+        headers: authReq.headers.set('Authorization', `Bearer ${token}`),
+      });
+    }
+
     return next.handle(authReq).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
@@ -58,10 +65,15 @@ export class AuthInterceptor implements HttpInterceptor {
         switchMap((res: any) => {
           this.isRefreshing = false;
           const isSuccess = res?.success ?? false;
-          if (isSuccess) {
+          if (isSuccess && res.data && res.data.accessToken) {
             console.log('Token refreshed successfully via cookies, retrying request...');
-            this.refreshTokenSubject.next(true);
-            return next.handle(request.clone({ withCredentials: true }));
+            this.refreshTokenSubject.next(res.data.accessToken);
+
+            const retriedReq = request.clone({
+              withCredentials: true,
+              headers: request.headers.set('Authorization', `Bearer ${res.data.accessToken}`)
+            });
+            return next.handle(retriedReq);
           } else {
             console.error('Token refresh failed, logging out...');
             this.authService.logout();
@@ -81,11 +93,16 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.refreshTokenSubject.pipe(
         filter((token) => token != null),
         take(1),
-        switchMap(() => {
+        switchMap((jwt) => {
           console.log('Retrying queued request after token refresh');
-          return next.handle(request.clone({ withCredentials: true }));
+          const retriedReq = request.clone({
+            withCredentials: true,
+            headers: request.headers.set('Authorization', `Bearer ${jwt}`)
+          });
+          return next.handle(retriedReq);
         }),
       );
     }
   }
 }
+

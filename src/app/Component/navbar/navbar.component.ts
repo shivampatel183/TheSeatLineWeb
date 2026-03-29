@@ -23,19 +23,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   get userName(): string {
-    const rawUser = localStorage.getItem('accessToken');
-    if (!rawUser) {
+    const user = this.authService.currentUser();
+    if (!user) {
       return 'Profile';
     }
-
-    try {
-      var UserName = localStorage.getItem('UserName');
-      var UserEmail = localStorage.getItem('UserEmail');
-      return UserName || UserEmail || 'Profile';
-    } catch {
-      return 'Profile';
-    }
+    return user.firstName || user.email || 'Profile';
   }
+
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -102,3 +96,4 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return Math.max(window.scrollY || document.documentElement.scrollTop || 0, 0);
   }
 }
+
