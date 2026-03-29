@@ -60,7 +60,8 @@
                                 <span class="order-item__qty">× {{ item.quantity }}</span>
                             </div>
                             <div class="order-item__right">
-                                <span class="order-item__unit">{{ formatCurrency(item.unitPrice) }} each</span>
+                                <span class="order-item__unit">{{ formatCurrency(item.unitPrice) }} × {{ item.quantity
+                                    }}</span>
                                 <span class="order-item__total">{{ formatCurrency(item.lineTotal) }}</span>
                             </div>
                         </div>
@@ -99,8 +100,7 @@
 
                 <!-- Pay Button -->
                 <div class="review-actions">
-                    <button type="button" class="btn btn-primary btn-pay"
-                        [disabled]="isExpired || isProcessing"
+                    <button type="button" class="btn btn-primary btn-pay" [disabled]="isExpired || isProcessing"
                         (click)="proceedToPay()">
                         <span *ngIf="!isProcessing && !isExpired">
                             Proceed to Pay {{ formatCurrency(booking.totalAmount) }}

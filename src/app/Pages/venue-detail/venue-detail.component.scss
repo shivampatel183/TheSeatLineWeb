@@ -4,7 +4,7 @@
 
 // ─── Layout ───────────────────────────────────────────────
 .venue-detail-page {
-  min-height: 100vh;
+  // min-height: 100vh;
   background: var(--bg-alt);
 }
 
@@ -150,7 +150,9 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
     font-size: 0.8rem;
     backdrop-filter: blur(4px);
 
@@ -177,7 +179,9 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
 
     &--active {
       background: #fff;
@@ -280,7 +284,9 @@
   background: var(--bg-alt);
   color: var(--text-light);
   border: 1px solid var(--border-color);
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 
   &:hover {
     border-color: var(--primary-light);
@@ -413,7 +419,10 @@
   border-radius: var(--radius-md);
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   border: none;
   font-size: 0.88rem;
   text-decoration: none;
@@ -504,7 +513,6 @@
   }
 }
 
-
 // ─── Responsive ───────────────────────────────────────────
 @media (max-width: 1024px) {
   .venue-layout {
@@ -515,7 +523,6 @@
     order: -1;
     position: static;
   }
-
 }
 
 @media (max-width: 768px) {
@@ -548,5 +555,4 @@
   .venue-layout__sidebar {
     order: 0;
   }
-
 }

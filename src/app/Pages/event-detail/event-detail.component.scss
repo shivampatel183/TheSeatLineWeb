@@ -4,7 +4,7 @@
 
 // ─── Layout ───────────────────────────────────────────────
 .event-detail-page {
-  min-height: 100vh;
+  // min-height: 100vh;
   background: var(--bg-alt);
 }
 
@@ -147,7 +147,9 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
     font-size: 0.8rem;
     backdrop-filter: blur(4px);
 
@@ -174,7 +176,9 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
 
     &--active {
       background: #fff;
@@ -208,7 +212,9 @@
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
   text-underline-offset: 2px;
 
   &:hover {
@@ -311,7 +317,7 @@
   }
 
   ul li::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0.75rem;
@@ -481,7 +487,10 @@
   border-radius: var(--radius-md);
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   border: none;
   font-size: 0.88rem;
   text-decoration: none;
@@ -586,7 +595,6 @@
   }
 }
 
-
 // ─── Responsive ───────────────────────────────────────────
 @media (max-width: 1024px) {
   .event-layout {
@@ -597,7 +605,6 @@
     position: static;
     align-self: start;
   }
-
 }
 
 @media (max-width: 768px) {
@@ -626,5 +633,4 @@
   .event-layout__sidebar {
     order: 0;
   }
-
 }
