@@ -79,11 +79,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.closeMobileMenu();
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.closeMobileMenu();
-  }
-
   ngOnDestroy(): void {
     this.setBodyScrollLock(false);
   }
