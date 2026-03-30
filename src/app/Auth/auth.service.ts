@@ -35,7 +35,9 @@ export class AuthService {
         this.currentUser.set(user);
         this.isAuthenticated.set(true);
       } else {
-        console.log('AuthService: No user found in localStorage during sync restore.');
+        console.log(
+          'AuthService: No user found in localStorage during sync restore.',
+        );
       }
     } catch (e) {
       console.error('AuthService: Error during sync restoreSession:', e);
@@ -43,19 +45,36 @@ export class AuthService {
   }
 
   initSession(): Observable<any> {
-    console.log('AuthService: Starting async initSession (refresh)...');
+    console.log('AuthService: Validating session on load...');
     if (this.isAuthenticated()) {
-      console.log('AuthService: Session exists, starting background refresh...');
-      return this.refreshToken().pipe(
-        tap(res => console.log('AuthService: Async refresh successful:', res)),
-        catchError((err) => {
-          console.error('AuthService: Async refresh failed!', err);
-          this.logout('Refresh failure in initSession');
-          return of(null);
-        })
-      );
+      // Flow: Check AccessToken (cookie) first via a standard GET Profile call.
+      // If it returns 200, we continue without a database-intensive token rotation.
+      // If it returns 401, the AuthInterceptor will automatically trigger /refresh-token.
+      return this.apiApiService
+        .get<ResponseEntity['user']>(`/Auth/profile`)
+        .pipe(
+          tap((response) => {
+            if (response.success && response.data) {
+              console.log('AuthService: Session valid. Data refreshed.');
+              // Keep the user signal updated with fresh data
+              this.currentUser.set(response.data);
+              localStorage.setItem(
+                'currentUser',
+                JSON.stringify(response.data),
+              );
+            }
+          }),
+          catchError((err) => {
+            // This runs if both the profile check AND the automatic refresh failed.
+            console.error(
+              'AuthService: Session validation failed (invalid or expired session).',
+            );
+            this.logout('Session initialization failure');
+            return of(null);
+          }),
+        );
     }
-    console.log('AuthService: No session to refresh.');
+    console.log('AuthService: No existing session found in storage.');
     return of(null);
   }
 
@@ -79,14 +98,16 @@ export class AuthService {
   // Refresh Token
   refreshToken(): Observable<ApiResponse<ResponseEntity>> {
     // Relying on HTTPOnly cookies, no payload needed conceptually but matching signature
-    const payload = {}; 
+    const payload = {};
     return this.apiApiService
       .post<ResponseEntity>(`/Auth/refresh-token`, payload)
-      .pipe(tap((response) => {
-         if (response.success && response.data) {
-           this.accessToken.set(response.data.accessToken);
-         }
-      }));
+      .pipe(
+        tap((response) => {
+          if (response.success && response.data) {
+            this.accessToken.set(response.data.accessToken);
+          }
+        }),
+      );
   }
 
   private saveSession(data: ResponseEntity) {
