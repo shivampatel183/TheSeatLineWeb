@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, APP_INITIALIZER } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -10,9 +10,9 @@ import { AuthService } from './Auth/auth.service';
 export function initializeApp(authService: AuthService) {
   return () => {
     return new Promise<void>((resolve) => {
-      authService.initSession().subscribe({
+      authService.initializeSession().subscribe({
         next: () => resolve(),
-        error: () => resolve()
+        error: () => resolve(),
       });
     });
   };
@@ -21,7 +21,13 @@ export function initializeApp(authService: AuthService) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled',
+      }),
+    ),
     provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,

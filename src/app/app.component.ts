@@ -4,7 +4,6 @@ import { Router, RouterOutlet } from '@angular/router';
 import { ToastComponent } from './common/components/toast/toast.component';
 import { NavbarComponent } from './Component/navbar/navbar.component';
 import { FooterComponent } from './Component/footer/footer.component';
-import { AuthService } from './Auth/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -21,7 +20,7 @@ import { AuthService } from './Auth/auth.service';
 export class AppComponent implements OnInit {
   title = 'TheSeatLineWeb';
 
-  constructor(public router: Router, private authService: AuthService) {}
+  constructor(public router: Router) {}
 
   get isAuthRoute(): boolean {
     return (
@@ -31,9 +30,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Restore access token into session on load
-    this.authService.initSession().subscribe();
-
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }

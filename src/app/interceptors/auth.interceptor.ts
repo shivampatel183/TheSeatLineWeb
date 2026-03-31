@@ -9,13 +9,17 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { AuthService } from '../Auth/auth.service';
+import {
+  CSRF_HEADER_NAME,
+  CSRF_HEADER_VALUE,
+  isApiRequestUrl,
+  isUnsafeApiMethod,
+} from '../common/config/api.config';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null,
-  );
+  private refreshTokenSubject = new BehaviorSubject<boolean | null>(null);
 
   constructor(private authService: AuthService) {}
 
@@ -23,21 +27,37 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    let authReq = req.clone({
-      withCredentials: true
+    if (!isApiRequestUrl(req.url)) {
+      return next.handle(req);
+    }
+
+    let authReq = req.withCredentials ? req : req.clone({
+      withCredentials: true,
     });
 
-    const token = this.authService.accessToken();
-    if (token) {
+    if (
+      isUnsafeApiMethod(authReq.method) &&
+      authReq.headers.get(CSRF_HEADER_NAME) !== CSRF_HEADER_VALUE
+    ) {
       authReq = authReq.clone({
-        headers: authReq.headers.set('Authorization', `Bearer ${token}`),
+        setHeaders: {
+          [CSRF_HEADER_NAME]: CSRF_HEADER_VALUE,
+        },
       });
     }
 
     return next.handle(authReq).pipe(
       catchError((error) => {
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === 401 &&
+          authReq.url.includes('/Auth/logout')
+        ) {
+          return throwError(() => error);
+        }
+
         if (error instanceof HttpErrorResponse && error.status === 401) {
-          console.log('AuthInterceptor: 401 Error detected on API call:', req.url);
+          console.log('AuthInterceptor: 401 Error detected on API call:', authReq.url);
           return this.handle401Error(authReq, next);
         }
         return throwError(() => error);
@@ -50,7 +70,11 @@ export class AuthInterceptor implements HttpInterceptor {
     if (request.url.includes('/Auth/refresh-token')) {
       console.error('Refresh token request failed, logging out...');
       this.isRefreshing = false;
-      this.authService.logout();
+      this.refreshTokenSubject.next(false);
+      this.authService.forceLogout(
+        'Refresh token request failed',
+        !this.authService.isInitializing(),
+      );
       return throwError(
         () => new Error('Session expired. Please login again.'),
       );
@@ -64,26 +88,33 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.authService.refreshToken().pipe(
         switchMap((res: any) => {
           this.isRefreshing = false;
-          const isSuccess = res?.success ?? false;
-          if (isSuccess && res.data && res.data.accessToken) {
-            console.log('AuthInterceptor: Token refreshed successfully via cookies, retrying request...');
-            this.refreshTokenSubject.next(res.data.accessToken);
+          const isSuccess = res?.success ?? res?.Success ?? false;
+          if (isSuccess) {
+            console.log('AuthInterceptor: Session refreshed successfully via cookies, retrying request...');
+            this.refreshTokenSubject.next(true);
 
             const retriedReq = request.clone({
               withCredentials: true,
-              headers: request.headers.set('Authorization', `Bearer ${res.data.accessToken}`)
             });
             return next.handle(retriedReq);
           } else {
             console.error('AuthInterceptor: Token refresh failed in Interceptor!', res);
-            this.authService.logout('Token refresh failed in Interceptor');
+            this.refreshTokenSubject.next(false);
+            this.authService.forceLogout(
+              'Token refresh failed in Interceptor',
+              !this.authService.isInitializing(),
+            );
             return throwError(() => new Error('Token refresh failed'));
           }
         }),
         catchError((err) => {
           console.error('AuthInterceptor: Error during token refresh in Interceptor:', err);
           this.isRefreshing = false;
-          this.authService.logout('Exception during refresh in Interceptor');
+          this.refreshTokenSubject.next(false);
+          this.authService.forceLogout(
+            'Exception during refresh in Interceptor',
+            !this.authService.isInitializing(),
+          );
           return throwError(() => err);
         }),
       );
@@ -91,13 +122,16 @@ export class AuthInterceptor implements HttpInterceptor {
       // Wait for token refresh to complete
       console.log('Token refresh already in progress, waiting...');
       return this.refreshTokenSubject.pipe(
-        filter((token) => token != null),
+        filter((refreshSucceeded) => refreshSucceeded !== null),
         take(1),
-        switchMap((jwt) => {
-          console.log('Retrying queued request after token refresh');
+        switchMap((refreshSucceeded) => {
+          if (!refreshSucceeded) {
+            return throwError(() => new Error('Token refresh failed'));
+          }
+
+          console.log('Retrying queued request after cookie refresh');
           const retriedReq = request.clone({
             withCredentials: true,
-            headers: request.headers.set('Authorization', `Bearer ${jwt}`)
           });
           return next.handle(retriedReq);
         }),

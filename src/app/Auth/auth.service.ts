@@ -1,81 +1,67 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap, of, catchError } from 'rxjs';
+import { Observable, catchError, finalize, map, of, shareReplay, take, tap } from 'rxjs';
 import {
   LoginEntity,
   RegisterEntity,
-  GoogleLoginEntity,
   ResponseEntity,
 } from './auth.model';
 import { ApiResponse } from '../common/model/api.model';
 import { ApiService } from '../common/Services/api.services';
 
+type AuthState = 'initializing' | 'authenticated' | 'anonymous';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // Using Signals for non-persistent session state
   public currentUser = signal<ResponseEntity['user'] | null>(null);
-  public isAuthenticated = signal<boolean>(false);
-  public accessToken = signal<string | null>(null);
+  public authState = signal<AuthState>('initializing');
   private router = inject(Router);
+  private initSessionRequest$: Observable<boolean> | null = null;
 
-  constructor(private apiApiService: ApiService) {
-    this.restoreSession();
-  }
+  constructor(private apiApiService: ApiService) {}
 
-  private restoreSession() {
-    console.log('AuthService: Running synchronous restoreSession...');
-    try {
-      const storedUser = localStorage.getItem('currentUser');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        console.log('AuthService: Synchronous restore found user:', user);
-        this.currentUser.set(user);
-        this.isAuthenticated.set(true);
-      } else {
-        console.log(
-          'AuthService: No user found in localStorage during sync restore.',
-        );
-      }
-    } catch (e) {
-      console.error('AuthService: Error during sync restoreSession:', e);
+  initializeSession(): Observable<boolean> {
+    const currentState = this.authState();
+
+    if (currentState === 'authenticated') {
+      return of(true);
     }
-  }
 
-  initSession(): Observable<any> {
-    console.log('AuthService: Validating session on load...');
-    if (this.isAuthenticated()) {
-      // Flow: Check AccessToken (cookie) first via a standard GET Profile call.
-      // If it returns 200, we continue without a database-intensive token rotation.
-      // If it returns 401, the AuthInterceptor will automatically trigger /refresh-token.
-      return this.apiApiService
-        .get<ResponseEntity['user']>(`/Auth/profile`)
-        .pipe(
-          tap((response) => {
-            if (response.success && response.data) {
-              console.log('AuthService: Session valid. Data refreshed.');
-              // Keep the user signal updated with fresh data
-              this.currentUser.set(response.data);
-              localStorage.setItem(
-                'currentUser',
-                JSON.stringify(response.data),
-              );
-            }
-          }),
-          catchError((err) => {
-            // This runs if both the profile check AND the automatic refresh failed.
-            console.error(
-              'AuthService: Session validation failed (invalid or expired session).',
-            );
-            this.logout('Session initialization failure');
-            return of(null);
-          }),
-        );
+    if (currentState === 'anonymous') {
+      return of(false);
     }
-    console.log('AuthService: No existing session found in storage.');
-    return of(null);
+
+    if (this.initSessionRequest$) {
+      return this.initSessionRequest$;
+    }
+
+    this.initSessionRequest$ = this.apiApiService
+      .get<ResponseEntity['user']>(`/Auth/profile`)
+      .pipe(
+        map((response) => {
+          const isSuccess = response.success ?? response.Success ?? false;
+
+          if (isSuccess && response.data) {
+            this.setAuthenticatedUser(response.data);
+            return true;
+          }
+
+          this.clearSession();
+          return false;
+        }),
+        catchError(() => {
+          this.clearSession();
+          return of(false);
+        }),
+        finalize(() => {
+          this.initSessionRequest$ = null;
+        }),
+        shareReplay(1),
+      );
+
+    return this.initSessionRequest$;
   }
 
   login(data: LoginEntity): Observable<ApiResponse<ResponseEntity>> {
@@ -97,41 +83,63 @@ export class AuthService {
 
   // Refresh Token
   refreshToken(): Observable<ApiResponse<ResponseEntity>> {
-    // Relying on HTTPOnly cookies, no payload needed conceptually but matching signature
     const payload = {};
-    return this.apiApiService
-      .post<ResponseEntity>(`/Auth/refresh-token`, payload)
-      .pipe(
-        tap((response) => {
-          if (response.success && response.data) {
-            this.accessToken.set(response.data.accessToken);
-          }
-        }),
-      );
+    return this.apiApiService.post<ResponseEntity>(`/Auth/refresh-token`, payload);
   }
 
   private saveSession(data: ResponseEntity) {
-    if (data) {
-      if (data.accessToken) {
-        this.accessToken.set(data.accessToken);
-      }
-      if (data.user) {
-        this.currentUser.set(data.user);
-        localStorage.setItem('currentUser', JSON.stringify(data.user));
-      }
-      this.isAuthenticated.set(true);
+    if (!data) {
+      return;
+    }
+
+    if (data.user) {
+      this.setAuthenticatedUser(data.user);
+    } else {
+      this.authState.set('authenticated');
     }
   }
 
-  logout(reason: string = 'User request') {
-    this.accessToken.set(null);
+  private setAuthenticatedUser(user: ResponseEntity['user']) {
+    this.currentUser.set(user);
+    this.authState.set('authenticated');
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
+  private clearSession() {
     this.currentUser.set(null);
-    this.isAuthenticated.set(false);
+    this.authState.set('anonymous');
     localStorage.removeItem('currentUser');
-    this.router.navigate(['/login']);
+  }
+
+  forceLogout(reason: string = 'User request', redirectToLogin = true) {
+    console.log(`AuthService: logging out. Reason: ${reason}`);
+    this.clearSession();
+
+    if (redirectToLogin) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  logout(reason: string = 'User request', redirectToLogin = true) {
+    this.apiApiService
+      .post<null>(`/Auth/logout`, {})
+      .pipe(
+        take(1),
+        catchError((error) => {
+          console.error('AuthService: server logout failed.', error);
+          return of(null);
+        }),
+      )
+      .subscribe(() => {
+        this.forceLogout(reason, redirectToLogin);
+      });
   }
 
   isLoggedIn(): boolean {
-    return this.isAuthenticated();
+    return this.authState() === 'authenticated';
+  }
+
+  isInitializing(): boolean {
+    return this.authState() === 'initializing';
   }
 }
