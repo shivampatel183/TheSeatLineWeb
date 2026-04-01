@@ -13,3 +13,4 @@ Recent frontend implementation changes are documented here.
 - The app now initializes authentication state through an application bootstrap step instead of synchronous local restoration.
 - API calls now centralize credentialed requests and CSRF header handling for unsafe backend operations.
 - Logout is now server-aware and aligned with the backend cookie session model.
+- Authentication entry screens now use a full-height responsive layout with clearer account messaging and backend-driven registration error text.

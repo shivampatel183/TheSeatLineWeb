@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   OnInit,
@@ -7,6 +8,9 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
+import { PaymentService } from '../../common/Services/payment.service';
+import { ToastService } from '../../common/Services/toast.service';
 import { BookingInitResponseDto } from '../../common/model/api.model';
 
 @Component({
@@ -29,6 +33,8 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private paymentService: PaymentService,
+    private toast: ToastService,
   ) {
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras.state) {
@@ -85,10 +91,40 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
   }
 
   proceedToPay(): void {
-    if (this.isExpired || this.isProcessing) return;
+    if (this.isExpired || this.isProcessing || !this.booking) return;
+
     this.isProcessing = true;
-    // Payment integration placeholder
     this.cdr.markForCheck();
+
+    const returnUrl =
+      typeof window !== 'undefined' ? window.location.href : undefined;
+
+    this.paymentService
+      .createOrder(this.booking.bookingId, {
+        gatewayProvider: 'phonepe',
+        returnUrl,
+      })
+      .pipe(
+        finalize(() => {
+          this.isProcessing = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (order) => {
+          if (order.checkoutUrl && typeof window !== 'undefined') {
+            window.location.assign(order.checkoutUrl);
+            return;
+          }
+
+          this.toast.warning(
+            'Payment order created, but checkout redirect is not available yet.',
+          );
+        },
+        error: (error: unknown) => {
+          this.toast.error(this.getPaymentErrorMessage(error));
+        },
+      });
   }
 
   private startCountdown(): void {
@@ -120,5 +156,17 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
       clearInterval(this.timerId);
       this.timerId = null;
     }
+  }
+
+  private getPaymentErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      const backendMessage =
+        (error.error as { message?: string; error?: string } | null)?.message ??
+        (error.error as { message?: string; error?: string } | null)?.error;
+
+      return backendMessage || 'Unable to start payment. Please try again.';
+    }
+
+    return 'Unable to start payment. Please try again.';
   }
 }

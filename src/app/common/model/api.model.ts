@@ -155,3 +155,47 @@ export interface CreateCategoryBookingRequest {
   eventShowId: string;
   selections: { ticketCategoryId: string; quantity: number }[];
 }
+
+export interface PaymentVerifyDto {
+  paymentId?: string | null;
+  bookingId: string;
+  merchantOrderId: string;
+  gatewayOrderId?: string | null;
+  gatewayPaymentId?: string | null;
+  gatewaySignature?: string | null;
+  gatewayStatus?: string | null;
+  gatewayPayload?: string | null;
+}
+
+export interface CreatePaymentOrderRequestDto {
+  gatewayProvider?: string | null;
+  method?: number | null;
+  returnUrl?: string | null;
+}
+
+export interface PaymentResponseDto {
+  paymentId: string;
+  bookingId: string;
+  gatewayProvider: string;
+  merchantOrderId: string;
+  gatewayOrderId?: string | null;
+  gatewayPaymentId?: string | null;
+  gatewayRefundId?: string | null;
+  gatewayStatus?: string | null;
+  status: string;
+  method: string;
+  amount: number;
+  refundAmount: number;
+  currency: string;
+  failureReason?: string | null;
+  refundReason?: string | null;
+  refundedAt?: string | null;
+  webhookReceivedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentOrderResponseDto extends PaymentResponseDto {
+  checkoutUrl?: string | null;
+  gatewayMetadata?: string | null;
+}
