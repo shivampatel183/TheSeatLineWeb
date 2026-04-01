@@ -28,7 +28,7 @@
 }
 
 .navbar__spacer {
-  height: 74px;
+  height: var(--navbar-height, 74px);
 }
 
 .navbar__container {
@@ -294,12 +294,6 @@
 
   .navbar__toggle {
     display: inline-flex;
-  }
-}
-
-@media (min-width: 768px) {
-  .navbar__spacer {
-    height: 78px;
   }
 }
 

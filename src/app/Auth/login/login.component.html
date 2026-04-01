@@ -1,81 +1,107 @@
 <section class="auth-page">
   <div class="auth-container">
-    <div class="mx-auto w-full max-w-md sm:max-w-lg">
+    <div class="auth-grid">
       <div class="auth-card">
-        <div class="auth-header">
-          <h2 class="auth-title">Welcome Back</h2>
-          <p class="auth-subtitle">Sign in to access your account</p>
-        </div>
+        <div class="auth-card-content">
+          <div class="auth-header">
+            <p class="auth-kicker">Welcome back</p>
+            <h1 class="auth-title">Log in to The Seat Line</h1>
+            <p class="auth-subtitle">Access your bookings, saved preferences, and upcoming events in one place.</p>
+          </div>
 
-        <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" class="auth-form" novalidate>
-          <div *ngFor="let field of loginFields" class="auth-field">
-            <label [for]="field.name" class="auth-label">{{ field.label }}</label>
-            <div class="relative">
-              <input
-                [id]="field.name"
-                [type]="getInputType(field)"
-                [name]="field.name"
-                [placeholder]="field.placeholder"
-                [autocomplete]="field.autocomplete"
-                [ngModel]="getFieldValue(field)"
-                (ngModelChange)="setFieldValue(field, $event)"
-                #control="ngModel"
-                [required]="true"
-                [minlength]="field.key === 'password' ? 8 : null"
-                class="auth-input"
-                [class.pr-20]="field.key === 'password'"
-              />
-              <button
-                *ngIf="field.key === 'password'"
-                type="button"
-                (click)="togglePasswordVisibility()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-600"
-              >
-                {{ showPassword ? 'Hide' : 'Show' }}
-              </button>
+          <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" class="auth-form" novalidate>
+            <div *ngFor="let field of loginFields" class="auth-field">
+              <label [for]="field.name" class="auth-label">{{ field.label }}</label>
+              <div class="relative">
+                <input
+                  [id]="field.name"
+                  [type]="getInputType(field)"
+                  [name]="field.name"
+                  [placeholder]="field.placeholder"
+                  [autocomplete]="field.autocomplete"
+                  [ngModel]="getFieldValue(field)"
+                  (ngModelChange)="setFieldValue(field, $event)"
+                  #control="ngModel"
+                  [required]="true"
+                  [minlength]="field.key === 'password' ? 8 : null"
+                  class="auth-input"
+                  [class.pr-20]="field.key === 'password'"
+                />
+                <button
+                  *ngIf="field.key === 'password'"
+                  type="button"
+                  (click)="togglePasswordVisibility()"
+                  class="auth-password-toggle"
+                >
+                  {{ showPassword ? 'Hide' : 'Show' }}
+                </button>
+              </div>
+              <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
+                <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
+                <span *ngIf="control.errors?.['minlength']">Password must be at least 8 characters.</span>
+              </small>
             </div>
-            <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
-              <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
-              <span *ngIf="control.errors?.['minlength']">Password must be at least 8 characters.</span>
-            </small>
+
+            <div class="auth-row">
+              <label class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="loginData.rememberMe"
+                  name="rememberMe"
+                  class="h-4 w-4 rounded border-slate-300 text-rose-600"
+                />
+                <span class="text-xs text-slate-600 sm:text-sm">Remember me</span>
+              </label>
+              <a href="#" class="auth-link text-xs sm:text-sm">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="auth-submit" [disabled]="loginForm.invalid || isSubmitting">
+              {{ isSubmitting ? 'Signing In...' : 'Sign In' }}
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <div class="auth-divider-line">
+              <span class="w-full border-t border-slate-200"></span>
+            </div>
+            <div class="auth-divider-label-wrap">
+              <span class="auth-divider-label">Or continue with</span>
+            </div>
           </div>
 
-          <div class="auth-row">
-            <label class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                [(ngModel)]="loginData.rememberMe"
-                name="rememberMe"
-                class="h-4 w-4 rounded border-slate-300 text-rose-600"
-              />
-              <span class="text-xs text-slate-600 sm:text-sm">Remember me</span>
-            </label>
-            <a href="#" class="auth-link text-xs sm:text-sm">Forgot password?</a>
+          <div class="auth-google-wrap flex justify-center">
+            <app-google-login></app-google-login>
           </div>
 
-          <button type="submit" class="auth-submit" [disabled]="loginForm.invalid || isSubmitting">
-            {{ isSubmitting ? 'Signing In...' : 'Sign In' }}
-          </button>
-        </form>
-
-        <div class="auth-divider">
-          <div class="auth-divider-line">
-            <span class="w-full border-t border-slate-200"></span>
-          </div>
-          <div class="auth-divider-label-wrap">
-            <span class="auth-divider-label">Or continue with</span>
-          </div>
+          <p class="auth-footer-text">
+            Don't have an account?
+            <a routerLink="/register" class="auth-link">Sign up here</a>
+          </p>
         </div>
-
-        <div class="flex justify-center">
-          <app-google-login></app-google-login>
-        </div>
-
-        <p class="auth-footer-text">
-          Don't have an account?
-          <a routerLink="/register" class="auth-link">Sign up here</a>
-        </p>
       </div>
+
+      <aside class="auth-panel">
+        <div>
+          <p class="auth-panel-kicker">Pick up where you left off</p>
+          <h2 class="auth-panel-title">Your next event is one login away.</h2>
+          <p class="auth-panel-copy">
+            Jump straight back into bookings, saved cities, and personalized event recommendations without changing the
+            experience you already know.
+          </p>
+
+          <div class="auth-panel-list">
+            <div *ngFor="let benefit of accountBenefits" class="auth-panel-item">
+              <span class="auth-panel-check">&#10003;</span>
+              <p class="auth-panel-item-text">{{ benefit }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-panel-footer">
+          <p class="auth-panel-footer-label">Member access</p>
+          <p class="auth-panel-footer-value">Bookings, alerts, and support stay synced on every device.</p>
+        </div>
+      </aside>
     </div>
   </div>
 </section>

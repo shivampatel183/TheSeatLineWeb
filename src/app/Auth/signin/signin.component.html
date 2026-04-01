@@ -2,85 +2,107 @@
   <div class="auth-container">
     <div class="auth-grid">
       <div class="auth-card">
-        <div class="auth-header">
-          <p class="auth-kicker">Create account</p>
-          <h1 class="auth-title">Join The Seat Line</h1>
-          <p class="auth-subtitle">Get early access to trending events in your city.</p>
-        </div>
-
-        <form
-          (ngSubmit)="onRegister(registerForm)"
-          #registerForm="ngForm"
-          class="auth-form auth-form--register"
-          novalidate
-        >
-          <div
-            *ngFor="let field of registerFields"
-            class="auth-field"
-            [class.auth-field--half]="field.key === 'firstName' || field.key === 'lastName'"
-          >
-            <label [for]="field.name" class="auth-label">{{ field.label }}</label>
-            <div class="relative">
-              <input [id]="field.name" [type]="getInputType(field)" [name]="field.name"
-                [placeholder]="field.placeholder" [autocomplete]="field.autocomplete" [ngModel]="getFieldValue(field)"
-                (ngModelChange)="setFieldValue(field, $event)" #control="ngModel" [required]="true"
-                [minlength]="field.key === 'password' || field.key === 'confirmPassword' ? 8 : null" class="auth-input"
-                [class.pr-20]="field.key === 'password' || field.key === 'confirmPassword'" />
-              <button *ngIf="field.key === 'password' || field.key === 'confirmPassword'" type="button"
-                (click)="togglePasswordVisibility(field.key)"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-600">
-                {{
-                field.key === 'password'
-                ? (showPassword ? 'Hide' : 'Show')
-                : (showConfirmPassword ? 'Hide' : 'Show')
-                }}
-              </button>
-            </div>
-            <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
-              <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
-              <span *ngIf="control.errors?.['minlength']">{{ field.label }} must be at least 8 characters.</span>
-            </small>
+        <div class="auth-card-content">
+          <div class="auth-header">
+            <p class="auth-kicker">Create account</p>
+            <h1 class="auth-title">Join The Seat Line</h1>
+            <p class="auth-subtitle">Create your account to save bookings, discover events faster, and stay in sync
+              everywhere.</p>
           </div>
 
-          <label class="auth-checkbox auth-form-span-full">
-            <input type="checkbox" class="auth-checkbox-input" name="termsAccepted" [(ngModel)]="termsAccepted"
-              required />
-            <span class="auth-checkbox-label">
-              I agree to the
-              <a href="#" class="auth-link">Terms &amp; Conditions</a>
-              and
-              <a href="#" class="auth-link">Privacy Policy</a>
-            </span>
-          </label>
+          <form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm" class="auth-form auth-form--register"
+            novalidate>
+            <ng-container *ngFor="let field of registerFields">
+              <div *ngIf="field.key !== 'password' && field.key !== 'confirmPassword'" class="auth-field"
+                [class.auth-field--half]="field.key === 'firstName' || field.key === 'lastName'"
+                [class.auth-form-span-full]="field.key === 'email'">
+                <label [for]="field.name" class="auth-label">{{ field.label }}</label>
+                <div class="relative">
+                  <input [id]="field.name" [type]="getInputType(field)" [name]="field.name"
+                    [placeholder]="field.placeholder" [autocomplete]="field.autocomplete"
+                    [ngModel]="getFieldValue(field)" (ngModelChange)="setFieldValue(field, $event)" #control="ngModel"
+                    [required]="true" class="auth-input" />
+                </div>
+                <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
+                  <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
+                </small>
+              </div>
+            </ng-container>
 
-          <button type="submit" [disabled]="registerForm.invalid || isSubmitting" class="auth-submit auth-form-span-full">
-            {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
-          </button>
-        </form>
+            <div class="auth-password-row auth-form-span-full">
+              <ng-container *ngFor="let field of registerFields">
+                <div *ngIf="field.key === 'password' || field.key === 'confirmPassword'" class="auth-field">
+                  <label [for]="field.name" class="auth-label">{{ field.label }}</label>
+                  <div class="relative">
+                    <input [id]="field.name" [type]="getInputType(field)" [name]="field.name"
+                      [placeholder]="field.placeholder" [autocomplete]="field.autocomplete"
+                      [ngModel]="getFieldValue(field)" (ngModelChange)="setFieldValue(field, $event)" #control="ngModel"
+                      [required]="true" [minlength]="8" class="auth-input pr-20" />
+                    <button type="button" (click)="togglePasswordVisibility(field.key)" class="auth-password-toggle">
+                      {{
+                      field.key === 'password'
+                      ? (showPassword ? 'Hide' : 'Show')
+                      : (showConfirmPassword ? 'Hide' : 'Show')
+                      }}
+                    </button>
+                  </div>
+                  <small class="text-red-600 text-xs" *ngIf="control.invalid && (control.dirty || control.touched)">
+                    <span *ngIf="control.errors?.['required']">{{ field.label }} is required.</span>
+                    <span *ngIf="control.errors?.['minlength']">{{ field.label }} must be at least 8 characters.</span>
+                  </small>
+                </div>
+              </ng-container>
+            </div>
 
+            <label class="auth-checkbox auth-form-span-full">
+              <input type="checkbox" class="auth-checkbox-input" name="termsAccepted" [(ngModel)]="termsAccepted"
+                required />
+              <span class="auth-checkbox-label">
+                I agree to the
+                <a href="#" class="auth-link">Terms &amp; Conditions</a>
+                and
+                <a href="#" class="auth-link">Privacy Policy</a>
+              </span>
+            </label>
 
-        <div class="mt-2">
-          <app-google-login></app-google-login>
-        </div>
-        <div class="auth-footer-box">
-          Already have an account?
-          <a [routerLink]="['/login']" class="auth-link">Sign in here</a>
+            <button type="submit" [disabled]="registerForm.invalid || isSubmitting"
+              class="auth-submit auth-form-span-full">
+              {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
+            </button>
+          </form>
+
+          <div class="auth-google-wrap">
+            <app-google-login></app-google-login>
+          </div>
+
+          <div class="auth-footer-box">
+            Already have an account?
+            <a [routerLink]="['/login']" class="auth-link">Sign in here</a>
+          </div>
         </div>
       </div>
 
       <aside class="auth-panel">
-        <p class="auth-panel-kicker">Start today</p>
-        <h2 class="auth-panel-title">Create your account and never miss a show.</h2>
-        <p class="auth-panel-copy">
-          Your profile keeps tickets, preferences, and event alerts synced across desktop and mobile. Enjoy
-          personalized recommendations and exclusive member benefits.
-        </p>
+        <div>
+          <p class="auth-panel-kicker">Start today</p>
+          <h2 class="auth-panel-title">Create your account and never miss a show.</h2>
+          <p class="auth-panel-copy">
+            Your profile keeps tickets, preferences, and event alerts synced across desktop and mobile. Enjoy
+            personalized recommendations and exclusive member benefits.
+          </p>
 
-        <div class="auth-panel-list">
-          <div *ngFor="let benefit of marketingBenefits" class="auth-panel-item">
-            <span class="auth-panel-check">&#10003;</span>
-            <p class="auth-panel-item-text">{{ benefit }}</p>
+          <div class="auth-panel-list">
+            <div *ngFor="let benefit of marketingBenefits" class="auth-panel-item">
+              <span class="auth-panel-check">&#10003;</span>
+              <p class="auth-panel-item-text">{{ benefit }}</p>
+            </div>
           </div>
+        </div>
+
+        <div class="auth-panel-footer">
+          <p class="auth-panel-footer-label">Why members stay</p>
+          <p class="auth-panel-footer-value">Early access, faster checkout, and event updates that follow you
+            everywhere.</p>
         </div>
       </aside>
     </div>

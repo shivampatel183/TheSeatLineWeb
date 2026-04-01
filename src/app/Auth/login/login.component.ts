@@ -31,6 +31,11 @@ export class LoginComponent implements OnInit {
   isSubmitting = false;
   showPassword = false;
   returnUrl: string = '/';
+  readonly accountBenefits: string[] = [
+    'Track bookings, invoices, and event history in one place.',
+    'Keep your city preferences and alerts synced across devices.',
+    'Check out faster with your saved account details.',
+  ];
   readonly loginFields: LoginFieldConfig[] = [
     {
       key: 'email',

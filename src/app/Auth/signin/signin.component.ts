@@ -142,40 +142,14 @@ export class RegisterComponent {
     this.authService.register(payload).subscribe({
       next: (response: ApiResponse<string>) => {
         this.isSubmitting = false;
-        const isSuccess = response.success ?? false;
-        if (!isSuccess) {
-          this.toastService.error(response.message || 'Registration failed');
+        if (!response.success) {
+          this.toastService.error(response.error || 'Registration failed');
           return;
         }
         this.toastService.success(
           response.message || 'User registered. Verification email sent.',
         );
         this.router.navigate(['/login']);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.isSubmitting = false;
-        const apiErrorCode = error.error?.error;
-
-        if (error.status === 400 || apiErrorCode === 'VAL_001') {
-          this.toastService.error(
-            'Validation failed. Please check your input.',
-          );
-          return;
-        }
-
-        if (error.status === 409 || apiErrorCode === 'AUTH_002') {
-          this.toastService.error('Email already registered.');
-          return;
-        }
-
-        if (error.status === 429) {
-          this.toastService.error(
-            'Too many attempts. Try again in 15 minutes.',
-          );
-          return;
-        }
-
-        this.toastService.error('Registration failed');
       },
     });
   }
