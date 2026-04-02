@@ -199,3 +199,13 @@ export interface PaymentOrderResponseDto extends PaymentResponseDto {
   checkoutUrl?: string | null;
   gatewayMetadata?: string | null;
 }
+
+export interface RazorpayCheckoutMetadata {
+  keyId: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  imageUrl?: string | null;
+  themeColor: string;
+}

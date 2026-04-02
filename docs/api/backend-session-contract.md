@@ -16,6 +16,13 @@ The Angular client now derives the API root from `environment.apiUrl` through `s
 - `POST /Auth/refresh-token`: refreshes the cookie-backed session after a `401`
 - `POST /Auth/logout`: terminates the backend session before client-side redirect
 
+## Payment Endpoints
+
+- `POST /payment/create-order/{bookingId}` now accepts an optional body with `gatewayProvider`, `method`, and `returnUrl`.
+- The order response is now treated as a typed `PaymentOrderResponseDto`, including checkout redirect data such as `checkoutUrl`.
+- `POST /payment/verify` now uses the shared `PaymentVerifyDto` interface instead of an inline payload shape.
+- See `api/payment-contract.md` for the payment-specific request and response fields.
+
 ## Failure Behavior
 
 - If refresh fails, the client clears session state and redirects to `/login` unless the app is still in the initialization phase.

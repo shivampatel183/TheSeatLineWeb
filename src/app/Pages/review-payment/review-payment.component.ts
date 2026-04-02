@@ -11,7 +11,61 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { PaymentService } from '../../common/Services/payment.service';
 import { ToastService } from '../../common/Services/toast.service';
-import { BookingInitResponseDto } from '../../common/model/api.model';
+import {
+  BookingInitResponseDto,
+  PaymentOrderResponseDto,
+  PaymentResponseDto,
+  RazorpayCheckoutMetadata,
+} from '../../common/model/api.model';
+
+interface RazorpaySuccessResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+interface RazorpayFailureResponse {
+  error?: {
+    description?: string;
+    reason?: string;
+    metadata?: {
+      payment_id?: string;
+      order_id?: string;
+    };
+  };
+}
+
+interface RazorpayInstance {
+  open(): void;
+  on(event: 'payment.failed', callback: (response: RazorpayFailureResponse) => void): void;
+}
+
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  image?: string;
+  order_id: string;
+  handler: (response: RazorpaySuccessResponse) => void;
+  modal?: {
+    ondismiss?: () => void;
+  };
+  notes?: Record<string, string>;
+  theme?: {
+    color?: string;
+  };
+  retry?: {
+    enabled?: boolean;
+  };
+}
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayOptions) => RazorpayInstance;
+  }
+}
 
 @Component({
   selector: 'app-review-payment',
@@ -22,6 +76,8 @@ import { BookingInitResponseDto } from '../../common/model/api.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewPaymentComponent implements OnInit, OnDestroy {
+  private static razorpayLoader: Promise<void> | null = null;
+
   booking: BookingInitResponseDto | null = null;
   holdMessage = '';
   isExpired = false;
@@ -97,11 +153,13 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     const returnUrl =
-      typeof window !== 'undefined' ? window.location.href : undefined;
+      typeof window !== 'undefined'
+        ? `${window.location.origin}/payment/result`
+        : undefined;
 
     this.paymentService
       .createOrder(this.booking.bookingId, {
-        gatewayProvider: 'phonepe',
+        gatewayProvider: 'razorpay',
         returnUrl,
       })
       .pipe(
@@ -112,6 +170,11 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (order) => {
+          if (order.gatewayProvider === 'razorpay') {
+            void this.launchRazorpayCheckout(order);
+            return;
+          }
+
           if (order.checkoutUrl && typeof window !== 'undefined') {
             window.location.assign(order.checkoutUrl);
             return;
@@ -158,6 +221,174 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  private async launchRazorpayCheckout(
+    order: PaymentOrderResponseDto,
+  ): Promise<void> {
+    try {
+      await this.ensureRazorpayLoaded();
+
+      if (!window.Razorpay) {
+        throw new Error('Razorpay checkout failed to load.');
+      }
+
+      const checkoutMetadata = this.parseRazorpayMetadata(order.gatewayMetadata);
+      if (!order.gatewayOrderId || !this.booking) {
+        throw new Error('Razorpay order details are missing.');
+      }
+
+      const options: RazorpayOptions = {
+        key: checkoutMetadata.keyId,
+        amount: checkoutMetadata.amount,
+        currency: checkoutMetadata.currency,
+        name: checkoutMetadata.name,
+        description: checkoutMetadata.description,
+        image: checkoutMetadata.imageUrl ?? undefined,
+        order_id: order.gatewayOrderId,
+        handler: (response) => {
+          void this.verifyRazorpayPayment(order, response);
+        },
+        modal: {
+          ondismiss: () => {
+            this.toast.warning(
+              'Payment window closed. Your booking is still on hold.',
+            );
+          },
+        },
+        notes: {
+          bookingId: this.booking.bookingId,
+          bookingReference: this.booking.bookingReference,
+        },
+        theme: {
+          color: checkoutMetadata.themeColor,
+        },
+        retry: {
+          enabled: true,
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.on('payment.failed', (response) => {
+        const message =
+          response.error?.description ||
+          response.error?.reason ||
+          'Payment could not be completed.';
+
+        this.goToResult('failed', order, message);
+      });
+      razorpay.open();
+    } catch (error) {
+      this.toast.error(this.getRazorpayLoadErrorMessage(error));
+    }
+  }
+
+  private verifyRazorpayPayment(
+    order: PaymentOrderResponseDto,
+    response: RazorpaySuccessResponse,
+  ): void {
+    if (!this.booking) {
+      return;
+    }
+
+    this.isProcessing = true;
+    this.cdr.markForCheck();
+
+    this.paymentService
+      .verifyPayment({
+        bookingId: this.booking.bookingId,
+        merchantOrderId: order.merchantOrderId,
+        gatewayOrderId: order.gatewayOrderId ?? response.razorpay_order_id,
+        gatewayPaymentId: response.razorpay_payment_id,
+        gatewaySignature: response.razorpay_signature,
+      })
+      .pipe(
+        finalize(() => {
+          this.isProcessing = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (payment) => {
+          this.goToResult(
+            payment.status === 'Success' ? 'success' : 'pending',
+            order,
+            this.buildPaymentMessage(payment),
+          );
+        },
+        error: (error: unknown) => {
+          this.goToResult('failed', order, this.getPaymentErrorMessage(error));
+        },
+      });
+  }
+
+  private async ensureRazorpayLoaded(): Promise<void> {
+    if (typeof window === 'undefined') {
+      throw new Error('Razorpay checkout is only available in the browser.');
+    }
+
+    if (window.Razorpay) {
+      return;
+    }
+
+    if (!ReviewPaymentComponent.razorpayLoader) {
+      ReviewPaymentComponent.razorpayLoader = new Promise<void>(
+        (resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+          script.async = true;
+          script.onload = () => resolve();
+          script.onerror = () =>
+            reject(new Error('Unable to load Razorpay checkout.'));
+          document.body.appendChild(script);
+        },
+      );
+    }
+
+    return ReviewPaymentComponent.razorpayLoader;
+  }
+
+  private parseRazorpayMetadata(
+    gatewayMetadata: string | null | undefined,
+  ): RazorpayCheckoutMetadata {
+    if (!gatewayMetadata) {
+      throw new Error('Razorpay checkout metadata is missing.');
+    }
+
+    const metadata = JSON.parse(gatewayMetadata) as RazorpayCheckoutMetadata;
+    if (!metadata.keyId) {
+      throw new Error('Razorpay checkout key is missing.');
+    }
+
+    return metadata;
+  }
+
+  private buildPaymentMessage(payment: PaymentResponseDto): string {
+    if (payment.status === 'Success') {
+      return 'Payment completed and your booking is confirmed.';
+    }
+
+    if (payment.status === 'Pending') {
+      return 'Payment is authorized but not captured yet. We will update it shortly.';
+    }
+
+    return payment.failureReason || 'Payment could not be completed.';
+  }
+
+  private goToResult(
+    status: 'success' | 'failed' | 'pending',
+    order: PaymentOrderResponseDto,
+    message: string,
+  ): void {
+    this.router.navigate(['/payment/result'], {
+      queryParams: {
+        status,
+        bookingId: order.bookingId,
+        merchantOrderId: order.merchantOrderId,
+        provider: order.gatewayProvider,
+        message,
+      },
+    });
+  }
+
   private getPaymentErrorMessage(error: unknown): string {
     if (error instanceof HttpErrorResponse) {
       const backendMessage =
@@ -168,5 +399,11 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
     }
 
     return 'Unable to start payment. Please try again.';
+  }
+
+  private getRazorpayLoadErrorMessage(error: unknown): string {
+    return error instanceof Error
+      ? error.message
+      : 'Unable to launch Razorpay checkout.';
   }
 }

@@ -30,6 +30,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'payment/result',
+    loadComponent: () =>
+      import('./Pages/payment-result/payment-result.component').then(
+        (m) => m.PaymentResultComponent,
+      ),
+  },
+  {
     path: 'event/:slug/:id',
     loadComponent: () =>
       import('./Pages/event-detail/event-detail.component').then(

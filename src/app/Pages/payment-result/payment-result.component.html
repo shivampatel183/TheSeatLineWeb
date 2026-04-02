@@ -1,0 +1,20 @@
+<main class="payment-result-page">
+  <section class="payment-result-card" [ngClass]="statusClass">
+    <div class="payment-result-card__badge">{{ provider }}</div>
+    <h1 class="payment-result-card__title">{{ title }}</h1>
+    <p class="payment-result-card__message">{{ message }}</p>
+    <p class="payment-result-card__description">{{ description }}</p>
+
+    <div class="payment-result-card__meta" *ngIf="bookingId || merchantOrderId">
+      <p *ngIf="bookingId"><strong>Booking ID:</strong> {{ bookingId }}</p>
+      <p *ngIf="merchantOrderId">
+        <strong>Merchant Order ID:</strong> {{ merchantOrderId }}
+      </p>
+    </div>
+
+    <div class="payment-result-card__actions">
+      <a routerLink="/my-bookings" class="btn btn-primary">My Bookings</a>
+      <a routerLink="/" class="btn btn-secondary">Go Home</a>
+    </div>
+  </section>
+</main>
