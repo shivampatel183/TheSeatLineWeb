@@ -5,18 +5,25 @@ import { ToastService } from '../../common/Services/toast.service';
 import { BookingResponseDto } from '../../common/model/api.model';
 import { BookingCardComponent } from '../../Component/booking-card/booking-card.component';
 import { PreloaderComponent } from '../../common/components/preloader/preloader.component';
+import { BookingTicketsModalComponent } from '../../Component/booking-tickets-modal/booking-tickets-modal.component';
 
 @Component({
   selector: 'app-my-bookings',
   standalone: true,
-  imports: [CommonModule, BookingCardComponent, PreloaderComponent],
+  imports: [
+    CommonModule,
+    BookingCardComponent,
+    PreloaderComponent,
+    BookingTicketsModalComponent,
+  ],
   templateUrl: './my-bookings.component.html',
   styleUrls: ['./my-bookings.component.scss'],
 })
 export class MyBookingsComponent implements OnInit {
   bookings: BookingResponseDto[] = [];
-  activeFilter: 'all' | 'cancelled' = 'all';
+  activeFilter: 'all' | 'pending' | 'confirmed' = 'all';
   isLoading = false;
+  activeBookingIdForTickets: string | null = null;
 
   constructor(
     private bookingService: BookingService,
@@ -31,7 +38,10 @@ export class MyBookingsComponent implements OnInit {
     this.isLoading = true;
     this.bookingService.getMyBookings().subscribe({
       next: (data) => {
-        this.bookings = data;
+        // Only show Pending + Confirmed bookings for now
+        this.bookings = (data ?? []).filter((b) =>
+          ['pending', 'confirmed'].includes((b.status ?? '').toLowerCase()),
+        );
         this.isLoading = false;
       },
       error: (error) => {
@@ -42,21 +52,33 @@ export class MyBookingsComponent implements OnInit {
     });
   }
 
-  setFilter(filter: 'all' | 'cancelled'): void {
+  setFilter(filter: 'all' | 'pending' | 'confirmed'): void {
     this.activeFilter = filter;
   }
 
   get filteredBookings(): BookingResponseDto[] {
-    if (this.activeFilter === 'cancelled') {
-      return this.bookings.filter((b) => b.status === 'Cancelled');
-    }
-    return this.bookings;
+    return this.bookings.filter((b) => this.matchesFilter(b, this.activeFilter));
   }
 
-  getBookingCount(filter: 'all' | 'cancelled'): number {
-    if (filter === 'cancelled') {
-      return this.bookings.filter((b) => b.status === 'Cancelled').length;
-    }
-    return this.bookings.length;
+  getBookingCount(filter: 'all' | 'pending' | 'confirmed'): number {
+    return this.bookings.filter((b) => this.matchesFilter(b, filter)).length;
+  }
+
+  openTickets(bookingId: string): void {
+    this.activeBookingIdForTickets = bookingId;
+  }
+
+  closeTickets(): void {
+    this.activeBookingIdForTickets = null;
+  }
+
+  private matchesFilter(
+    booking: BookingResponseDto,
+    filter: 'all' | 'pending' | 'confirmed',
+  ): boolean {
+    if (filter === 'all') return true;
+
+    const status = (booking.status ?? '').toLowerCase();
+    return status === filter;
   }
 }

@@ -11,9 +11,13 @@
             <span>All Bookings</span>
             <span class="count">{{ getBookingCount('all') }}</span>
         </button>
-        <button class="filter-tab" [class.active]="activeFilter === 'cancelled'" (click)="setFilter('cancelled')">
-            <span>Cancelled</span>
-            <span class="count">{{ getBookingCount('cancelled') }}</span>
+        <button class="filter-tab" [class.active]="activeFilter === 'pending'" (click)="setFilter('pending')">
+            <span>Pending</span>
+            <span class="count">{{ getBookingCount('pending') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'confirmed'" (click)="setFilter('confirmed')">
+            <span>Confirmed</span>
+            <span class="count">{{ getBookingCount('confirmed') }}</span>
         </button>
     </div>
 
@@ -22,7 +26,8 @@
 
     <!-- Bookings Grid -->
     <div *ngIf="!isLoading && filteredBookings.length > 0" class="bookings-grid">
-        <app-booking-card *ngFor="let booking of filteredBookings" [booking]="booking"></app-booking-card>
+        <app-booking-card *ngFor="let booking of filteredBookings" [booking]="booking"
+            (viewTickets)="openTickets($event)"></app-booking-card>
     </div>
 
     <!-- Empty State -->
@@ -39,3 +44,6 @@
         <a href="/" class="browse-btn">Browse Events</a>
     </div>
 </div>
+
+<app-booking-tickets-modal *ngIf="activeBookingIdForTickets" [bookingId]="activeBookingIdForTickets"
+    (closed)="closeTickets()"></app-booking-tickets-modal>

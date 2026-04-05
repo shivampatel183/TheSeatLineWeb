@@ -1,44 +1,51 @@
-<div class="booking-card premium-card">
+<article class="booking-card">
+    <div class="banner" *ngIf="booking.bannerImageUrl">
+        <img [src]="booking.bannerImageUrl" [alt]="booking.eventTitle || 'Event banner'" loading="lazy" />
+        <span class="image-status" [ngClass]="getStatusClass()">{{ booking.status }}</span>
+    </div>
+
     <div class="card-header">
-        <div class="booking-id-group">
-            <span class="label">Reference</span>
-            <span class="value">#{{ booking.bookingReference }}</span>
-        </div>
-        <div class="status-badges">
-            <span class="status-badge" [ngClass]="getStatusClass()">
-                {{ booking.status }}
-            </span>
+        <div class="header-left">
+            <h3 class="event-title">{{ booking.eventTitle || 'Event' }}</h3>
+            <p class="event-meta" *ngIf="booking.venueName || booking.city">
+                <span *ngIf="booking.venueName">{{ booking.venueName }}</span>
+                <span *ngIf="booking.venueName && booking.city"> • </span>
+                <span *ngIf="booking.city">{{ booking.city }}</span>
+            </p>
+            <p class="event-meta" *ngIf="booking.showStartDateTime">
+                {{ booking.showStartDateTime | date:'EEE, d MMM, h:mm a' }}
+            </p>
         </div>
     </div>
 
     <div class="booking-details">
         <div class="detail-row">
-            <div class="detail-item">
-                <i class="fas fa-chair"></i>
-                <div class="detail-info">
-                    <span class="label">Seats Selected</span>
-                    <span class="value">{{ getSeatNumbers() }}</span>
-                </div>
-            </div>
-            <div class="detail-item">
-                <i class="fas fa-hourglass-half"></i>
-                <div class="detail-info">
-                    <span class="label">Hold Expires</span>
-                    <span class="value">{{ booking.holdExpiresAt | date:'shortTime' }}</span>
-                </div>
-            </div>
+            <span class="label">Reference</span>
+            <span class="value">#{{ booking.bookingReference }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="label">Seats / Tickets</span>
+            <span class="value seats">{{ getSeatSummary() }}</span>
+        </div>
+        <div class="detail-row" *ngIf="isPending && booking.holdExpiresAt">
+            <span class="label">Hold Expires</span>
+            <span class="value">{{ booking.holdExpiresAt | date:'short' }}</span>
         </div>
     </div>
 
     <div class="card-footer">
         <div class="total-amount">
-            <span class="label">Total Amount</span>
-            <span class="amount">{{ booking.totalAmount | currency:'INR' }}</span>
+            <span class="label">Total</span>
+            <span class="amount">{{ booking.totalAmount | currency:(booking.currency || 'INR') }}</span>
         </div>
-        <div class="actions" *ngIf="booking.status === 'Pending'">
-            <button class="pay-btn" [routerLink]="eventLink" [disabled]="!eventLink">
-                Complete Payment <i class="fas fa-chevron-right"></i>
+        <div class="actions">
+            <button class="view-btn" *ngIf="isConfirmed" (click)="onViewTickets()">
+                View Tickets
+            </button>
+            <button class="pay-btn" *ngIf="isPending" [routerLink]="payReviewLink"
+                [queryParams]="{ bookingId: booking.id }" [disabled]="!payReviewLink">
+                Pay Now
             </button>
         </div>
     </div>
-</div>
+</article>

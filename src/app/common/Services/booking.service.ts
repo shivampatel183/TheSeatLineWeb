@@ -5,6 +5,7 @@ import {
   ApiResponse,
   BookingInitResponseDto,
   BookingResponseDto,
+  BookingTicketsResponseDto,
   CreateBookingRequest,
   CreateCategoryBookingRequest,
 } from '../model/api.model';
@@ -39,6 +40,18 @@ export class BookingService {
   getBookingById(id: string): Observable<BookingResponseDto> {
     return this.apiService
       .get<BookingResponseDto>(`/booking/${id}`)
+      .pipe(map((response) => response.data));
+  }
+
+  getBookingInit(id: string): Observable<BookingInitResponseDto> {
+    return this.apiService
+      .get<BookingInitResponseDto>(`/booking/${id}/init`)
+      .pipe(map((response) => response.data));
+  }
+
+  getBookingTickets(id: string): Observable<BookingTicketsResponseDto> {
+    return this.apiService
+      .get<BookingTicketsResponseDto>(`/booking/${id}/tickets`)
       .pipe(map((response) => response.data));
   }
 }

@@ -7,8 +7,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
+import { BookingService } from '../../common/Services/booking.service';
 import { PaymentService } from '../../common/Services/payment.service';
 import { ToastService } from '../../common/Services/toast.service';
 import {
@@ -83,12 +84,15 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
   isExpired = false;
   countdownText = '';
   isProcessing = false;
+  isLoadingInit = false;
 
   private timerId: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
+    private bookingService: BookingService,
     private paymentService: PaymentService,
     private toast: ToastService,
   ) {
@@ -100,11 +104,38 @@ export class ReviewPaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!this.booking) {
+    if (this.booking) {
+      this.startCountdown();
+      return;
+    }
+
+    const bookingId = this.route.snapshot.queryParamMap.get('bookingId');
+    if (!bookingId) {
       this.router.navigate(['/']);
       return;
     }
-    this.startCountdown();
+
+    this.isLoadingInit = true;
+    this.cdr.markForCheck();
+
+    this.bookingService
+      .getBookingInit(bookingId)
+      .pipe(
+        finalize(() => {
+          this.isLoadingInit = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (booking) => {
+          this.booking = booking;
+          this.startCountdown();
+        },
+        error: () => {
+          this.toast.error('Unable to load booking for payment. Please try again.');
+          this.router.navigate(['/my-bookings']);
+        },
+      });
   }
 
   ngOnDestroy(): void {

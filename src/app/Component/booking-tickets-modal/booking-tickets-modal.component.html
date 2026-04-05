@@ -1,0 +1,136 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <header class="modal-header">
+      <div class="header-left">
+        <p class="kicker">Your Tickets</p>
+        <h2 class="title">{{ data?.eventTitle || 'Booking Tickets' }}</h2>
+        <p class="meta">
+          <span *ngIf="data?.venueName">{{ data?.venueName }}</span>
+          <span *ngIf="data?.venueName && data?.city"> • </span>
+          <span *ngIf="data?.city">{{ data?.city }}</span>
+        </p>
+        <p class="meta" *ngIf="data?.showStartDateTime">
+          {{ data?.showStartDateTime | date: 'EEE, d MMM, h:mm a' }}
+        </p>
+      </div>
+
+      <div class="header-right">
+        <div class="ref" *ngIf="data?.bookingReference">
+          <span class="ref-label">Ref</span>
+          <span class="ref-value">#{{ data?.bookingReference }}</span>
+        </div>
+        <button class="close-btn" (click)="close()" aria-label="Close">
+          ✕
+        </button>
+      </div>
+    </header>
+
+    <div class="modal-body">
+      <div class="loading" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading tickets…</p>
+      </div>
+
+      <div class="empty" *ngIf="!isLoading && tickets.length === 0">
+        <h3>No tickets yet</h3>
+        <p>Tickets will appear here once your booking is confirmed.</p>
+      </div>
+
+      <ng-container *ngIf="!isLoading && activeTicket as ticket">
+        <div class="ticket-shell">
+          <button class="nav-btn left" (click)="prev()" [disabled]="tickets.length <= 1" aria-label="Previous ticket">
+            ‹
+          </button>
+
+          <section class="ticket-card">
+            <div class="ticket-top">
+              <div class="ticket-top-left">
+                <div class="ticket-number">{{ ticket.ticketNumber }}</div>
+                <div class="ticket-status" [class.valid]="ticket.statusText === 'Valid'">
+                  {{ ticket.statusText }}
+                </div>
+              </div>
+              <div class="ticket-top-right">
+                <div class="slide-count">{{ activeIndex + 1 }} / {{ tickets.length }}</div>
+              </div>
+            </div>
+
+            <div class="perforation">
+              <span class="dot"></span>
+              <span class="dash"></span>
+              <span class="dot"></span>
+            </div>
+
+            <div class="ticket-main">
+              <div class="qr-area">
+                <ng-container *ngIf="ticket.canShowQr; else qrDisabled">
+                  <img
+                    class="qr-img"
+                    *ngIf="getQrDataUrl(ticket.ticketId) as qrUrl; else qrFallback"
+                    [src]="qrUrl"
+                    alt="Ticket QR"
+                    loading="eager"
+                  />
+                  <ng-template #qrFallback>
+                    <div class="qr-fallback">
+                      <p>QR unavailable</p>
+                      <small>Try again in a moment.</small>
+                    </div>
+                  </ng-template>
+                </ng-container>
+                <ng-template #qrDisabled>
+                  <div class="qr-disabled">
+                    <p>QR hidden</p>
+                    <small>This ticket is not valid for entry.</small>
+                  </div>
+                </ng-template>
+              </div>
+
+              <div class="ticket-info">
+                <div class="info-row" *ngIf="ticket.seat">
+                  <span class="label">Seat</span>
+                  <span class="value">
+                    <span *ngIf="ticket.seat.section">{{ ticket.seat.section }}</span>
+                    <span *ngIf="ticket.seat.section && ticket.seat.row"> • </span>
+                    <span *ngIf="ticket.seat.row">Row {{ ticket.seat.row }}</span>
+                    <span *ngIf="(ticket.seat.section || ticket.seat.row) && ticket.seat.seatNumber"> • </span>
+                    <span *ngIf="ticket.seat.seatNumber">Seat {{ ticket.seat.seatNumber }}</span>
+                  </span>
+                </div>
+
+                <div class="info-row" *ngIf="ticket.ticketCategory">
+                  <span class="label">Category</span>
+                  <span class="value">{{ ticket.ticketCategory.name }}</span>
+                </div>
+
+                <div class="info-row hide-on-compact">
+                  <span class="label">Created</span>
+                  <span class="value">{{ ticket.createdAt | date: 'medium' }}</span>
+                </div>
+
+                <div class="info-row hide-on-compact" *ngIf="ticket.usedAt">
+                  <span class="label">Used</span>
+                  <span class="value">{{ ticket.usedAt | date: 'medium' }}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <button class="nav-btn right" (click)="next()" [disabled]="tickets.length <= 1" aria-label="Next ticket">
+            ›
+          </button>
+        </div>
+
+        <div class="dots" *ngIf="tickets.length > 1">
+          <button
+            *ngFor="let t of tickets; let i = index; trackBy: trackTicketId"
+            class="dot-btn"
+            [class.active]="i === activeIndex"
+            (click)="goTo(i)"
+            [attr.aria-label]="'Go to ticket ' + (i + 1)"
+          ></button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

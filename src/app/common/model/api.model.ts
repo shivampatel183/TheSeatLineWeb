@@ -80,18 +80,75 @@ export interface SeatSelectDTO {
 
 export interface BookingSeatDto {
   seatId: string;
-  priceAtBooking: number;
+  section?: string | null;
+  row?: string | null;
+  seatNumber?: string | null;
+  seatType?: string | null;
+  price?: number | null;
 }
 
 export interface BookingResponseDto {
   id: string;
   bookingReference: string;
   eventId: string;
+
+  // Rich event/show summary (sent by API; avoids extra per-booking fetches)
+  eventTitle?: string | null;
   eventSlug?: string | null;
+  bannerImageUrl?: string | null;
+  venueName?: string | null;
+  city?: string | null;
+  eventShowId?: string | null;
+  showStartDateTime?: string | null;
+  showEndDateTime?: string | null;
+
   status: string;
+  totalQuantity?: number | null;
+  currency?: string | null;
   totalAmount: number;
-  holdExpiresAt: string;
+  holdExpiresAt?: string | null;
+  createdAt?: string | null;
   seats: BookingSeatDto[];
+}
+
+export interface BookingTicketSeatDto {
+  seatId: string;
+  section?: string | null;
+  row?: string | null;
+  seatNumber: string;
+}
+
+export interface BookingTicketCategoryDto {
+  ticketCategoryId: string;
+  name: string;
+}
+
+export interface BookingTicketDto {
+  ticketId: string;
+  ticketNumber: string;
+  statusCode: number;
+  statusText: string;
+  createdAt: string;
+  usedAt?: string | null;
+  canShowQr: boolean;
+  qrCode: string;
+  eventShowId: string;
+  seat?: BookingTicketSeatDto | null;
+  ticketCategory?: BookingTicketCategoryDto | null;
+}
+
+export interface BookingTicketsResponseDto {
+  bookingId: string;
+  bookingReference: string;
+  eventId: string;
+  eventTitle?: string | null;
+  bannerImageUrl?: string | null;
+  venueName?: string | null;
+  city?: string | null;
+  eventShowId?: string | null;
+  showStartDateTime?: string | null;
+  showEndDateTime?: string | null;
+  tickets: BookingTicketDto[];
 }
 
 export interface CreateBookingRequest {

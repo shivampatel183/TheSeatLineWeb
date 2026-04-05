@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BookingResponseDto } from '../../common/model/api.model';
-import { EventService } from '../../common/Services/event.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -11,51 +10,72 @@ import { EventService } from '../../common/Services/event.service';
   templateUrl: './booking-card.component.html',
   styleUrls: ['./booking-card.component.scss'],
 })
-export class BookingCardComponent implements OnInit {
+export class BookingCardComponent {
   @Input() booking!: BookingResponseDto;
-  eventLink: string[] | null = null;
+  @Output() viewTickets = new EventEmitter<string>();
 
-  constructor(private eventService: EventService) {}
+  get isPending(): boolean {
+    return (this.booking?.status ?? '').toLowerCase() === 'pending';
+  }
 
-  ngOnInit(): void {
-    if (!this.booking?.eventId) {
-      return;
-    }
+  get payReviewLink(): string[] | null {
+    if (!this.isPending) return null;
 
-    if (this.booking.eventSlug) {
-      this.eventLink = ['/event', this.booking.eventSlug, this.booking.eventId];
-      return;
-    }
+    const slug = this.booking?.eventSlug ?? null;
+    const eventId = this.booking?.eventId ?? null;
+    const showId = this.booking?.eventShowId ?? null;
 
-    this.eventService.getEventById(this.booking.eventId).subscribe({
-      next: (event) => {
-        if (event?.slug && event.id) {
-          this.eventLink = ['/event', event.slug, event.id];
-        }
-      },
-      error: (error) => {
-        console.error('Error loading booking event details:', error);
-      },
-    });
+    if (!slug || !eventId || !showId) return null;
+    return ['/event', slug, eventId, 'shows', showId, 'review'];
+  }
+
+  get isConfirmed(): boolean {
+    return (this.booking?.status ?? '').toLowerCase() === 'confirmed';
+  }
+
+  onViewTickets(): void {
+    if (!this.isConfirmed) return;
+    this.viewTickets.emit(this.booking.id);
   }
 
   getStatusClass(): string {
-    switch (this.booking.status.toLowerCase()) {
+    switch ((this.booking?.status ?? '').toLowerCase()) {
       case 'confirmed':
         return 'status-confirmed';
       case 'pending':
         return 'status-pending';
       case 'cancelled':
         return 'status-cancelled';
+      case 'failed':
+        return 'status-failed';
+      case 'refunded':
+        return 'status-refunded';
+      case 'expired':
+        return 'status-expired';
       default:
         return '';
     }
   }
 
-  getSeatNumbers(): string {
-    if (!this.booking?.seats || this.booking.seats.length === 0) {
-      return 'N/A';
+  getSeatSummary(): string {
+    const seats = this.booking?.seats ?? [];
+    if (seats.length > 0) {
+      return seats
+        .map((s) => {
+          const parts: string[] = [];
+          if (s.section) parts.push(s.section);
+          if (s.row) parts.push(`Row ${s.row}`);
+          if (s.seatNumber) parts.push(`Seat ${s.seatNumber}`);
+          return parts.length > 0 ? parts.join(' ') : s.seatId;
+        })
+        .join(', ');
     }
-    return this.booking.seats.map((s) => s.seatId).join(', ');
+
+    const qty = this.booking?.totalQuantity ?? null;
+    if (qty && qty > 0) {
+      return `${qty} ticket${qty === 1 ? '' : 's'}`;
+    }
+
+    return 'N/A';
   }
 }

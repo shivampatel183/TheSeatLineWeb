@@ -123,7 +123,7 @@
 </div>
 
 <ng-template #noData>
-    <div class="error-state">
+    <div class="error-state" *ngIf="!isLoadingInit; else loadingState">
         <div class="error-state__icon">
             <i class="fas fa-exclamation-triangle"></i>
         </div>
@@ -132,5 +132,15 @@
         <a routerLink="/" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Go Home
         </a>
+    </div>
+</ng-template>
+
+<ng-template #loadingState>
+    <div class="error-state">
+        <div class="error-state__icon">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <h3>Loading Booking</h3>
+        <p>Fetching booking details for payment…</p>
     </div>
 </ng-template>
